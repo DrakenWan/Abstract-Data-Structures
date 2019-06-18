@@ -58,7 +58,12 @@ S stack<S>::pop()
 template <typename S>
  S stack<S>::peek()
  {
-    return content[length - 1];
+     if(length != 0)
+        return content[length - 1];
+     else {
+         cout<<"\nStack Empty\n";
+         return -1;
+     }
  }
 
 int main()
@@ -71,5 +76,9 @@ int main()
     cout<<s1.pop()<<endl;
     cout<<s1.pop()<<endl;
     cout<<s1.pop()<<endl;
+    cout<<s1.pop();
+    cout<<s1.peek()<<endl;
+    s1.push(25);
+    cout<<s1.peek();
     return 0;
 }
