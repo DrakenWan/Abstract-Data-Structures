@@ -6,24 +6,26 @@
 using namespace std;
 
 //each doubly linked list node
+template <typename any>
 struct node
 {
-    int data;
-    node* prev;
-    node* next;
+    any data;
+    node<any>* prev;
+    node<any>* next;
 };
 
 //class list to define our linked list
 //and establish its behaviour/functionalities
+template <typename any>
 class list
 {
-    node* head;
-    node* last;
+    node<any>* head;
+    node<any>* last;
 
     //declared as private
-    node* readnode(int data)
+    node<any>* readnode(int data)
      {
-         node* newnode = new node;
+         node<any>* newnode = new node<any>;
          if(newnode == NULL)
             {
                 cout<<"Insufficient Memory!";
@@ -40,7 +42,7 @@ class list
      {
          head = last = NULL;
      }
-     list(int data)
+     list(any data)
      {
          head = last = readnode(data);
      }
@@ -49,12 +51,12 @@ class list
      int isEmpty(); //check if empty
      void Empty(); //empty the list
      int create();
-     int insertLast(int data);
-     int insertFirst(int data);
+     int insertLast(any data);
+     int insertFirst(any data);
 
      //below Middle Traversals are from head to last.
-     int insertMiddleAfterX(int x, int data); //insert data after X element
-     int insertMiddleAfterCount(int count, int data); //insert after traversing Count
+     int insertMiddleAfterX(any x, any data); //insert data after X element
+     int insertMiddleAfterCount(int count, any data); //insert after traversing Count
      // number of nodes
      
      int delFirst();
@@ -62,15 +64,17 @@ class list
      int delData(int data);
      //display
      //forward Traversal
-     void display(int t);
+     void display(int t=0);
 };//end of class LIST
 
-void list::Empty()
+template <typename any>
+void list<any>::Empty()
  {
      head=last=NULL; 
  }
 
-int list::isEmpty()
+template <typename any>
+int list<any>::isEmpty()
  {
      if(this->size()==0)
         return 1;
@@ -78,10 +82,11 @@ int list::isEmpty()
         return 0;
  }
 
-int list::size()
+template <typename any>
+int list<any>::size()
  {
      int counter=0;
-     node* traverse = head;
+     node<any>* traverse = head;
      while(traverse != NULL)
       {
        counter++;
@@ -91,9 +96,11 @@ int list::size()
  }
 
 //create method
-int list::create()
+template <typename any>
+int list<any>::create()
 {
-  int c, data;
+  int c;
+  any data;
   if(head != NULL)
   {
       cout<<"\nlinked list was already created with some entries.";
@@ -108,7 +115,7 @@ int list::create()
             head = last = readnode(data);
            else
             {
-                node* newnode = readnode(data);
+                node<any>* newnode = readnode(data);
                 last->next = newnode;
                 newnode->prev = last;
                 last = last->next;
@@ -120,13 +127,14 @@ int list::create()
 }//end of create method
 
 //insertLast method
-int list::insertLast(int data)
+template <typename any>
+int list<any>::insertLast(any data)
 {
     if(head == NULL)
         head = last = readnode(data);
     else
      {
-        node* newnode = readnode(data);
+        node<any>* newnode = readnode(data);
         last->next = newnode;
         newnode->prev = last;
         last = last->next; //or last = newnode can do as well.
@@ -135,13 +143,14 @@ int list::insertLast(int data)
 }//insertLast method ends here
 
 //insertFirst method
-int list::insertFirst(int data)
+template <typename any>
+int list<any>::insertFirst(any data)
 {
     if(head == NULL)
         head = last = readnode(data);
     else
     {
-        node* newnode = readnode(data);
+        node<any>* newnode = readnode(data);
         head->prev = newnode;
         newnode->next = head;
         head = head->prev; //or head = newnode can do as well
@@ -150,17 +159,18 @@ int list::insertFirst(int data)
 }//insertLast method ends here
 
 //insertMiddleAfterX method
-int list::insertMiddleAfterX(int x, int data)
+template <typename any>
+int list<any>::insertMiddleAfterX(any x, any data)
 {
     //if x is the last node then there will be no insertion
-    node* newnode = readnode(data);
-    node* temp = head;
+    node<any>* newnode = readnode(data);
+    node<any>* temp = head;
     while(temp != NULL)
      {
         if(temp->data == x && temp->next != NULL)
         {
             //under testing
-            node* next = temp->next;
+            node<any>* next = temp->next;
             newnode->next = next;
             temp->next = newnode;
             next->prev = newnode;
@@ -175,13 +185,14 @@ int list::insertMiddleAfterX(int x, int data)
     return -1;
 }//insertMiddleAfterX method ends here
 
-int list::delFirst()
+template <typename any>
+int list<any>::delFirst()
 {
     if(this->isEmpty())
         return -1;
     else
     {
-        node *delnode = head;
+        node<any> *delnode = head;
         cout<<"\nDeleted node is "<<delnode->data;
         if(head == last)
             head = last = NULL;
@@ -194,13 +205,14 @@ int list::delFirst()
     return 1;
 }//delFirst method ends here
 
-int list::delLast()
+template <typename any>
+int list<any>::delLast()
 {
     if(this->isEmpty())
         return -1;
     else
     {
-        node* delnode = last;
+        node<any>* delnode = last;
         cout<<"\nDeleted node is "<<delnode->data;
         if(head==last)
             head=last=NULL;
@@ -214,12 +226,13 @@ int list::delLast()
 }//delLast method ends here
 
 //delData method starts here
-int list::delData(int data)
+template <typename any>
+int list<any>::delData(int data)
 {
     //return -1 : list is empty
     //return 0 : could not find the data element to be deleted
     //return 1 : deleted successfully
-    node* delnode = head;
+    node<any>* delnode = head;
     if(head == NULL)
         return -1;
     else
@@ -235,8 +248,8 @@ int list::delData(int data)
                else
                {
                    cout<<"\nDeleted node is: "<<delnode->data;
-                   node* prev = delnode->prev;
-                   node* next = delnode->next;
+                   node<any>* prev = delnode->prev;
+                   node<any>* next = delnode->next;
                    prev->next = next;
                    next->prev = prev;
                    delete delnode;
@@ -253,7 +266,8 @@ int list::delData(int data)
     return 0;
 }//delData method ends here
 
-void list::display(int t=0)
+template <typename any>
+void list<any>::display(int t)
 {
     if(this->isEmpty())
         {
@@ -264,7 +278,7 @@ void list::display(int t=0)
     //t == 0 : forward traversal
     //t == 1 : backward traversal
     cout<<endl;
-    node* temp = new node;
+    node<any>* temp = new node<any>;
     if( t == 0)
     //forward traversal
     {
@@ -293,7 +307,7 @@ void list::display(int t=0)
 int main()
 {
     int after, val = 10;
-    list l1(val);
+    list<int> l1(val);
     val = 2;
     l1.insertFirst(val);
     val=12;
@@ -310,7 +324,6 @@ int main()
     l1.delFirst();
     l1.delFirst();
     l1.delLast();
-   
     l1.display();
     return 0;
 }

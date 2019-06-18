@@ -1,6 +1,7 @@
 /*circular singly linked list
 //author: Kartikay Kaul
 //method functionalities are descriped within function definitions or declarations
+// still under construction
 //Future ideas:
     ╤ add a method to return a node with traversal almost like a search function
 
@@ -9,19 +10,21 @@
 
 using namespace std;
 
+template <typename any>
 struct node
 {
-    int data;
-    node* next;
+    any data;
+    node<any>* next;
 };
 
+template <typename any>
 class list
 {
-    node *head, *last;
+    node<any> *head, *last;
 
-    node* readnode(int data)
+    node<any>* readnode(int data)
     {
-        node* newnode = new node;
+        node<any>* newnode = new node<any>;
         if(newnode == NULL)
          {
             cout<<"\nMemory insufficient! Restart program.";
@@ -40,7 +43,7 @@ class list
              head = last = NULL;
          }
 
-        list(int data)
+        list(any data)
          {
              //initialise the list with one element
              head = last = readnode(data);
@@ -53,22 +56,23 @@ class list
 
         //insertion or creation methods follow below
         int create(); //create a list only if it is entirely empty
-        int insertFirst(int data); // insert the element at the head of the linked list
-        int insertLast(int data); // insert the element at the rear of the linked list
-        int insertMiddleAfterX(int x, int data); // insert 'data' after element 'x'
-        int insertMiddleAfterCount(int count, int data); // insert 'data' after 'count'th element
+        int insertFirst(any data); // insert the element at the head of the linked list
+        int insertLast(any data); // insert the element at the rear of the linked list
+        int insertMiddleAfterX(any x, any data); // insert 'data' after element 'x'
+        int insertMiddleAfterCount(int count, any data); // insert 'data' after 'count'th element
 
 };
 
 //size method
-int list::size()
+template <typename any>
+int list<any>::size()
  {
      int count=1;
      if(head == NULL) //directly checking if head is NULL or not
         return 0;
      else
      {
-         node* temp = head;
+         node<any>* temp = head;
          while(temp->next != head)
             {
                 count++;
@@ -79,7 +83,8 @@ int list::size()
  }//size method ends
 
 //isEmpty method begins
-bool list::isEmpty()
+template <typename any>
+bool list<any>::isEmpty()
  {
      if(this->size() == 0)
         return true;
@@ -88,7 +93,8 @@ bool list::isEmpty()
  }//isEmpty method ends here
 
 //Empty method : to empty the list
-void list::Empty()
+template <typename any>
+void list<any>::Empty()
  {
      if(head == NULL)
         cout<<"\nthe list is already empty.";
@@ -98,9 +104,11 @@ void list::Empty()
 
 
 //create function
-int list::create()
+template <typename any>
+int list<any>::create()
  {
-     int c, data;
+     int c;
+     any data;
      if(head != NULL)
      {
         cout<<"\nThe list is already created.";
@@ -128,13 +136,14 @@ int list::create()
  }//end of create method
 
 //insertFirst method
-int list::insertFirst(int data)
+template <typename any>
+int list<any>::insertFirst(any data)
 {
     if(head == NULL)
        head = last = readnode(data);
     else
     {
-        node* newnode = readnode(data);
+        node<any>* newnode = readnode(data);
         newnode->next = head;
         head = newnode;
     }
@@ -143,13 +152,14 @@ int list::insertFirst(int data)
 }//inserFirst Method ends here
  
 //insertLast method
-int list::insertLast(int data)
+template <typename any>
+int list<any>::insertLast(any data)
 {
     if(head == NULL)
         head = last = readnode(data);
     else
     {
-        node* newnode = readnode(data);
+        node<any>* newnode = readnode(data);
         last->next = newnode;
         last = newnode; 
     }
@@ -158,14 +168,15 @@ int list::insertLast(int data)
 }//insertLast method ends here
 
 //insertAfterX Method
-int list::insertMiddleAfterX(int x, int data)
+template <typename any>
+int list<any>::insertMiddleAfterX(any x, any data)
 {
-    node* newnode = readnode(data);
+    node<any>* newnode = readnode(data);
     if(head == NULL)
         return -1;
     else
     {
-        node* temp = head;
+        node<any>* temp = head;
         do
         {
             if(temp->data == x)
@@ -189,8 +200,8 @@ int list::insertMiddleAfterX(int x, int data)
 
  int main()
   {
-      list l1(10);
-      list l2;
+      list<int> l1(10);
+      list<int> l2;
       cout<<l1.size()<<endl;
       cout<<l2.size();
       l2.create();
