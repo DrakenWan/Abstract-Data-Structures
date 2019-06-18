@@ -5,21 +5,23 @@
 
 using namespace std;
 
+template <typename any>
 struct node
 {
-    int data;
-    node* next;
+    any data;
+    node<any>* next;
 };
 
+template <typename any>
 class list
 {
-    node *head;
-    node *last;
+    node<any> *head;
+    node<any> *last;
 
     //declared as private
-    node* readnode(int data)
+    node<any>* readnode(any data)
     {
-        node* newnode = new node;
+        node<any>* newnode = new node<any>;
         if(newnode == NULL)
         {
             cout<<"Memory insufficient!";
@@ -37,32 +39,34 @@ class list
              head = last = NULL;
          }
 
-         list(int data)
+         list(any data)
          {
              head = last = readnode(data);
          }
 
-        int isEmpty();
-        void Empty();
-        int size();
+        int isEmpty(); //is the linked list empty
+        void Empty(); // clear the entire list
+        int size(); //enumerate the 
         int create();
-        int insertLast(int data);
-        int insertFirst(int data);
-        int insertMiddleAfterX(int x, int data);
-        int insertMiddleCount(int count, int data);
+        int insertLast(any data);
+        int insertFirst(any data);
+        int insertMiddleAfterX(any x, any data);
+        int insertMiddleCount(int count, any data);
 
         int delFirst();
         int delLast();
-        //int delData(int data); //will add later
+        //int delData(any data); //will add later
         void display();
 };
 
-void list::Empty()
+template <typename any>
+void list<any>::Empty()
  {
      head=last=NULL; 
  }
 
-int list::isEmpty()
+template <typename any>
+int list<any>::isEmpty()
  {
      if(this->size()==0)
         return 1;
@@ -70,10 +74,11 @@ int list::isEmpty()
         return 0;
  }
 
-int list::size()
+template <typename any>
+int list<any>::size()
  {
      int counter=0;
-     node* traverse = head;
+     node<any>* traverse = head;
      while(traverse != NULL)
       {
        counter++;
@@ -82,9 +87,11 @@ int list::size()
     return counter;
  }
 
-int list::create()
+template <typename any>
+int list<any>::create()
 {
-    int c,data;
+    int c;
+    any data;
     if(head!=NULL)
     {
         cout<<"\nLinked list already created.";
@@ -114,7 +121,8 @@ int list::create()
 }//end of create method
 
 //INSERT LAST METHOD
-int list::insertLast(int data=0)
+template <typename any>
+int list<any>::insertLast(any data)
 {
     if(head == NULL)
     {
@@ -127,25 +135,27 @@ int list::insertLast(int data=0)
     return 1;
 }//end of insertLast method
 
-int list::insertFirst(int data=0)
+template <typename any>
+int list<any>::insertFirst(any data)
 {
     if(head == NULL)
       {
         head=last=readnode(data);
         return 1;
       }
-    node* newnode = readnode(data);
+    node<any>* newnode = readnode(data);
     newnode->next = head;
     head=newnode;
     return 1;
 }//end of insertLast
 
 //insert middle after the data given
-int list::insertMiddleAfterX(int x, int data)
+template <typename any>
+int list<any>::insertMiddleAfterX(any x, any data)
 {
-    node* newnode = readnode(data);
+    node<any>* newnode = readnode(data);
     
-    node *temp = head;
+    node<any> *temp = head;
     while(temp!=NULL)
     {
         if(temp->data == x)
@@ -165,13 +175,14 @@ int list::insertMiddleAfterX(int x, int data)
 }//insert middle after the data ends
 
 // Method for Insert Middle after Count
-int list::insertMiddleCount(int count, int data)
+template <typename any>
+int list<any>::insertMiddleCount(int count, any data)
 {
     if(head == NULL)
          head = last = readnode(data);
 
      
-     node *temp = head;
+     node<any> *temp = head;
      while(count>0 && temp!=NULL)
      {
          temp = temp->next;
@@ -179,7 +190,7 @@ int list::insertMiddleCount(int count, int data)
      }
     if(this->size() > count)
     {
-      node* newnode = readnode(data);
+      node<any>* newnode = readnode(data);
       newnode->next = temp->next;
       temp->next = newnode;
       if(temp == last)
@@ -190,7 +201,8 @@ int list::insertMiddleCount(int count, int data)
 }//Insert Middle After count ends
 
 //delFirst() Method
-int list::delFirst()
+template <typename any>
+int list<any>::delFirst()
 {
     if(head == NULL)
      {
@@ -199,7 +211,7 @@ int list::delFirst()
      }
      else
      {
-         node *delnode = head;
+         node<any> *delnode = head;
          cout<<"\nDeleted node is "<<delnode->data;
          if(head == last)
             head=last=NULL;
@@ -211,7 +223,8 @@ int list::delFirst()
 }//delFirst() Method Ends here
 
 //delLast() Method
-int list::delLast()
+template <typename any>
+int list<any>::delLast()
 {
     if(head==NULL)
     {
@@ -220,14 +233,14 @@ int list::delLast()
     }
     else
     {
-        node* delnode = last;
+        node<any>* delnode = last;
         cout<<"\nDeleted node is "<<delnode->data;
         if(head == last)
             head=last=NULL;
         else
         {
-            node* t = head;
-            node* prev = new node;
+            node<any>* t = head;
+            node<any>* prev = new node<any>;
             while(t->next != NULL)
             {
                 prev = t;
@@ -241,13 +254,14 @@ int list::delLast()
     }
 }//delLast() Method ends here
 
-void list::display()
+template <typename any>
+void list<any>::display()
 {
     if(head==NULL)
         cout<<"\nLinked list is empty.";
     else
     {
-        node* t = head;
+        node<any>* t = head;
         cout<<endl;
         while(t != NULL)
          {
@@ -260,7 +274,7 @@ void list::display()
 
 int main()
 {
-    list l1;
+    list<int> l1;
     cout<<l1.size()<<endl;
     //l1.create();
     l1.insertLast(10);
@@ -275,12 +289,22 @@ int main()
     l1.delFirst();
     l1.delLast();
     l1.display();
-    l1.create();
+    //l1.create();
     //l1.Empty();
 
     if(l1.isEmpty())
-        cout<<"\nKhatam!";
+        cout<<"\Empty!";
     else
-        cout<<"\nNahi Khatam!";
+        cout<<"\nNein Empty";
+
+    list<float> l2;
+    l2.create();
+    l2.display();
+
+    cout<<"End of werk\n";
+    list<string> l3;
+    l3.create();
+    l3.display();
+
     return 0;
 }

@@ -1,5 +1,6 @@
 /*circular singly linked list
 //author: Kartikay Kaul
+//method functionalities are descriped within function definitions or declarations
 //Future ideas:
     ╤ add a method to return a node with traversal almost like a search function
 
@@ -35,11 +36,13 @@ class list
     public:
         list()
          {
+             //start off with an empty list
              head = last = NULL;
          }
 
         list(int data)
          {
+             //initialise the list with one element
              head = last = readnode(data);
              last->next = head;
          }
@@ -49,11 +52,11 @@ class list
         void Empty(); //empty the linked list
 
         //insertion or creation methods follow below
-        int create();
-        int insertFirst(int data);
-        int insertLast(int data);
-        int insertMiddleAfterX(int x, int data);
-        int insertMiddleAfterCount(int count, int data);
+        int create(); //create a list only if it is entirely empty
+        int insertFirst(int data); // insert the element at the head of the linked list
+        int insertLast(int data); // insert the element at the rear of the linked list
+        int insertMiddleAfterX(int x, int data); // insert 'data' after element 'x'
+        int insertMiddleAfterCount(int count, int data); // insert 'data' after 'count'th element
 
 };
 
