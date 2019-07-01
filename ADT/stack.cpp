@@ -6,6 +6,7 @@ Author: Kartikay Kaul
 ////////////////// +++++++++++++++++++++ //////////////////////
  */
 #include<iostream>
+#include<typeinfo>
 #include<vector>
 
 using namespace std;
@@ -60,8 +61,6 @@ S stack<S>::pop()
     return value; 
     }
     cout<<"Stack underflow.\n";
-    return -1;
-
 }
 
 template <typename S>
@@ -71,10 +70,14 @@ template <typename S>
         Peek the top of the stack
       */
      if(length != 0)
-        return content[length - 1];
+        {
+            S value = content.back();
+            return value;
+        }
      else {
-         cout<<"Stack Empty\n";
-         return -1;
+         cout<<"\nStack Empty\n";
+         S value;
+         return value;
      }
  }
 
@@ -128,22 +131,16 @@ int main()
      */
     
     stack<int> s1;
-    s1.push(10);
-    s1.push(20);
-    s1.push(30);
-    cout<<s1.pop()<<endl;
-    cout<<s1.pop()<<endl;
-    cout<<s1.pop()<<endl;
-    cout<<s1.pop();
-    cout<<s1.peek()<<endl;
-    s1.push(25);
+    s1.push(1);
     cout<<s1.peek();
-    s1.push(35);
-    s1.push(40);
-    s1.toString();
-    s1.clear();
-    s1.peek();
-    s1.clear();
-    s1.toString();
+
+    stack<string> s2;
+    s1.pop();
+    cout<<s2.peek();
+    s2.push("ad");
+    cout<<s2.peek();
+    cout<<s2.pop();
+    cout<<s2.peek();
+    s2.toString();
     return 0;
 }
