@@ -19,6 +19,9 @@ struct node
     node* right;
 };
 
+class btree {
+
+}
 node* newNode(int data)
 {
     node* n = new node;
