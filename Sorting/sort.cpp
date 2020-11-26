@@ -4,6 +4,13 @@
 
 using namespace std;
 
+void swap(int &a, int &b)
+ {
+     int temp;
+     temp = a;
+     a = b;
+     b = temp;
+ }
 
 //edit as may suffice
 class Sort {
@@ -20,9 +27,10 @@ class Sort {
             this->data = data;
             this->length = data.size();
         }
-        void insertion();
+        void insertion(bool);
         void display();
 };
+
 
 void Sort::display() {
     int i;
@@ -30,7 +38,7 @@ void Sort::display() {
         cout<<this->data[i]<<endl;
 }
 
-void Sort::insertion() {
+void Sort::insertion(bool decr=false) {
 
     int i, j , temp, length = this->data.size();
     //cout<<length;
@@ -44,6 +52,11 @@ void Sort::insertion() {
             j--;
          }
          this->data[j+1] = temp;
+     }
+
+     if(decr) { //O(n)
+         for(i=0; i<length/2; i++)
+            swap(this->data[i], this->data[length - 1 - i]);
      }
 }
 
@@ -69,7 +82,7 @@ int main()
     Sort s(v);
     s.display();
     cout<<endl;
-    s.insertion();
+    s.insertion(true);
     s.display();
     return 0;
 }
