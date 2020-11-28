@@ -14,6 +14,11 @@ void swap(int &a, int &b)
 
 //edit as may suffice
 class Sort {
+    /* Sort algorithms in ascending order of their O() and T()
+
+
+
+    */
         //edit datatype as may suffice
         vector<int> data;
         int length;
@@ -27,10 +32,31 @@ class Sort {
             this->data = data;
             this->length = data.size();
         }
+        
+        void changeData(vector<int>);
+
+        void reverse() {
+            int i;
+            for(i=0; i<length/2; i++)
+                swap(this->data[i], this->data[length - 1 - i]);
+        }
+
+        // sorting algos better for low n values
         void insertion(bool);
+        void bubble(bool); //O(n^2)
+        void selection(bool); //O(n^2)
+
+        // sorting algos for high / very high n values
+        void merge(bool); // O(logn) however if decr = true then O(n)
+
         void display();
 };
 
+void Sort::changeData(vector<int> data) {
+    //update data altogether. No pushbacks to the vector
+    this->data = data;
+    cout<<endl<<"Updated Data."<<endl;
+}
 
 void Sort::display() {
     int i;
@@ -54,12 +80,41 @@ void Sort::insertion(bool decr=false) {
          this->data[j+1] = temp;
      }
 
-     if(decr) { //O(n)
-         for(i=0; i<length/2; i++)
-            swap(this->data[i], this->data[length - 1 - i]);
-     }
+     if(decr) // O(n)
+        reverse();
 }
 
+void Sort::bubble(bool decr=false) {
+    //O(n^2)
+    int i, j;
+    for(i=0; i<this->length - 1; i++)
+     {
+         for(j=0; j<this->length - 1 - i; j++)
+          if (this->data[j] > this->data[j+1])
+            swap(this->data[j], this->data[j+1]);
+     }
+
+     if(decr) //O(n)
+        reverse();
+}
+
+void Sort::selection(bool decr=false) {
+    //O(n^2)
+    int i, j, min_index;
+    for(i=0; i<this->length - 1; i++)
+     {
+         min_index = i;
+         for(j=i+1; j<this->length; j++)
+          if(this->data[j] < this->data[min_index])
+            min_index = j;
+         
+         swap(this->data[i], this->data[min_index]);
+     }
+
+      if(decr) //O(n)
+            reverse();
+
+}
 
 int main()
 
@@ -82,7 +137,7 @@ int main()
     Sort s(v);
     s.display();
     cout<<endl;
-    s.insertion(true);
+    s.selection();
     s.display();
     return 0;
 }
