@@ -17,7 +17,7 @@ class stack {
     int length;
     public:
         stack() {
-            length = content.size();
+            this->length = content.size();
         }
         stack(S value)
         {
@@ -25,7 +25,7 @@ class stack {
         }
 
         void push(S value);
-        int StackLength() {return content.size();}
+        int StackLength() {return this->length;}
         void clear();
         void toString();
         S pop();
@@ -39,8 +39,8 @@ void stack<S>::push(S value)
         Push above the top of the stack
      */
     try {
-        content.push_back(value);
-        length = content.size();
+        this->content.push_back(value);
+        this->length = content.size();
     } catch(std::exception e)
     {
         cout<<"Error! Memory overflow!";
@@ -55,10 +55,10 @@ S stack<S>::pop()
      */
     if(length != 0)
     {
-    S value = content.back();
+    S value = this->content.back();
     cout<<"Deleted content value: "<<value;
-    content.pop_back();
-    length = content.size(); 
+    this->content.pop_back();
+    this->length = content.size(); 
     return value; 
     }
     cout<<"Stack underflow.\n";
@@ -70,9 +70,9 @@ template <typename S>
      /*
         Peek the top of the stack
       */
-     if(length != 0)
+     if(this->length != 0)
         {
-            S value = content.back();
+            S value = this->content.back();
             return value;
         }
      else {
