@@ -1,6 +1,10 @@
 #include<iostream>
 #include<vector>
 #include<string>
+#include<cstdlib>
+#include<time.h>
+#define DTYPE int
+#define floatGEN 1.1531
 
 using namespace std;
 
@@ -20,21 +24,35 @@ class Sort {
 
     */
         //edit datatype as may suffice
-        vector<int> data;
+        // select data identifiers from standard library
+        vector<DTYPE> data;
         int length;
-
+		
+		
+		// helper functions for sorting algorithms
+		void merge1(DTYPE&,int,int,int);
+		void merge2(DTYPE&, int, int);
+		
     public:
         Sort() {
             this->length=0;
             }
 
-        Sort(vector<int> data) {
+        Sort(vector<DTYPE> data) {
             this->data = data;
             this->length = data.size();
         }
         
-        void changeData(vector<int>);
-
+        void changeData(vector<DTYPE>);
+		DTYPE *vec2array() {
+			DTYPE arr[this->length];
+			
+			for(int i=0; i<this->length; i++)
+			 arr[i] = this->data[i];
+			 
+			return arr;	
+		}
+		
         void reverse() {
             int i;
             for(i=0; i<length/2; i++)
@@ -47,12 +65,12 @@ class Sort {
         void selection(bool); //O(n^2)
 
         // sorting algos for high / very high n values
-        void merge(bool); // O(logn) however if decr = true then O(n)
+        void mergeSort(bool); // O(logn) however if decr = true then O(n)
 
         void display();
 };
 
-void Sort::changeData(vector<int> data) {
+void Sort::changeData(vector<DTYPE> data) {
     //update data altogether. No pushbacks to the vector
     this->data = data;
     cout<<endl<<"Updated Data."<<endl;
@@ -66,7 +84,8 @@ void Sort::display() {
 
 void Sort::insertion(bool decr=false) {
 
-    int i, j , temp, length = this->data.size();
+    int i, j, length = this->data.size();
+    DTYPE temp;
     //cout<<length;
 
     for(i=1; i<length; i++)
@@ -116,28 +135,108 @@ void Sort::selection(bool decr=false) {
 
 }
 
+
+void Sort::merge1(DTYPE &arr, int l, int m, int r) {
+	
+	int i, j, k;
+	int n1 = m - l + 1;
+	int n2 = r - m;
+	
+	
+	DTYPE L[n1], R[n2];
+	
+	for(i=0; i<n1; i++)
+		L[i] = arr[l+i];
+		
+	for(j=0; j<n2; j++)
+		R[j] = arr[m + 1 + j];
+		
+		
+	i = 0;
+	j = 0;
+	k = l;
+	
+	while(i<n1 && j<n2) {
+		if( L[i] <= R[j]) {
+			arr[k] = L[i];
+			i++;
+		}
+		else {
+			arr[k] = R[j];
+			j++;
+		}
+		k++;
+	}
+	
+	
+	while(i<n1) {
+		arr[k] = L[i];
+		i++;
+		k++;
+	}
+	
+	
+	while(j<n2) {
+		arr[k] = R[j];
+		j++;
+		k++;
+	}
+}
+
+void Sort::merge2(DTYPE &vec, int l, int r) {
+	if (l < r) {
+		int m = l + (r - l)/2;
+		//cout<<"Reached here\n";
+		merge2(vec, l, m);
+		//cout<<"Reached here 2\n";
+		merge2(vec, m+1, r);
+		
+		//cout<<"Reached here 3\n";
+		
+		merge1(vec, l, m, r);
+		//cout<<"Reached here end";
+	}
+}
+
+void Sort::mergeSort(bool decr=false) {
+	
+	merge2(this->vec2array(), 0, this->length);
+	
+	vector<DTYPE> temp(arr, arr + this->length);
+	
+	this->data = temp;
+	
+	if(decr) //O(n)
+		reverse();
+}
+
 int main()
 
 {
-    //int a = 10;
-    //cout<<a;
-
-    // init the dummy data vector
-    vector<int> v;
-    v.push_back(10);
-    v.push_back(2);
-    v.push_back(3);
-    v.push_back(23);
-    v.push_back(0);
-    v.push_back(8);
-    v.push_back(11);
-    v.push_back(1);
-    v.push_back(-1);
+	// currently programmed DTYPE to int
+	// the main driver function is coded to handle
+	// the numerical data types (like int, short, double
+	//  float, etc.) (take a look at the for loop
+	// below)
+	
+    int length;
+	vector<DTYPE> v;
+    
+    int max = 50, min = -20;
+	
+	srand(time(0));
+    
+    cout<<"Enter length of list:- "; cin>>length;
+    for(int i=0; i<length; i++) {
+    	DTYPE var = (rand()%max + min)*floatGEN;
+    	v.push_back(var);
+    }
+    	
 
     Sort s(v);
     s.display();
     cout<<endl;
-    s.selection();
+    s.mergeSort();
     s.display();
     return 0;
 }
