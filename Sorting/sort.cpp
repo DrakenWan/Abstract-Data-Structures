@@ -30,8 +30,7 @@ class Sort {
 		
 		
 		// helper functions for sorting algorithms
-		void merge1(DTYPE&,int,int,int);
-		void merge2(DTYPE&, int, int);
+		void merge(vector<DTYPE>&);
 		
     public:
         Sort() {
@@ -44,6 +43,7 @@ class Sort {
         }
         
         void changeData(vector<DTYPE>);
+        
 		DTYPE *vec2array() {
 			DTYPE arr[this->length];
 			
@@ -136,82 +136,71 @@ void Sort::selection(bool decr=false) {
 }
 
 
-void Sort::merge1(DTYPE &arr, int l, int m, int r) {
-	
-	int i, j, k;
-	int n1 = m - l + 1;
-	int n2 = r - m;
-	
-	
-	DTYPE L[n1], R[n2];
-	
-	for(i=0; i<n1; i++)
-		L[i] = arr[l+i];
+void Sort::merge(vector<DTYPE> &arr) {
+	int len = arr.size();
+	vector<DTYPE> L, R;
+	if(len > 1) {
 		
-	for(j=0; j<n2; j++)
-		R[j] = arr[m + 1 + j];
+		int mid = len/2;
 		
+		for(int i=0; i<mid; i++)
+			L.push_back(arr[i]);
 		
-	i = 0;
-	j = 0;
-	k = l;
-	
-	while(i<n1 && j<n2) {
-		if( L[i] <= R[j]) {
-			arr[k] = L[i];
-			i++;
+		for(int i=mid; i<len; i++)
+			R.push_back(arr[i]);
+			
+		merge(L);
+		
+		merge(R);
+		
+		int i,j,k;
+		i=j=k=0;
+		
+		while(i < L.size() && j < R.size()) {
+			
+			if (L[i] < R[j]) {
+				arr[k] = L[i];
+				i+=1;
+			}
+			else {
+				arr[k] = R[j];
+				j+=1;
+			}
+		
+		k +=1;
 		}
-		else {
+		
+		while (i < L.size()) {
+			arr[k] = L[i];
+			i++; k++;
+		}
+		
+		while(j < R.size()) {
 			arr[k] = R[j];
 			j++;
+			k++;
 		}
-		k++;
-	}
-	
-	
-	while(i<n1) {
-		arr[k] = L[i];
-		i++;
-		k++;
-	}
-	
-	
-	while(j<n2) {
-		arr[k] = R[j];
-		j++;
-		k++;
-	}
-}
-
-void Sort::merge2(DTYPE &vec, int l, int r) {
-	if (l < r) {
-		int m = l + (r - l)/2;
-		//cout<<"Reached here\n";
-		merge2(vec, l, m);
-		//cout<<"Reached here 2\n";
-		merge2(vec, m+1, r);
 		
-		//cout<<"Reached here 3\n";
 		
-		merge1(vec, l, m, r);
-		//cout<<"Reached here end";
-	}
-}
-
+	} // OUTERMOST IF CONDITION ENDS
+} //MERGE function
+	
+	
 void Sort::mergeSort(bool decr=false) {
 	
-	merge2(this->vec2array(), 0, this->length);
+	vector<DTYPE> daa = this->data;
 	
-	vector<DTYPE> temp(arr, arr + this->length);
+	merge(daa);
 	
-	this->data = temp;
+	this->data = daa;
 	
 	if(decr) //O(n)
 		reverse();
 }
 
-int main()
 
+
+int main() 
 {
 	// currently programmed DTYPE to int
 	// the main driver function is coded to handle
