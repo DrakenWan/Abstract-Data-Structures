@@ -1,9 +1,7 @@
-#include<iostream>
-
 using namespace std;
 
 class complex {
-		
+	
 		double real, img;
 		
 		public:
