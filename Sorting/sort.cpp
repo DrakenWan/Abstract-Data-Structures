@@ -2,7 +2,7 @@
 #include<vector>
 #include<string>
 #include<cstdlib>
-#include<time.h>
+#include<ctime>
 #define DTYPE int
 #define floatGEN 1.1531
 
@@ -31,6 +31,8 @@ class Sort {
 		
 		// helper functions for sorting algorithms
 		void merge(vector<DTYPE>&);
+		int partition(vector<DTYPE>&, int, int);
+		void quick(vector<DTYPE>&, int, int);
 		
     public:
         Sort() {
@@ -43,15 +45,6 @@ class Sort {
         }
         
         void changeData(vector<DTYPE>);
-        
-		DTYPE *vec2array() {
-			DTYPE arr[this->length];
-			
-			for(int i=0; i<this->length; i++)
-			 arr[i] = this->data[i];
-			 
-			return arr;	
-		}
 		
         void reverse() {
             int i;
@@ -66,7 +59,7 @@ class Sort {
 
         // sorting algos for high / very high n values
         void mergeSort(bool); // O(logn) however if decr = true then O(n)
-
+		void quickSort(bool); //O(logn) however if decr = true then O(n)
         void display();
 };
 
@@ -199,6 +192,49 @@ void Sort::mergeSort(bool decr=false) {
 }
 
 
+// quicksort methods
+int Sort::partition(vector<DTYPE> &arr, int low, int high) {
+	
+	DTYPE pivot = arr[high];
+	
+	int i = low - 1;
+	
+	for(int j=low; j<high; j++)
+		if( arr[j] < pivot) {
+			
+			i++;
+			swap( arr[i], arr[j]);
+		}
+	
+	swap(arr[i+1], arr[high]);
+	
+	return i+1;
+}
+
+void Sort::quick(vector<DTYPE> &arr, int low, int high) {
+	
+	if( low < high ) {
+		
+		int pidx = partition(arr, low, high);
+		
+		quick(arr, low, pidx - 1); //left of pivot
+		quick(arr, pidx + 1, high); //right of pivot
+	}
+	
+}
+
+void Sort::quickSort(bool decr=false) {
+	vector<DTYPE> daa = this->data;
+	
+	quick(daa, 0, daa.size()-1);
+	
+	this->data = daa;
+	
+	if(decr) //O(n)
+	 	reverse();
+	
+}
+
 
 int main() 
 {
@@ -208,10 +244,10 @@ int main()
 	//  float, etc.) (take a look at the for loop
 	// below)
 	
-    int length;
+    long int length;
 	vector<DTYPE> v;
     
-    int max = 50, min = -20;
+    long int max = 10000, min = -50;
 	
 	srand(time(0));
     
@@ -220,12 +256,14 @@ int main()
     	DTYPE var = (rand()%max + min)*floatGEN;
     	v.push_back(var);
     }
-    	
 
     Sort s(v);
     s.display();
     cout<<endl;
-    s.mergeSort();
+    s.quickSort();
     s.display();
+    
+    cout<<"\n\n\n";
+    
     return 0;
 }
