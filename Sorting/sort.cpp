@@ -66,6 +66,7 @@ class Sort {
 void Sort::changeData(vector<DTYPE> data) {
     //update data altogether. No pushbacks to the vector
     this->data = data;
+    this->length = data.size();
     cout<<endl<<"Updated Data."<<endl;
 }
 
