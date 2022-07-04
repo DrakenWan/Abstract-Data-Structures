@@ -67,7 +67,7 @@ void Sort::changeData(vector<DTYPE> data) {
     //update data altogether. No pushbacks to the vector
     this->data = data;
     this->length = data.size();
-    cout<<endl<<"Updated Data."<<endl;
+    //cout<<endl<<"Updated Data."<<endl;
 }
 
 void Sort::display() {
@@ -186,7 +186,7 @@ void Sort::mergeSort(bool decr=false) {
 	
 	merge(daa);
 	
-	this->data = daa;
+	this->changeData(daa);
 	
 	if(decr) //O(n)
 		reverse();
@@ -229,7 +229,7 @@ void Sort::quickSort(bool decr=false) {
 	
 	quick(daa, 0, daa.size()-1);
 	
-	this->data = daa;
+	this->changeData(daa);
 	
 	if(decr) //O(n)
 	 	reverse();
