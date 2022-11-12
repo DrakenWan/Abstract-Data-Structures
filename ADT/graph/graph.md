@@ -1,10 +1,12 @@
-==GRAPHS!==
+<small> NOTE: I will refactor and cleanup this markdown file asap </small>
+ 
+# GRAPHS 
 
 G(E, V) where E is set of edges connecting 
 the set of vertices V
 
 
-=== TYPES ===
+## TYPES
 
 1.  A Null Graph has no edges.
 
