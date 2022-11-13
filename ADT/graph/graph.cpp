@@ -5,39 +5,26 @@
 
 using namespace std;
 
-class Graph {
-    int choice;
-    vector<vector <int>> adjMat;
-    vector<dtype> adjList;
-
+// this undirected graph is represented by adjacency matrix; personal choice
+class uGraph {
+    int nV; //number of vertices
+    vector<vector <int>> adjMat; //adjacency matrix
+    
     public:
-    Graph(int choice=0) {
-        this->choice = choice;
-        if(this->choice) cout<<"Using Adjacency List.";
-        if(!this->choice) cout<<"Using Adjacency Matrix";
-        cout<<"\nGraph created.";
+    uGraph() {
+        cout<<"\nSingle node Graph created.";
     }
 
-    Graph(vector<vector <int>> data) {
-        this->adjMat = data;
-        this->choice = 0;
+    uGraph(vector<vector <int>> matrix) {
+        this->adjMat = matrix;
+        this->nV = this->adjMat.size();
         cout<<"\nAdjacency Matrix created.";
     }
 
-    Graph(vector<dtype> al) {
-        this->adjList = al;
-        this->choice = 1;
-        cout<<"\nAdjacency List created.";
-    } 
-
-
     // temp functions
-    void display() {
-        if(this->choice) cout<<this->adjList[0];
-        if(!this->choice) cout<<this->adjMat[0][0];
+    void print() {
+        
     }
-
-
 };
 
 
@@ -49,9 +36,10 @@ int main() {
         {0, 0, 0, 1},
         {1, 0, 1, 0}
     };
+    cout<<aloo.size();
 
     vector<dtype> l(5,10);
-    Graph g(aloo);
-    g.display();
+    uGraph g(aloo);
+    g.print();
     return 0;
 }
