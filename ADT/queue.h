@@ -26,12 +26,18 @@ class queue {
 		
 		dtype dequeue() {
 			dtype x;
-			if(this->verbose) x = *(this->data.begin());
+			x = *(this->data.begin());
 			this->data.erase(this->data.begin());
 			if(this->verbose) cout<<endl<<x<<" deleted.\n";
+			return x;
 		}
 		
-		
+		bool isEmpty() {
+			if(this->data.size() > 0)
+				return false;
+			return true;	
+		}
+
 		void display() {
 			
 			if(this->verbose) cout<<"Queue Data:- ";
