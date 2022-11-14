@@ -12,8 +12,7 @@ the set of vertices V
 
 2.  A Trivial Graph has only a single vertex. Smallest possible graph
 
-3.  A graph in which edges do not have any direction is called
-    Undirected Graph.
+3.  A graph in which edges do not have any direction is called Undirected Graph.
 
 4.  Directed graph has edges with direction. 
     Illustration1-
@@ -98,7 +97,7 @@ AMatrix vs AList
     of edges then adjacency matrix is a good use
 
 Action        | Adj Matrix   | Adj List 
-----------------------------------
+---------------------------------------
 Add Edge      |  O(1)        | O(1)
 Removing Edge |  O(1)        | O(N)
 Initialize    |  O(N*N)      | O(N)

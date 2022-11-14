@@ -1,6 +1,6 @@
 #include<iostream>
 #include<vector>
-#include "../linked lists/singlylinkedlist.h"
+//#include "../linked lists/singlylinkedlist.h"
 #define dtype int
 
 using namespace std;
@@ -23,7 +23,12 @@ class uGraph {
 
     // temp functions
     void print() {
-        
+        cout<<"\n";
+        for(int i=0; i<this->nV; i++) {
+            for(int j=0; j<this->nV; j++) 
+                cout<<this->adjMat[i][j]<<" ";
+            cout<<endl;
+        }
     }
 };
 
@@ -38,7 +43,6 @@ int main() {
     };
     cout<<aloo.size();
 
-    vector<dtype> l(5,10);
     uGraph g(aloo);
     g.print();
     return 0;
