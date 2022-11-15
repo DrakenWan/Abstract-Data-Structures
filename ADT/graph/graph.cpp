@@ -20,6 +20,10 @@ class uGraph {
 
     uGraph(int vertices) {
         this->nV = vertices;
+        this->adjMat.resize(nV);
+        for(int i=0; i<nV; i++)
+            this->adjMat[i].resize(nV,0);
+        
         cout<<"\nGraph created.";
     }
 
@@ -33,7 +37,7 @@ class uGraph {
         if(nv != -1) this->nV = nv;
         this->adjMat = matrix;
         this->nV = this->adjMat.size();
-        cout<<"\nAdjacency Matrix created.";
+        cout<<"\nAdjacency Matrix updated.";
     }
 
     // temp functions
@@ -52,6 +56,7 @@ class uGraph {
     vector<int> returnChildNodes(int index);
     void bfs(int start);
     void dfs(int start);
+    void addEdge(int v, int w, int cost=1);
 };
 
 
@@ -124,6 +129,20 @@ void uGraph::dfs(int start) {
     }
 }
 
+
+void uGraph::addEdge(int v, int w, int cost){
+
+    if( !(v < this->nV && v > -1) && !(w < this->nV && w > -1))
+        {
+            cout<<"Bad vertex. Recheck.";
+            return;
+        }
+    this->adjMat[v][w] = cost;
+    this->adjMat[w][v] = cost;
+}
+
+
+//////// 
 void printVector(vector<int> arr) {
     cout<<endl;
     for(auto i=arr.begin(); i!=arr.end(); ++i)
@@ -141,7 +160,11 @@ int main() {
     cout<<aloo.size();
 
     uGraph g(aloo.size());
-    g.adjacencyMatrix(aloo);
+    //g.adjacencyMatrix(aloo);
+    g.addEdge(0,1);
+    g.addEdge(0,3);
+    g.addEdge(1,2);
+    g.addEdge(2,3);
     g.print();
 
     vector<int> nodes = g.nodes();
