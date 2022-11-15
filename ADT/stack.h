@@ -1,6 +1,6 @@
 using namespace std;
 
-template <typename S>
+template<typename S>
 class stack {
     vector<S> content;
     int length;

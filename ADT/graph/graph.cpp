@@ -1,7 +1,7 @@
 #include<iostream>
 #include<vector>
-#include "../queue.h"
 #include "../stack.h"
+#include "../queue.h"
 #define dtype int
 
 using namespace std;
@@ -130,7 +130,6 @@ void printVector(vector<int> arr) {
         cout<<*i<<" ";
     cout<<endl;
 }
-
 int main() {
 
     vector<vector<int>> aloo = {

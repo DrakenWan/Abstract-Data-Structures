@@ -1,6 +1,6 @@
 #define dtype int
-using namespace std;
 
+using namespace std;
 
 class queue {
 	vector<dtype> data;
