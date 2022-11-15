@@ -1,17 +1,13 @@
 #include<iostream>
 #include<vector>
-//#include "../linked lists/singlylinkedlist.h"
 #include "../queue.h"
+#include "../stack.h"
 #define dtype int
 
 using namespace std;
 
 // this undirected graph is represented by adjacency matrix; personal choice
 class uGraph {
-    /*
-        This is an undirected graph implemented by
-         
-    */
     int nV; //number of vertices
     vector<vector <int>> adjMat; //adjacency matrix
     
@@ -55,6 +51,7 @@ class uGraph {
     vector<int> nodes();
     vector<int> returnChildNodes(int index);
     void bfs(int start);
+    void dfs(int start);
 };
 
 
@@ -83,7 +80,7 @@ void uGraph::bfs(int start) {
     vector<bool> visited;
     visited.resize(this->nV, false);
 
-    queue q; //queue for our BFS
+    queue q; //queue for our nodes
 
     //pushing start node of graph into visited nodelist
     visited[start] = true;
@@ -102,6 +99,28 @@ void uGraph::bfs(int start) {
                 q.enqueue(child);
              }
 
+    }
+}
+
+void uGraph::dfs(int start) {
+    vector<bool> visited;
+    visited.resize(this->nV, false);
+
+    stack<dtype> s; //stack for our nodes
+
+    //push starting node into stack
+    visited[start] = true;
+    s.push(start);
+
+    while(s.StackLength() != 0) {
+        int node = s.pop();
+        cout<<node<<" ";
+
+        for(auto child : this->returnChildNodes(node))
+            if(!visited[child]) {
+                visited[child]=true;
+                s.push(child);
+            }
     }
 }
 
@@ -136,7 +155,9 @@ int main() {
 
     printVector(succs);
 
-    g.bfs(1);
+    g.bfs(0);
+    cout<<endl;
+    g.dfs(0);
     return 0;
 }
 

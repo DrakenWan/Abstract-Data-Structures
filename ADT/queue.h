@@ -1,7 +1,4 @@
-#include<iostream>
-#include<vector>
 #define dtype int
-
 using namespace std;
 
 
