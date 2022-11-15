@@ -36,7 +36,6 @@ class queue {
 		}
 
 		void display() {
-			
 			if(this->verbose) cout<<"Queue Data:- ";
 			cout<<"\n[(front)-->  ";
 			for(auto i = this->data.begin(); i != this->data.end(); ++i) {
