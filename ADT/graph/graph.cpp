@@ -187,7 +187,6 @@ void uGraph::dfs_recursive(int node, vector<bool> &visited) {
 
 //////// 
 void printVector(vector<int> arr) {
-    cout<<endl;
     for(auto i=arr.begin(); i!=arr.end(); ++i)
         cout<<*i<<" ";
     cout<<endl;
@@ -253,7 +252,7 @@ int main() {
     //printVector(succs);
 
 
-    int node_index = 0;
+    int node_index = 2;
     cout<<"recursive DFS Traversal from node "<<node_index<<".\n";
     g.dfs_recursive_main(node_index);
     cout<<endl;
@@ -263,7 +262,7 @@ int main() {
     cout<<"BFS Traversal from node "<<node_index<<".\n";
     g.bfs(node_index);
 
-    cout<<endl<<endl;
+    cout<<endl<<endl<<"indexing example g[0] returns adjacent nodes of 0:-\n";
 
     printVector(g[node_index]);
     return 0;
