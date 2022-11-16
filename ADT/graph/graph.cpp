@@ -58,15 +58,31 @@ class uGraph {
 
     // methods prototype
     vector<int> nodes();
-    vector<int> returnChildNodes(int index);
+    vector<int> returnChildNodes(int index); //prototype name Child is not technically correct.
     void bfs(int start);
     void dfs(int start);
-    void addEdge(int v, int w, int cost=1);
+    void addEdge(int v, int w, int cost=1); //by default cost is 1 if not set
 
     void dfs_recursive_main(dtype start);
     void dfs_recursive(dtype node, vector<bool> &visited);
+
+    vector<int> operator[](dtype index);
 };
 
+//
+vector<int> uGraph::operator[](dtype index) {
+    if(index > this->nV) {
+        cout<<"Error: vertex not present in graph.";
+        exit(0);
+    }
+
+    vector<dtype> disp;
+    for(auto i = 0; i < this->adjMat[index].size(); i++)
+        if(this->adjMat[index][i] != 0)
+            disp.push_back(i);
+
+    return disp;
+}
 
 // returns a vector of nodes in the graph
 vector<int> uGraph::nodes() {
@@ -243,6 +259,13 @@ int main() {
     cout<<endl;
     cout<<"DFS Traversal from node "<<node_index<<".\n";
     g.dfs(node_index);
+    cout<<endl;
+    cout<<"BFS Traversal from node "<<node_index<<".\n";
+    g.bfs(node_index);
+
+    cout<<endl<<endl;
+
+    printVector(g[node_index]);
     return 0;
 }
 
