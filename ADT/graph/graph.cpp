@@ -9,6 +9,10 @@ using namespace std;
 // this undirected graph is represented by adjacency matrix; personal choice
 //point to note is that parallel edges cannot be displayed in adjacency matrix representation
 class uGraph {
+
+    /// NOTE: I have incorrectly named 'returnChildNodes' method. This is technically incorrect as
+    ///        in graphs we don't have parent-child relationships. We have adjacency between nodes
+
     int nV; //number of vertices
     vector<vector <int>> adjMat; //adjacency matrix
     
@@ -58,6 +62,9 @@ class uGraph {
     void bfs(int start);
     void dfs(int start);
     void addEdge(int v, int w, int cost=1);
+
+    void dfs_recursive_main(dtype start);
+    void dfs_recursive(dtype node, vector<bool> &visited);
 };
 
 
@@ -143,6 +150,25 @@ void uGraph::addEdge(int v, int w, int cost){
 }
 
 
+//recursive dfs main function
+void uGraph::dfs_recursive_main(dtype node) {
+    vector<bool> visited;
+    visited.resize(this->nV, false);
+    
+    this->dfs_recursive(node, visited);
+}
+
+
+void uGraph::dfs_recursive(int node, vector<bool> &visited) {
+    visited[node] = true;
+    cout<<node<<" ";
+    vector<dtype> neighbs = this->returnChildNodes(node);
+
+    for(auto &i : neighbs)
+        if(visited[i] == 0)
+            this->dfs_recursive(i, visited);
+}
+
 //////// 
 void printVector(vector<int> arr) {
     cout<<endl;
@@ -150,6 +176,11 @@ void printVector(vector<int> arr) {
         cout<<*i<<" ";
     cout<<endl;
 }
+
+
+
+
+
 int main() {
 
     vector<vector<int>> aloo = {
@@ -206,9 +237,9 @@ int main() {
     //printVector(succs);
 
 
-    int node_index = 2;
-    cout<<"BFS Traversal from node "<<node_index<<".\n";
-    g.bfs(node_index);
+    int node_index = 0;
+    cout<<"recursive DFS Traversal from node "<<node_index<<".\n";
+    g.dfs_recursive_main(node_index);
     cout<<endl;
     cout<<"DFS Traversal from node "<<node_index<<".\n";
     g.dfs(node_index);
