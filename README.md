@@ -6,4 +6,8 @@ The entire library is to be written in C++ but if I feel the need I might adjust
 
 I do not have any plan in regards to it's structure or where to start off. I am currently sticking to learning from CLRS and Coursera and whatever DS or A comes my way I will implement it into the repo after learning of it.
 
-I keep mentioning that it is a library. However, there are no header files just CPP files. These algorithms are just written for me to learn and I have not given care to what sort of data structure I have used to store what kind of data. In most of the algorithms, I have used integer vectors by default however in some files I might've used Templates to store general (primary data types).
+## Updates
+
+I will post updates here from this commit onwards.
+
+* timestamp-11162022 - I am currently working on implementing a priority queue DS. The idea is to make it viable to use for our search algorithms such as UCS or A*. I am committing some progress on this DS but one of the functions in the pqueue DS is wrongly implemented and won't give any results

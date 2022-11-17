@@ -252,7 +252,7 @@ int main() {
     //printVector(succs);
 
 
-    int node_index = 2;
+    int node_index = 5;
     cout<<"recursive DFS Traversal from node "<<node_index<<".\n";
     g.dfs_recursive_main(node_index);
     cout<<endl;
@@ -262,7 +262,7 @@ int main() {
     cout<<"BFS Traversal from node "<<node_index<<".\n";
     g.bfs(node_index);
 
-    cout<<endl<<endl<<"indexing example g[0] returns adjacent nodes of 0:-\n";
+    cout<<endl<<endl<<"indexing example g["<<node_index<<"] returns adjacent nodes of "<<node_index<<":-\n";
 
     printVector(g[node_index]);
     return 0;
