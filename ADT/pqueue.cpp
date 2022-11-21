@@ -6,7 +6,7 @@
 using namespace std;
 
 
-// min heap execution
+// min heap representation used
 class pqueue {
         vector< pair<dtype, int> > data;
         void swap(pair<dtype, int>&, pair<dtype, int>&);
@@ -26,7 +26,7 @@ class pqueue {
 pair<dtype, int> pqueue::peek() {
     if(this->data.size() == 0) {
         cout<<"Pqueue is empty.";
-        pair<dtype, int> s(dtype_smpl,0); //not a generalized value returned
+        pair<dtype, int> s(dtype_smpl,0); //not a generalized value returned //change it later
         return s;
     }
     return this->data[0];
@@ -52,15 +52,60 @@ void pqueue::enqueue(pair<dtype, int> value) {
 
 pair<dtype, int> pqueue::dequeue(bool verbose) {
 
-    //swapping the max(root) with last leaf node. then pop out the max from the end
-    // it is kind of like popping the prioritised node from front of pq
-
     // I will swap last element with the root and then pop the root swapped to last
     // and then to maintain the pqueue invariant do what is required
-    int last = this->data.size() - 1;
+    int last = this->data.size() - 1; 
+    pair<dtype, int> root(dtype_smpl, 0); 
+
+    // if pqueue is empty
+    if(last < 0)  {
+        cout<<"ERROR; There are no elements in the queue.";
+        return root;
+    }
     this->swap(this->data[0], this->data[last]);
-    this->data.pop_back();
-    
+    root = this->data[last];
+    if(verbose) cout<<"Element "<<root.first<<" with priority "<<root.second<<".\n";
+
+    this->data.pop_back(); //remove last element
+    this->data.resize(last); //reduce size/capacity of vector ds
+
+    // maintaining pqueue invariant
+    /*   
+        Algorithm
+            set lidx = 0
+            set child1 = (lidx + 1) * 2 - 1
+            set child2 = (lidx+1)*2
+            while lidx < size
+                if child1 < lidx and child1 < size
+                then swap
+                     lidx = child1
+                     enumerate child1, child2
+                
+                if child2 < lidx and child2 < size
+                then swap
+                     lidx = child2
+                     enumerate child1, child2    
+    */
+    int lidx = 0, child2 = (lidx+1)*2, child1 = (lidx+1)*2 - 1;
+
+    while(lidx < this->data.size()) {
+        if( child1 < this->data.size() && this->data[child1].second < this->data[lidx].second)
+        {
+            swap(this->data[child1], this->data[lidx]);
+            lidx = child1;
+        }
+        else if( child2 < this->data.size() && this->data[child2].second < this->data[lidx].second ) 
+        {
+            swap(this->data[child2], this->data[lidx]);
+            lidx = child2;
+        }
+        else {
+            return root;
+        }
+        child1 = (lidx+1)*2 - 1;
+        child2 = (lidx+1)*2;
+        
+    } //while loot
 }
 
 void pqueue::swap(pair<dtype, int> &a, pair<dtype, int> &b) {
@@ -92,6 +137,11 @@ int main() {
     }
     
     pq.print();
-    
+    data = pq.dequeue();
+    cout<<data.first<<" - "<<data.second;
+
+    pq.print();
+
+
     return 0;
 }
