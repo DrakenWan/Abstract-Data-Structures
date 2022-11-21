@@ -141,7 +141,5 @@ int main() {
     cout<<data.first<<" - "<<data.second;
 
     pq.print();
-
-
     return 0;
 }
