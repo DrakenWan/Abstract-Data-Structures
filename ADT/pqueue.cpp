@@ -37,14 +37,16 @@ void pqueue::enqueue(pair<dtype, int> value) {
     this->data.push_back(value);
 
     // compare and swap child with parent if child smaller than parent
-    int lidx = this->data.size() - 1;
+    int lidx = this->data.size() - 1, parentidx=(lidx+1)/2 - 1;
 
     // check of condition if the index is out of bounds and compare the parent with child
     // while above condn is true do swaps
-    while(lidx > -1 && lidx/2+1 > -1 && this->data[lidx].second < this->data[lidx/2 + 1].second)
+    
+    while(lidx > -1 && parentidx > -1 && this->data[lidx].second < this->data[parentidx].second)
      {
-        this->swap(this->data[lidx], this->data[lidx/2 + 1]);
-        lidx /= 2;
+        this->swap(this->data[lidx], this->data[parentidx]);
+        lidx = parentidx;
+        parentidx = (lidx+1)/2-1;
      }
 }
 
@@ -52,27 +54,13 @@ pair<dtype, int> pqueue::dequeue(bool verbose) {
 
     //swapping the max(root) with last leaf node. then pop out the max from the end
     // it is kind of like popping the prioritised node from front of pq
-    swap(*(this->data.begin()), *(this->data.end()));
-    if(verbose) cout<<(this->peek()).first;
-    this->data.pop_back();
 
-    int ti = 0;
-    while(ti < this->data.size()) {
-        
-        if( ((ti+1)*2 - 1) < this->data.size())
-        {
-            int mini = (ti+1)*2 - 1;
-            if ( mini+1 < this->data.size() )
-                if(this->data[mini+1].second < this->data[mini].second )
-                    mini = mini+1;
-            
-            if(this->data[ti] < this->data[mini])
-                {
-                    swap(this->data[ti], this->data[mini]);
-                    ti = mini;
-                }
-        }   
-    }
+    // I will swap last element with the root and then pop the root swapped to last
+    // and then to maintain the pqueue invariant do what is required
+    int last = this->data.size() - 1;
+    this->swap(this->data[0], this->data[last]);
+    this->data.pop_back();
+    
 }
 
 void pqueue::swap(pair<dtype, int> &a, pair<dtype, int> &b) {
@@ -97,6 +85,7 @@ int main() {
     
     for(auto i : {1,2,3,4,5}) {
         data.first = i;
+        cout<<data.first<<" - ";
         cin>>data.second;
 
         pq.enqueue(data);
