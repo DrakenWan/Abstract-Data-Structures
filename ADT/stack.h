@@ -47,6 +47,7 @@ S stack<S>::pop(bool verbose)
     S value = this->content.back();
     if(verbose) cout<<"Deleted content value: "<<value;
     this->content.pop_back();
+    this->content.shrink_to_fit(); //this will shrink the size //pop_back alone doesn't shrink the size
     this->length = content.size(); 
     return value; 
     }

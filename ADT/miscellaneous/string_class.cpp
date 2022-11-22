@@ -11,8 +11,9 @@ class String
 	
 	public:
 	String() {
-		cout<<this->value.size();
+		size = this->value.size();
 	}
+
 	
 	String(vector<char> value) {
 		

@@ -35,7 +35,9 @@ int main()
     s2.push("camila");
     s2.push("noora");
     s2.toString();
+    cout<<s2.StackLength();
     s2.pop();
     s2.toString();
+    cout<<s2.StackLength();
     return 0;
 }
