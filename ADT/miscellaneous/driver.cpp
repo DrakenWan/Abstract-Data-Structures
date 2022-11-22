@@ -7,6 +7,6 @@ int main()
  {
  	complex c1 {3};
  	c1.change(-1,false);
- 	c1.display();
+ 	cout<<c1;
  	return 0;
  }
