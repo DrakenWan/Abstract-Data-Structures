@@ -61,9 +61,9 @@ class btree {
     
     void insert(dtype_bt key);
     int _branching_() {return this->branching;}
-    node* _root_() {return this->root;}
+    //node* _root_() {return this->root;} //this is a threat to the tree as we are using pointers.
 
-    void display(node*, int);
+    void display(int);
 };
 
 
@@ -98,7 +98,7 @@ void btree::insert(dtype_bt key, node *root){
     }
 } // private insert method
 
-void btree::display(node* root, int choice=1) {
+void btree::display(int choice=1) {
     /*
         Function to display contents of
         tree.
@@ -108,13 +108,13 @@ void btree::display(node* root, int choice=1) {
     */
     switch(choice) {
         case 0 :
-            preorder(root);
+            preorder(this->root);
             break;
         case 1 :
-            inorder(root);
+            inorder(this->root);
             break;
         case 2 :
-            postorder(root);
+            postorder(this->root);
             break;
         default :
             cout<<"Wrong choice selected. select from 0,1,2.";
@@ -155,6 +155,6 @@ int main()
     buddy.insert(53);
     buddy.insert(66);
     buddy.insert(78);
-    buddy.display(buddy._root_(), 0);
+    buddy.display(); //in order traversal.
     return 0;
 }
