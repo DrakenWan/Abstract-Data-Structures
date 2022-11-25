@@ -15,7 +15,6 @@ where L is leaf nodes and I is internal nodes
 */
 
 #include<iostream>
-#include<vector>
 #include "../../queue.h"
 #define dtype_bt int //the key of the node of the type `dtype_bt`. It is better to use integer keys
 // also keep the keys of the data type that can work with relational operators "<, >, >=, <=, =="

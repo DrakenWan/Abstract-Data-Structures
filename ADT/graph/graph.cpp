@@ -1,5 +1,5 @@
 #include<iostream>
-#include<vector>
+// #include<vector>
 #include "../stack.h"
 #include "../queue.h"
 #define dtype int
@@ -109,7 +109,7 @@ void uGraph::bfs(int start) {
     vector<bool> visited;
     visited.resize(this->nV, false);
 
-    queue q; //queue for our nodes
+    queue<dtype> q; //queue for our nodes
 
     //pushing start node of graph into visited nodelist
     visited[start] = true;
@@ -156,13 +156,16 @@ void uGraph::dfs(int start) {
 
 void uGraph::addEdge(int v, int w, int cost){
 
-    if( !(v < this->nV && v > -1) && !(w < this->nV && w > -1))
-        {
-            cout<<"Bad vertex. Recheck.";
-            return;
-        }
-    this->adjMat[v][w] = cost;
-    this->adjMat[w][v] = cost;
+    if( v < this->nV && w < this->nV)
+    {
+        this->adjMat[v][w] = cost;
+        this->adjMat[w][v] = cost;
+    }
+    else {
+        cout<<"Bad vertex. Recheck. Exiting program.";
+        exit(0);
+    }
+    
 }
 
 

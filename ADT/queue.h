@@ -1,4 +1,5 @@
 #define dtype int
+#include<vector>
 
 using namespace std;
 

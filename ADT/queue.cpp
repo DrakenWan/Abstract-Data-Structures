@@ -4,7 +4,6 @@
 */
 
 #include<iostream>
-#include<vector>
 #include "queue.h"
 #define dtype int
 
