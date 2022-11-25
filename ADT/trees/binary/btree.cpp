@@ -15,6 +15,8 @@ where L is leaf nodes and I is internal nodes
 */
 
 #include<iostream>
+#include<vector>
+#include "../../queue.h"
 #define dtype_bt int //the key of the node of the type `dtype_bt`. It is better to use integer keys
 // also keep the keys of the data type that can work with relational operators "<, >, >=, <=, =="
 
@@ -47,6 +49,8 @@ class btree {
     void preorder(node*);
     void inorder(node*);
     void postorder(node*);
+    void levelorder(node*, queue<node*>);
+    void levelorder_helper(node*);
 
     public:
 
@@ -108,16 +112,41 @@ void btree::display(int choice=1) {
     */
     switch(choice) {
         case 0 :
-            preorder(this->root);
+            this->preorder(this->root);
             break;
         case 1 :
-            inorder(this->root);
+            this->inorder(this->root);
             break;
         case 2 :
-            postorder(this->root);
+            this->postorder(this->root);
+            break;
+        case 3 :
+            this->levelorder_helper(this->root);
             break;
         default :
             cout<<"Wrong choice selected. select from 0,1,2.";
+    }
+}
+
+void btree::levelorder_helper(node* root) {
+    if(root != NULL) {
+        queue<node*> q;
+        q.enqueue(root);
+        this->levelorder(root, q);
+    } else {
+        cout<<"Null tree.";
+    }
+}
+
+void btree::levelorder(node *root, queue<node*> q) {
+    
+    while(!q.isEmpty()) {
+        node* NODE  = q.dequeue();
+        if(NODE != NULL) {
+            cout<<NODE->data<<" ";
+            q.enqueue(NODE->left);
+            q.enqueue(NODE->right);
+        }
     }
 }
 
@@ -155,6 +184,6 @@ int main()
     buddy.insert(53);
     buddy.insert(66);
     buddy.insert(78);
-    buddy.display(); //in order traversal.
+    buddy.display(3); //in order traversal.
     return 0;
 }

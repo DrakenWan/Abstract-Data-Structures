@@ -6,8 +6,8 @@ Author: Kartikay Kaul
 ////////////////// +++++++++++++++++++++ //////////////////////
  */
 #include<iostream>
-#include<typeinfo>
 #include<vector>
+#include<typeinfo>
 #include "stack.h"
 
 using namespace std;

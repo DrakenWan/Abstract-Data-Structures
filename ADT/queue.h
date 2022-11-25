@@ -2,8 +2,9 @@
 
 using namespace std;
 
+template<typename S>
 class queue {
-	vector<dtype> data;
+	vector<S> data;
 
 	int verbose;
 	/*
@@ -17,14 +18,15 @@ class queue {
 			if(this->verbose) cout<<"Queue created!\n";
 		}
 		
-		void enqueue(dtype val) {
+		void enqueue(S val) {
 			data.push_back(val);
 		} 
 		
-		dtype dequeue() {
-			dtype x;
-			x = *(this->data.begin());
+		S dequeue() {
+			S x;
+			x = this->data[0];
 			this->data.erase(this->data.begin());
+			this->data.shrink_to_fit();
 			if(this->verbose) cout<<endl<<x<<" deleted.\n";
 			return x;
 		}

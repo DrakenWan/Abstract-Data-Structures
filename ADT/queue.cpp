@@ -13,7 +13,7 @@ using namespace std;
 
 int main() {
 	
-	queue _;
+	queue<int> _;
 	_.enqueue(10);
 	_.enqueue(20);
 	_.enqueue(30);
