@@ -265,19 +265,19 @@ int main() {
 
    // modified form of example graph from the video: https://www.youtube.com/watch?v=1wu2sojwsyQ //
    // This is an undirected graph
-    g.addEdge(0, 1, 1);
+    g.addEdge(0, 1, 7);
     g.addEdge(0, 2, 3);
     g.addEdge(0, 4, 2);
     g.addEdge(1, 7, 4);
-    g.addEdge(1, 2, 1);
+    g.addEdge(1, 2, 4);
     g.addEdge(2, 3, 2);
     g.addEdge(3, 8, 1);
     g.addEdge(3, 6, 12);
     g.addEdge(4, 3, 4);
     g.addEdge(4, 5, 5);
     g.addEdge(5, 9, 6);
-    g.addEdge(6, 4, 1);
-    g.addEdge(6, 9, 4);
+    g.addEdge(6, 4, 3);
+    g.addEdge(6, 9, 8);
 
     g.print();
     vector<int> nodes = g.nodes();
