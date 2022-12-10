@@ -2,6 +2,8 @@
 // #include<vector>
 #include "../stack.h"
 #include "../queue.h"
+#include "../pqueue.h"
+
 #define dtype int
 
 using namespace std;
@@ -61,10 +63,14 @@ class uGraph {
     vector<int> returnChildNodes(int index); //prototype name Child is not technically correct.
     void bfs(int start);
     void dfs(int start);
+    void ucs(int start);
+
     void addEdge(int v, int w, int cost=1); //by default cost is 1 if not set
 
     void dfs_recursive_main(dtype start);
     void dfs_recursive(dtype node, vector<bool> &visited);
+
+    
 
     vector<int> operator[](dtype index);
 };
@@ -153,6 +159,34 @@ void uGraph::dfs(int start) {
     }
 }
 
+void uGraph::ucs(int start) {
+    vector<bool> visited;
+    visited.resize(this->nV, false);
+
+    pqueue pq;
+    pair<dtype, int> startNode;
+    startNode.first = start;
+    startNode.second = 0;
+
+    visited[start] = true;
+    pq.enqueue(startNode);
+
+    while(!pq.isEmpty()) {
+        pair<dtype, int> node = pq.dequeue();
+        cout<<node.first<<" ";
+
+        for(auto child : this->returnChildNodes(node.first)) {
+            if(!visited[child]) {
+                visited[child] = true;
+                pair <dtype, int> childNode;
+                childNode.first = child;
+                childNode.second = this->adjMat[node.first][child];
+
+                pq.enqueue(childNode);
+            }
+        }
+    }
+}
 
 void uGraph::addEdge(int v, int w, int cost){
 
@@ -264,6 +298,10 @@ int main() {
     cout<<endl;
     cout<<"BFS Traversal from node "<<node_index<<".\n";
     g.bfs(node_index);
+    cout<<endl;
+    cout<<"UCS Traversal from node "<<node_index<<".\n";
+    g.ucs(node_index);
+    cout<<endl;
 
     cout<<endl<<endl<<"indexing example g["<<node_index<<"] returns adjacent nodes of "<<node_index<<":-\n";
 
