@@ -63,7 +63,7 @@ class uGraph {
     vector<int> returnChildNodes(int index); //prototype name Child is not technically correct.
     void bfs(int start);
     void dfs(int start);
-    void ucs(int start);
+    void ucs(int start, dtype goal);
 
     void addEdge(int v, int w, int cost=1); //by default cost is 1 if not set
 
@@ -159,7 +159,7 @@ void uGraph::dfs(int start) {
     }
 }
 
-void uGraph::ucs(int start) {
+void uGraph::ucs(int start, dtype goal) {
     vector<bool> visited;
     visited.resize(this->nV, false);
 
@@ -176,6 +176,10 @@ void uGraph::ucs(int start) {
         cout<<node.first<<" ";
 
         for(auto child : this->returnChildNodes(node.first)) {
+            if(child == goal) {
+                cout<<"\nFound goal "<<goal<<" at cost "<<node.second + this->adjMat[node.first][child];
+                return;
+            }
             if(!visited[child]) {
                 visited[child] = true;
                 pair <dtype, int> childNode;
@@ -261,19 +265,19 @@ int main() {
 
    // modified form of example graph from the video: https://www.youtube.com/watch?v=1wu2sojwsyQ //
    // This is an undirected graph
-    g.addEdge(0, 1, 5);
-    g.addEdge(0, 2, 2);
-    g.addEdge(0, 4, 6);
+    g.addEdge(0, 1, 1);
+    g.addEdge(0, 2, 3);
+    g.addEdge(0, 4, 2);
     g.addEdge(1, 7, 4);
-    g.addEdge(1, 2, 3);
-    g.addEdge(2, 3, 1);
+    g.addEdge(1, 2, 1);
+    g.addEdge(2, 3, 2);
     g.addEdge(3, 8, 1);
-    g.addEdge(3, 6, 1);
+    g.addEdge(3, 6, 12);
     g.addEdge(4, 3, 4);
-    g.addEdge(4, 5, 2);
-    g.addEdge(5, 9, 2);
-    g.addEdge(6, 4, 2);
-    g.addEdge(6, 9, 8);
+    g.addEdge(4, 5, 5);
+    g.addEdge(5, 9, 6);
+    g.addEdge(6, 4, 1);
+    g.addEdge(6, 9, 4);
 
     g.print();
     vector<int> nodes = g.nodes();
@@ -289,7 +293,7 @@ int main() {
     //printVector(succs);
 
 
-    int node_index = 5;
+    int node_index = 0;
     cout<<"recursive DFS Traversal from node "<<node_index<<".\n";
     g.dfs_recursive_main(node_index);
     cout<<endl;
@@ -300,7 +304,9 @@ int main() {
     g.bfs(node_index);
     cout<<endl;
     cout<<"UCS Traversal from node "<<node_index<<".\n";
-    g.ucs(node_index);
+
+    dtype goal = 9;
+    g.ucs(node_index, goal);
     cout<<endl;
 
     cout<<endl<<endl<<"indexing example g["<<node_index<<"] returns adjacent nodes of "<<node_index<<":-\n";
