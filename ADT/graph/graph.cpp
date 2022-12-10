@@ -166,7 +166,7 @@ void uGraph::ucs(int start) {
     pqueue pq;
     pair<dtype, int> startNode;
     startNode.first = start;
-    startNode.second = 0;
+    startNode.second = 0; //arbitrary number = 0
 
     visited[start] = true;
     pq.enqueue(startNode);
@@ -180,7 +180,7 @@ void uGraph::ucs(int start) {
                 visited[child] = true;
                 pair <dtype, int> childNode;
                 childNode.first = child;
-                childNode.second = this->adjMat[node.first][child];
+                childNode.second =  node.second + this->adjMat[node.first][child];
 
                 pq.enqueue(childNode);
             }
@@ -262,16 +262,16 @@ int main() {
    // modified form of example graph from the video: https://www.youtube.com/watch?v=1wu2sojwsyQ //
    // This is an undirected graph
     g.addEdge(0, 1, 5);
-    g.addEdge(0, 2, 9);
+    g.addEdge(0, 2, 2);
     g.addEdge(0, 4, 6);
-    g.addEdge(1, 7, 9);
+    g.addEdge(1, 7, 4);
     g.addEdge(1, 2, 3);
     g.addEdge(2, 3, 1);
-    g.addEdge(3, 8, 5);
-    g.addEdge(3, 6, 7);
+    g.addEdge(3, 8, 1);
+    g.addEdge(3, 6, 1);
     g.addEdge(4, 3, 4);
     g.addEdge(4, 5, 2);
-    g.addEdge(5, 9, 7);
+    g.addEdge(5, 9, 2);
     g.addEdge(6, 4, 2);
     g.addEdge(6, 9, 8);
 
