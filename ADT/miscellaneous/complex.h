@@ -51,6 +51,7 @@ class complex {
 			complex operator*(complex c1);
 			complex operator/(complex c1);
 			double operator[](int index);
+			bool operator==(complex c1);
 			friend ostream& operator<<(ostream& os, const complex& c);
 };
 
@@ -89,7 +90,11 @@ complex complex::operator/(complex c1) {
 	return c;
 }
 
-
+bool complex::operator==(complex c1) {
+	if(c1.img == this->img && c1.real == this->real)
+		return true;
+	return false;
+}
 
 ostream& operator<<(ostream& os, const complex& c)
 {
