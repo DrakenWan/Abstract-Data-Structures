@@ -50,6 +50,7 @@ class complex {
 			complex operator-(complex c1);
 			complex operator*(complex c1);
 			complex operator/(complex c1);
+			double operator[](int index);
 			friend ostream& operator<<(ostream& os, const complex& c);
 };
 
@@ -89,6 +90,7 @@ complex complex::operator/(complex c1) {
 }
 
 
+
 ostream& operator<<(ostream& os, const complex& c)
 {
     if(c.real != 0)
@@ -110,4 +112,19 @@ ostream& operator<<(ostream& os, const complex& c)
 
 	if(c.img == 0 && c.real == 0)
 		os<<0;
+}
+
+double complex::operator[](int index) {
+	try {
+		switch(index) {
+			case 0 :
+				return this->real;
+			case 1 :
+				return this->img;
+			default :
+				throw(index);
+		}
+	} catch(int num) {
+		cout<<"index "<<num<<" not in range. Accepted values: 0 (real) and 1 (imaginary).";
+	}
 }

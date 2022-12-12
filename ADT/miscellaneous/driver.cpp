@@ -12,5 +12,7 @@ int main()
 
 	complex c2 {1, 3};
 	cout<<c1/c2;
+	
+	cout<<endl<<c1[1];
  	return 0;
  }
