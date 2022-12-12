@@ -5,8 +5,12 @@ using namespace std;
 
 int main()
  {
- 	complex c1 {3};
- 	c1.change(-1,false);
+ 	complex c1 {0,1};
+ 	//c1.change(2,true);
  	cout<<c1;
+	cout<<endl;
+
+	complex c2 {-2, 1};
+	cout<<c1*c2;
  	return 0;
  }

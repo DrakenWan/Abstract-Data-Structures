@@ -45,22 +45,56 @@ class complex {
 					this->img = val;
 			}
 
+			//operator overloading for some operations
+			complex operator+(complex c1);
+			complex operator-(complex c1);
+			complex operator*(complex c1);
+
 			friend ostream& operator<<(ostream& os, const complex& c);
 };
+
+
+complex complex::operator+(complex c1) {
+	complex c;
+	c.real = this->real + c1.real;
+	c.img = this->img + c1.img;
+	return c;
+}
+
+complex complex::operator-(complex c1) {
+	complex c;
+	c.real = this->real - c1.real;
+	c.img = this->img - c1.img;
+	return c;
+}
+
+complex complex::operator*(complex c1) {
+	complex c;
+	c.real = this->real * c1.real + (-1) * (this->img * c1.img);
+	c.img = this->img * c1.real + this->real * c1.img;
+	return c;
+}
+
 
 ostream& operator<<(ostream& os, const complex& c)
 {
     if(c.real != 0)
-		cout<<c.real;
+		os<<c.real;
 	
 	if(c.real !=0 && c.img !=0) {
 		if(c.img > 0)
-			cout<<'+';
+			os<<'+';
 	} 
 	
-	if(c.img !=0) 
-		cout<<c.img<<'i';
-		
+	if(c.img > 1) 
+		os<<c.img<<'i';
+	else if(c.img == 1 )
+		os<<'i';
+	else if(c.img == -1)
+		os<<"-i";
+	else if(c.img < 0)
+		os<<c.img<<'i';
+
 	if(c.img == 0 && c.real == 0)
-		cout<<0;
+		os<<0;
 }
