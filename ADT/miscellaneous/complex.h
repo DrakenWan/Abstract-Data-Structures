@@ -49,7 +49,7 @@ class complex {
 			complex operator+(complex c1);
 			complex operator-(complex c1);
 			complex operator*(complex c1);
-
+			complex operator/(complex c1);
 			friend ostream& operator<<(ostream& os, const complex& c);
 };
 
@@ -72,6 +72,19 @@ complex complex::operator*(complex c1) {
 	complex c;
 	c.real = this->real * c1.real + (-1) * (this->img * c1.img);
 	c.img = this->img * c1.real + this->real * c1.img;
+	return c;
+}
+
+complex complex::operator/(complex c1) {
+	complex c;
+	double denom = c1.real*c1.real + c1.img*c1.img;
+	c1.change(-c1.img, false);
+	c.real = this->real * c1.real + (-1) * (this->img * c1.img);
+	c.img = this->img * c1.real + this->real * c1.img;
+
+	c.real /= denom;
+	c.img /= denom;
+
 	return c;
 }
 
