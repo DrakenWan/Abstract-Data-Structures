@@ -1,7 +1,8 @@
 #include<iostream>
-#include "C:\\Github\\Abstract-Data-Structures\\ADT\\miscellaneous\\complex.h"
+#include "./complex.h"
 
 using namespace std;
+using namespace adt;
 
 int main()
  {

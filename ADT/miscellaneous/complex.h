@@ -1,5 +1,6 @@
 using namespace std;
 
+namespace adt {
 class complex {
 	
 		double real, img;
@@ -132,4 +133,5 @@ double complex::operator[](int index) {
 	} catch(int num) {
 		cout<<"index "<<num<<" not in range. Accepted values: 0 (real) and 1 (imaginary).";
 	}
+}
 }

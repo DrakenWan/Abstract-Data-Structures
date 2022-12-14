@@ -21,6 +21,7 @@ where L is leaf nodes and I is internal nodes
 
 using namespace std;
 
+namespace adt {
 struct node
 {
     dtype_bt data;
@@ -64,11 +65,12 @@ class btree {
     
     void insert(dtype_bt key);
     int _branching_() {return this->branching;}
-    //node* _root_() {return this->root;} //this is a threat to the tree as we are using pointers.
+    node* _root_() {return this->root;} //this is a threat to the tree as we are using pointers.
 
     void display(int);
+    void pretty(const string, const node*, bool);
+    friend ostream& operator<<(ostream& os, const btree& tree);
 };
-
 
 void btree::insert(dtype_bt key) {
     /*
@@ -173,6 +175,30 @@ void btree::postorder(node *root) {
     }
 }
 
+
+void btree::pretty(const string prefix, const node* _node_, bool isLeft) {
+    if(_node_ != NULL) {
+
+        cout<<prefix;
+        cout<< (isLeft ? "├──" : "└──");
+
+        cout<<_node_->data<<endl;
+        pretty(prefix + (isLeft? "│   ": "    "), _node_->left, true);
+        pretty(prefix + (isLeft ? "│   " : "    "), _node_->right, false);
+    }
+}
+
+ostream& operator<<(ostream& os, const btree& tree) {
+
+}
+
+} //adt namespace
+
+
+using namespace adt;
+
+
+
 int main()
 {   
     btree buddy;
@@ -184,5 +210,9 @@ int main()
     buddy.insert(66);
     buddy.insert(78);
     buddy.display(3); //in order traversal.
+
+    cout<<endl;
+
+    buddy.pretty("", buddy._root_(), false);
     return 0;
 }
