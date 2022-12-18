@@ -66,6 +66,7 @@ class btree {
     void insert(dtype_bt key);
     int _branching_() {return this->branching;}
     node* _root_() {return this->root;} //this is a threat to the tree as we are using pointers.
+    //recommend against using this method to return root node.
 
     void display(int);
     void pretty(const string, const node*, bool);
