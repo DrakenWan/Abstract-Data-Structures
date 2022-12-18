@@ -54,6 +54,10 @@ class point {
         point operator-(point p1);
         point operator*(double scalar);
 
+
+        // operations relational
+        bool operator==(point p1);
+
         // operations display
         friend ostream& operator<<(ostream& os, const point& p); //display  DS through ostream
 
@@ -115,6 +119,12 @@ point point::operator*(double scalar) {
 }
 
 
+bool point::operator==(point p1) {
+    if( this->distance(p1) == 0 )
+        return true;
+    return false;
+}
+
 class agent {
     point location;
 };
@@ -130,6 +140,10 @@ int main() {
 
     cout<<endl;
     cout<<p3*x; //multiply a scalar to the point
-    
+
+    cout<<p3.distance(p1+1);
+    cout<<endl;
+    cout<<"p1+1 and p3 ";
+    cout<<((p3 == p1+1)? "equal" : "not equal");
     return 0;
 }
