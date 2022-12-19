@@ -4,8 +4,14 @@
 using namespace std;
 
 class agent {
+    
+    // base attributes
     string name;
     point location;
+
+
+    // other attributes
+    double weight;
 
     public:
     agent() {
@@ -36,10 +42,13 @@ class agent {
         this->location = loc;
     }
 
-
+    // return values of attributes
     string _name() {return this->name;}
     point _location() {return this->location;}
+    double _weight() {return this->weight;}
 
+
+    // movement functions
     void moveNorth(int stride=1) {
         location.update(location._y() + stride,1);
     }
@@ -56,11 +65,24 @@ class agent {
         location.update(location._x() - stride,0);
     }
 
+
+    // set attribute functions
+    void setWeight(double weight) { this->weight = weight;}
+    void setLocation(double x, double y) { 
+        this->location.update(x, 0); 
+        this->location.update(y, 1);
+    }
+    void setLocation(point p) {
+        this->location = p;
+    }
+    void changeName(string name) {this->name = name;}
+    
+
     friend ostream& operator<<(ostream& os,  agent a);
 
 };
 
-
+ 
 ostream& operator<<(ostream& os, agent a)
 {
     os<<"[";
@@ -72,6 +94,8 @@ ostream& operator<<(ostream& os, agent a)
 int main() {
 
     agent a("Anya", 2, 3);
-    cout<<a;
+    agent b("Keri", 2, 4);
+    agent c ("Natu", 1, 3);
+    cout<<a<<endl<<b<<endl<<c;
     return 0;
 }
