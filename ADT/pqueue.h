@@ -2,7 +2,6 @@
 #include<vector>
 #define dtype int
 #define dtype_smpl 0 //give a sample dtype value here for reference
-#define _MAXIMUMPRIORITY_ 30000
 using namespace std;
 
 
