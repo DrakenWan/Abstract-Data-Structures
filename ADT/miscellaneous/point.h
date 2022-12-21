@@ -72,6 +72,19 @@ class point {
         // operations display
         friend ostream& operator<<(ostream& os, const point& p); //display  DS through ostream
 
+        double& operator[](int idx) {
+            switch(idx) {
+                case 0 : return this->x;
+                case 1 : return this->y;
+                case 2 : return this->z;
+                default : 
+                    try {
+                        throw(idx);
+                    } catch(int m) {
+                        cout<<"Error: Wrong index used."<<"Value used = "<<m;
+                    }
+            }
+        }
 
         // Other methods
         double distance(point p); //calculate euclidean distance between the points

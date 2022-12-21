@@ -93,9 +93,8 @@ ostream& operator<<(ostream& os, agent a)
 
 int main() {
 
-    agent a("Anya", 2, 3);
-    agent b("Keri", 2, 4);
-    agent c ("Natu", 1, 3);
-    cout<<a<<endl<<b<<endl<<c;
+    point p(1,2);
+    p[0] = 2;
+    cout<<p[3];
     return 0;
 }

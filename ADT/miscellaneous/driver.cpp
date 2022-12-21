@@ -27,5 +27,11 @@ int main()
 	} else {
 		cout<<"\nnot equal.";
 	}
+
+
+	complex c10(10,20);
+	cout<<endl<<c10;
+	c10[0] = 1;
+	cout<<endl<<c10;
  	return 0;
  }

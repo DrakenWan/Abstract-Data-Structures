@@ -51,7 +51,7 @@ class complex {
 			complex operator-(complex c1);
 			complex operator*(complex c1);
 			complex operator/(complex c1);
-			double operator[](int index);
+			double& operator[](int index);
 			bool operator==(complex c1);
 			friend ostream& operator<<(ostream& os, const complex& c);
 };
@@ -120,7 +120,7 @@ ostream& operator<<(ostream& os, const complex& c)
 		os<<0;
 }
 
-double complex::operator[](int index) {
+double& complex::operator[](int index) {
 	try {
 		switch(index) {
 			case 0 :
