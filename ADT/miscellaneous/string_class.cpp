@@ -72,8 +72,15 @@ class String
 		this->feed.insert(this->feed.end(), s.feed.begin(), s.feed.end());
 	}
 
-	friend ostream& operator<<(ostream& os, String& s) {
-		s.display();
+
+	// some operations
+	String capitalize();
+	String upper();
+	String lower();
+
+	friend ostream& operator<<(ostream& os, String s) {
+		for(long i=0; i<s.size(); i++)
+			os<<s.feed[i];
 	}
 };
 
@@ -89,7 +96,33 @@ String String::operator+(String s1) {
 	s.feed.insert(s.feed.end(), s1.feed.begin(), s1.feed.end());
 	return s;
 }
+
+String String::capitalize() {
+	String s(this->feed);
+	if(s.feed[0] >= 'a' && s.feed[0] <='z')
+		s.feed[0] = s.feed[0] - ('a' - 'A');
+	return s;
+}
+
+String String::upper() {
+	String s(this->feed);
+	
+	for(long i=0; i<s.size(); i++)
+		if(s.feed[i] >= 'a' && s.feed[i] <='Z')
+			s.feed[i] = s.feed[i] - ('a' - 'A');
+	return s;
+}
+
+String String::lower() {
+	String s = this->feed;
+	for(long i=0; i<s.size(); i++)
+		if(s.feed[i] >= 'A' && s.feed[i] <= 'Z')
+			s.feed[i] = s.feed[i] + ('a' - 'A');
+	return s;
+}
+
 //Function definitions for String end here //
+
 
 
 int main() {
@@ -97,14 +130,10 @@ int main() {
 	//string s1 = "aash", s2 = "aash";
 	//cout<<s1.compare(s2);
 	
-	String s1("hello"), s2(" "), s3("World"), s4("!");
-	s1.display();
-	String s5 = s1+s2+s3+s4;
-	cout<<endl;
-	s1.append(s2);
-	cout<<s1<<s3;
-	cout<<endl;
-	cout<<s3[4];
-	cout<<s3.size();
+	String s1 = "hello";
+	cout<<s1;
+
+	String s2 = s1.upper();
+	cout<<s2;
 	return 0;
 }

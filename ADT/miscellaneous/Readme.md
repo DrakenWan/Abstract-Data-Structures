@@ -26,4 +26,4 @@ This is the complex class that I have created. It tries to realise the concept o
 
 ### String
 
-String data structure is basically trying to achieve what every other string class out there does. The internal data structure that holds the data is made of std::vector. I will give utmost care to each and every method I conceive and see if there is an efficient way to perform certain operation.
+This is also still in works. String data structure is basically trying to achieve what every other string class out there does. The internal data structure that holds the data is made of std::vector. I will give utmost care to each and every method I conceive and see if there is an efficient way to perform certain operation.
