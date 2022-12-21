@@ -1,20 +1,12 @@
 #include<iostream>
 #include<vector>
-#include<string>
-#include<cstdlib>
-#include<ctime>
-
 
 
 using namespace std;
 
-
-//edit as may suffice
 template<typename S>
 class Sort {
     /* Sort algorithms in ascending order of their O() and T()
-
-
 
     */
         //edit datatype as may suffice
@@ -28,13 +20,12 @@ class Sort {
 		long partition(vector<S>&, long, long);
 		void quick(vector<S>&, long, long);
 		void swap(S &a, S &b)
-        {
+        { //swap utility function
             S temp;
             temp = a;
             a = b;
             b = temp;
         }
-
 
         void returnSortedArray() {
             return this->data;
@@ -77,6 +68,21 @@ class Sort {
         void mergeSort(bool decr=false); // O(logn) however if decr = true then O(n)
 		void quickSort(bool decr=false); //O(logn) however if decr = true then O(n)
         void display();
+
+
+        //default run function
+        void run(string algo="quick", bool decr=false, bool verbose=false) {
+            if(verbose)
+                cout<<"Running "<<algo<<" sort.\n";
+            switch(algo[0]) {
+                case 'q' : this->quickSort(decr); break;
+                case 'm' : this->mergeSort(decr); break;
+                case 'b' : this->bubble(decr); break;
+                case 'i' : this->insertion(decr); break;
+                case 's' : this->selection(decr); break;
+                default: this->quickSort(decr); break;
+            }
+        }
 };
 
 template<typename S>
@@ -86,7 +92,6 @@ void Sort<S>::changeData(vector<S> data) {
     this->length = data.size();
     //cout<<endl<<"Updated Data."<<endl;
 }
-
 
 template<typename S>
 void Sort<S>::display() {
@@ -155,7 +160,6 @@ void Sort<S>::selection(bool decr) {
 
 }
 
-
 template<typename S>
 void Sort<S>::merge(vector<S> &arr) {
 	long len = arr.size();
@@ -206,7 +210,6 @@ void Sort<S>::merge(vector<S> &arr) {
 	} // OUTERMOST IF CONDITION ENDS
 } //MERGE function
 	
-
 template<typename S>
 void Sort<S>::mergeSort(bool decr) {
 	
@@ -219,7 +222,6 @@ void Sort<S>::mergeSort(bool decr) {
 	if(decr) //O(n)
 		reverse();
 }
-
 
 // quicksort methods
 template<typename S>
@@ -270,14 +272,9 @@ void Sort<S>::quickSort(bool decr) {
 
 int main() 
 {
-	// currently programmed DTYPE to int
-	// the main driver function is coded to handle
-	// the numerical data types (like int, short, double
-	//  float, etc.) (take a look at the for loop
-	// below)
 	
     long length;
-	vector<int> v;
+	vector<int> v = {-1, 4, 5, 7, 9, 0, 10, 2, 1, 3, 2, 1 ,3, 4, 5, 1, -5, -5, -5, -3, -2, 1, 11, 102};
 
     Sort<int> s;
     s.addData(10);
@@ -295,6 +292,13 @@ int main()
     s.quickSort();
     s.display();
     cout<<"\n\n\n";
+
+    s.changeData(v);
+
+    s.display();
+    cout<<endl;
+    s.run("insertion", false, true);
+    s.display();
     
     return 0;
 }
