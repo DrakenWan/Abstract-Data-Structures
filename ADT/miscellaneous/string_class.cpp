@@ -55,8 +55,36 @@ class String
 
 	long size(){return this->_size;}
 
+	//concatenate two strings
+	String operator+(String s1);
+	String operator+(char c);
 
-	//operator overloads and operations
+	//append methods
+	void append(String s) {
+		this->feed.insert(this->feed.end(), s.feed.begin(), s.feed.end());
+		this->_size = this->feed.size();
+	}
+	void append(char s) {
+		this->feed.push_back(s);
+		this->_size = this->feed.size();
+	}
+
+
+	// some operations
+	String capitalize();
+	String upper();
+	String lower();
+	bool startsWith(char val);
+	bool endsWith(char val);
+	vector<String> split(char separator);
+	String strip();
+
+	// operator overloads below
+	friend ostream& operator<<(ostream& os, String s) {
+		for(long i=0; i<s.size(); i++)
+			os<<s.feed[i];
+	}
+
 	char& operator[](long idx) {
 		try{
 			if(idx > -1 && idx < this->size())
@@ -71,38 +99,63 @@ class String
 		}
 	}
 
-	//concatenate two strings
-	String operator+(String s1);
-	String operator+(char c);
-	void append(String s) {
-		this->feed.insert(this->feed.end(), s.feed.begin(), s.feed.end());
-	}
-	void append(char s) {
-		this->feed.push_back(s);
-	}
-
-
-	// some operations
-	String capitalize();
-	String upper();
-	String lower();
-	bool endsWith(char val);
-	vector<String> split(char separator);
-
-	friend ostream& operator<<(ostream& os, String s) {
-		for(long i=0; i<s.size(); i++)
-			os<<s.feed[i];
-	}
+	//String slicing
+	String operator()(long,long);
 };
 
 
 // Function definitions for some methods
+
+String String::operator()(long start, long end){
+	String s = *this, toss;
+	try{
+		if(start >= end)
+			throw(-1);
+		if(start >= 0 && end >= 0){
+			if(start >= this->size() || end >= this->size())
+				throw(0);
+			else {
+				for(long i=start; i<end; i++)
+					toss.append(s[i]);
+
+				return toss;
+			}
+		}
+		else if(start < 0 && end < 0) {
+			if(start < -this->size() || end < -this->size())
+				throw(0);
+			else {
+				for(long i=start; i<=end; i++)
+					toss.append(s[i]);
+
+				return toss;
+			}
+		}
+		else throw(1);
+	} //try ends
+	catch(int val) {
+		switch(val) {
+			case 0 :
+				cout<<"Index out of range.";
+				break;
+			case -1 :
+				cout<<"Start index greater than end index.";
+				break;
+			case 1 :
+				cout<<"Unexceptional error in slicing String.";
+				break;
+			default :
+				cout<<"Unreadable error code thrown.";
+		}
+	} //catch ends
+}
+
+
 String String::operator+(char c) {
 	String s = *this;
 	s.append(c);
 	return s;
 }
-
 
 vector<String> String::split(char separator=' ') {
     /*
@@ -165,6 +218,12 @@ String String::lower() {
 	return s;
 }
 
+bool String::startsWith(char val) {
+	if(this->feed[0] == val)
+		return true;
+	return false;
+}
+
 bool String::endsWith(char val) {
 	long final_index = this->size() - 1;
 	if(this->feed[final_index] == val)
@@ -174,27 +233,19 @@ bool String::endsWith(char val) {
 
 //Function definitions for String end here //
 
-
-
 int main() {
 	
 	//string s1 = "aash", s2 = "aash";
 	//cout<<s1.compare(s2);
 	
 	String s1 = "Hello world!";
+	//cout<<s1;
 	cout<<s1;
-
-	vector<String> pew = s1.split('l');
-
-	for(auto i=pew.begin(); i != pew.end(); i++)
-		{ cout<<endl; cout<<*i;}
-
-
-	cout<<endl<<endl;
-
-	String s2 = "Pata nahi!";
-
-	cout<<s2[-1];
-	cout<<s2[0];
+	String s2 = s1(1,3);
+	String s3 = s1(-5, -3);
+	cout<<endl;
+	cout<<s1(5, 10);
+	String s4 = s1(5,10); cout<<endl;
+	cout<<s4;
 	return 0;
 }
