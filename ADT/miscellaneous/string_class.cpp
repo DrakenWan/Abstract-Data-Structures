@@ -11,6 +11,8 @@ class String
 		My own implementation of String type
 		The inernal data structure of string makes use of std::vector
 		and its operations
+
+		you can access and change the internal element of the string using subscript [] operator
 	*/
 	vector<char> feed;
 	long _size;
@@ -55,7 +57,7 @@ class String
 
 
 	//operator overloads and operations
-	char operator[](long idx) {
+	char& operator[](long idx) {
 		try{
 			if(idx < 0 || idx >= this->size())
 				throw(idx);
@@ -78,7 +80,7 @@ class String
 	String capitalize();
 	String upper();
 	String lower();
-
+	bool endsWith(char val);
 	friend ostream& operator<<(ostream& os, String s) {
 		for(long i=0; i<s.size(); i++)
 			os<<s.feed[i];
@@ -122,6 +124,13 @@ String String::lower() {
 	return s;
 }
 
+bool String::endsWith(char val) {
+	long final_index = this->size() - 1;
+	if(this->feed[final_index] == val)
+		return true;
+	return false;
+}
+
 //Function definitions for String end here //
 
 
@@ -137,5 +146,8 @@ int main() {
 	String s2 = s1.capitalize();
 	cout<<s1.lower();
 	cout<<endl<<s2;
+	cout<<s1.endsWith('0');
+	s1[0]='F';
+	cout<<s1;
 	return 0;
 }
