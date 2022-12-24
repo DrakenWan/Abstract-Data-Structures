@@ -59,10 +59,13 @@ class String
 	//operator overloads and operations
 	char& operator[](long idx) {
 		try{
-			if(idx < 0 || idx >= this->size())
-				throw(idx);
-			else
+			if(idx > -1 && idx < this->size())
 				return this->feed[idx];
+			else if(idx >= -this->size() && idx < 0 )
+				return this->feed[this->size() + idx];
+			else
+				throw(idx);
+				
 		} catch(long val) {
 			cout<<"\nError: "<<val<<" index is out of range.";
 		}
@@ -70,9 +73,12 @@ class String
 
 	//concatenate two strings
 	String operator+(String s1);
-	
+	String operator+(char c);
 	void append(String s) {
 		this->feed.insert(this->feed.end(), s.feed.begin(), s.feed.end());
+	}
+	void append(char s) {
+		this->feed.push_back(s);
 	}
 
 
@@ -81,6 +87,8 @@ class String
 	String upper();
 	String lower();
 	bool endsWith(char val);
+	vector<String> split(char separator);
+
 	friend ostream& operator<<(ostream& os, String s) {
 		for(long i=0; i<s.size(); i++)
 			os<<s.feed[i];
@@ -89,6 +97,39 @@ class String
 
 
 // Function definitions for some methods
+String String::operator+(char c) {
+	String s = *this;
+	s.append(c);
+	return s;
+}
+
+
+vector<String> String::split(char separator=' ') {
+    /*
+		Returns a vector of Strings
+		Each element of the vector is a string separated by the `separator` char
+		variable which is a whitespace by default
+
+		The separator is not included within the elements of the vector returned
+	*/
+	vector<String> container;
+	String stringy="";
+	
+	for(long i=0; i<this->size(); i++) {
+		if(this->feed[i] == separator ) {
+			container.push_back(stringy);
+			stringy = "";
+		} else if(i == this->size() - 1) {
+			stringy = stringy + this->feed[i];
+			container.push_back(stringy);
+		}
+		else stringy = stringy + this->feed[i];
+	 }
+
+	 return container;
+}
+
+
 String String::operator+(String s1) {
 	//O(n) 
 	// currently searching ways for efficient concatenation
@@ -140,14 +181,20 @@ int main() {
 	//string s1 = "aash", s2 = "aash";
 	//cout<<s1.compare(s2);
 	
-	String s1 = "HelLO";
+	String s1 = "Hello world!";
 	cout<<s1;
 
-	String s2 = s1.capitalize();
-	cout<<s1.lower();
-	cout<<endl<<s2;
-	cout<<s1.endsWith('0');
-	s1[0]='F';
-	cout<<s1;
+	vector<String> pew = s1.split('l');
+
+	for(auto i=pew.begin(); i != pew.end(); i++)
+		{ cout<<endl; cout<<*i;}
+
+
+	cout<<endl<<endl;
+
+	String s2 = "Pata nahi!";
+
+	cout<<s2[-1];
+	cout<<s2[0];
 	return 0;
 }
