@@ -14,6 +14,7 @@ class String
 	*/
 	vector<char> feed;
 	long _size;
+
 	
 	public:
 	String() {
@@ -98,23 +99,23 @@ String String::operator+(String s1) {
 }
 
 String String::capitalize() {
-	String s(this->feed);
+	String s = *this;
 	if(s.feed[0] >= 'a' && s.feed[0] <='z')
 		s.feed[0] = s.feed[0] - ('a' - 'A');
 	return s;
 }
 
 String String::upper() {
-	String s(this->feed);
+	String s = *this;
 	
 	for(long i=0; i<s.size(); i++)
-		if(s.feed[i] >= 'a' && s.feed[i] <='Z')
+		if(s.feed[i] >= 'a' && s.feed[i] <='z')
 			s.feed[i] = s.feed[i] - ('a' - 'A');
 	return s;
 }
 
 String String::lower() {
-	String s = this->feed;
+	String s = *this;
 	for(long i=0; i<s.size(); i++)
 		if(s.feed[i] >= 'A' && s.feed[i] <= 'Z')
 			s.feed[i] = s.feed[i] + ('a' - 'A');
@@ -130,10 +131,11 @@ int main() {
 	//string s1 = "aash", s2 = "aash";
 	//cout<<s1.compare(s2);
 	
-	String s1 = "hello";
+	String s1 = "HelLO";
 	cout<<s1;
 
-	String s2 = s1.upper();
-	cout<<s2;
+	String s2 = s1.capitalize();
+	cout<<s1.lower();
+	cout<<endl<<s2;
 	return 0;
 }
