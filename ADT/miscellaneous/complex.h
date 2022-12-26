@@ -39,8 +39,8 @@ class complex {
 					cout<<0;
 			}
 			
-			void change(double val, bool isReal=true) {
-				if(isReal)
+			void change(double val, bool isImg=true) {
+				if(isImg)
 					this->real =  val;
 				else
 					this->img = val;
@@ -81,7 +81,7 @@ complex complex::operator*(complex c1) {
 complex complex::operator/(complex c1) {
 	complex c;
 	double denom = c1.real*c1.real + c1.img*c1.img;
-	c1.change(-c1.img, false);
+	c1.change(-c1.img, 1);
 	c.real = this->real * c1.real + (-1) * (this->img * c1.img);
 	c.img = this->img * c1.real + this->real * c1.img;
 

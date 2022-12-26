@@ -33,5 +33,11 @@ int main()
 	cout<<endl<<c10;
 	c10[0] = 1;
 	cout<<endl<<c10;
+
+	cout<<endl<<endl;
+
+	complex c11(1,-2), c12(2,-1);
+	cout<<(c11/c12);
+	cout<<endl<<(c11+1);
  	return 0;
  }

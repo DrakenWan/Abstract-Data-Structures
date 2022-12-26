@@ -1,6 +1,6 @@
 #include<iostream>
 #include<vector>
-#include<stdio.h>
+#include<cctype>
 
 using namespace std;
 
@@ -16,7 +16,6 @@ class String
 	*/
 	vector<char> feed;
 	long _size;
-
 	
 	public:
 	String() {
@@ -34,7 +33,6 @@ class String
 	}
 	//operations
 
-
 	String(const char* str) {
 		for(auto *i=str; *i!='\0'; i++)
 			this->feed.push_back(*i);
@@ -45,7 +43,6 @@ class String
 		this->feed = s.feed;
 		this->_size = this->feed.size();
 	}
-
 
 	// display values
 	void display() {
@@ -69,7 +66,6 @@ class String
 		this->_size = this->feed.size();
 	}
 
-
 	// some operations
 	String capitalize();
 	String upper();
@@ -78,12 +74,16 @@ class String
 	bool endsWith(char val);
 	vector<String> split(char separator);
 	String strip();
+	String cipher(int, int);
+	String decipher(int, int);
 
 	// operator overloads below
 	friend ostream& operator<<(ostream& os, String s) {
 		for(long i=0; i<s.size(); i++)
 			os<<s.feed[i];
 	}
+
+	String operator*(int times);
 
 	char& operator[](long idx) {
 		try{
@@ -105,6 +105,59 @@ class String
 
 
 // Function definitions for some methods
+String String::cipher(int cipherstep, int stride=1){
+	/*
+		Input
+			cipherstep : an integer step by which the cipher moves
+			stride : stride over the string
+		Output
+			A cipher String
+	*/
+
+	String cipher_ = *this;
+	for(long i=0; i<this->size(); i+=stride) {
+		if( (cipher_[i] >= 'A' && cipher_[i] <= 'Z') || ( cipher_[i] >= 'a' && cipher_[i] <= 'z')  ) {
+			if(cipher_[i] >= 'A' && cipher_[i] <= 'Z')
+				cipher_[i] = char(int(cipher_[i] + cipherstep - 65) % 26 + 65);
+			else
+				cipher_[i] = char(int(cipher_[i] + cipherstep - 97) % 26 + 97);	
+		}
+	}
+
+	return cipher_;
+}
+
+String String::decipher(int cipherstep, int stride=1) {
+	/*
+		Input
+			key => (cipherstep, stride)
+				cipherstep : an integer step to be reversed
+				stride : stride over the string
+
+				note: these are the values you used to produce the cipher string
+		Output
+			A deciphered String	
+	*/
+
+	String decipher_ = *this;
+	for(long i=0; i<this->size(); i+=stride) {
+		if( (decipher_[i] >= 'A' && decipher_[i] <= 'Z') || ( decipher_[i] >= 'a' && decipher_[i] <= 'z')  ) {
+			if(decipher_[i] >= 'A' && decipher_[i] <= 'Z')
+				decipher_[i] = char((int(decipher_[i]) - cipherstep - 65) % 26 + 65);
+			else
+				decipher_[i] = char((int(decipher_[i]) - cipherstep - 97) % 26 + 97);
+		}
+	}
+	return decipher_;
+}
+
+String String::operator*(int times) {
+	String s="";
+	for(int i=0; i<times; i++)
+		s.append(*this);
+	
+	return s;
+}
 
 String String::operator()(long start, long end){
 	String s = *this, toss;
@@ -112,7 +165,7 @@ String String::operator()(long start, long end){
 		if(start >= end)
 			throw(-1);
 		if(start >= 0 && end >= 0){
-			if(start >= this->size() || end >= this->size())
+			if(start >= this->size() || end >= this->size() && s.size() != 1)
 				throw(0);
 			else {
 				for(long i=start; i<end; i++)
@@ -134,6 +187,7 @@ String String::operator()(long start, long end){
 		else throw(1);
 	} //try ends
 	catch(int val) {
+		cout<<"\nError: ";
 		switch(val) {
 			case 0 :
 				cout<<"Index out of range.";
@@ -149,7 +203,6 @@ String String::operator()(long start, long end){
 		}
 	} //catch ends
 }
-
 
 String String::operator+(char c) {
 	String s = *this;
@@ -181,7 +234,6 @@ vector<String> String::split(char separator=' ') {
 
 	 return container;
 }
-
 
 String String::operator+(String s1) {
 	//O(n) 
@@ -232,20 +284,17 @@ bool String::endsWith(char val) {
 }
 
 //Function definitions for String end here //
-
 int main() {
 	
 	//string s1 = "aash", s2 = "aash";
 	//cout<<s1.compare(s2);
 	
-	String s1 = "Hello world!";
-	//cout<<s1;
-	cout<<s1;
-	String s2 = s1(1,3);
-	String s3 = s1(-5, -3);
+	String s1 = "Hello Kartikby.";
+
+	String cipher = s1.cipher(2);
+	String decipher = cipher.decipher(2);
+	cout<<cipher;
 	cout<<endl;
-	cout<<s1(5, 10);
-	String s4 = s1(5,10); cout<<endl;
-	cout<<s4;
+	cout<<decipher;
 	return 0;
 }
