@@ -99,6 +99,12 @@ class String
 		}
 	}
 
+	bool operator==(String s) {
+		if(this->feed == s.feed)
+			return true;
+		return false;
+	}
+
 	//String slicing
 	String operator()(long,long);
 };
@@ -289,12 +295,8 @@ int main() {
 	//string s1 = "aash", s2 = "aash";
 	//cout<<s1.compare(s2);
 	
-	String s1 = "Hello Kartikby.";
-
-	String cipher = s1.cipher(2);
-	String decipher = cipher.decipher(2);
-	cout<<cipher;
-	cout<<endl;
-	cout<<decipher;
-	return 0;
+	String s1 = "Hello Kartikay.";
+	String s2 = "Hello Kartikay.";
+	String substr = s1(3,13); //substring
+	cout<<(s1==s2);
 }
