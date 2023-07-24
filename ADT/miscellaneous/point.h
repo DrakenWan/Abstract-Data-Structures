@@ -60,7 +60,7 @@ class point {
         point operator+(double number);
         point operator-(point p1);
         point operator*(double scalar);
-
+        double operator&(point p1); //dot product
 
         // operations relational
 
@@ -168,4 +168,11 @@ bool point::operator==(point p1) {
     if( this->distance(p1) == 0 )
         return true;
     return false;
+}
+
+
+double point::operator&(point p1) {
+    double sum =  p1.x * this->x + p1.y * this->y +  p1.z * this->z;
+
+    return sum;
 }
