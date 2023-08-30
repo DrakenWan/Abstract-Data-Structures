@@ -297,6 +297,9 @@ int main() {
 	
 	String s1 = "Hello Kartikay.";
 	String s2 = "Hello Kartikay.";
-	String substr = s1(3,13); //substring
+	String substr = s1(3,8); //substring
+	cout<<s1;
+	cout<<s2;
+	cout<<substr;
 	cout<<(s1==s2);
 }
