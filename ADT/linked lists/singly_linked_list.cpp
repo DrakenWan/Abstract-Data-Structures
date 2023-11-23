@@ -50,5 +50,8 @@ int main()
     list<int> l3 = l1 + l2;
     
     l3.display();
+
+    cout<<endl<<l3.getMiddleData();
+    cout<<endl<<l3.getMiddleNode()->data;
     return 0;
 }

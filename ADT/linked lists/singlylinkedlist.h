@@ -51,6 +51,7 @@ class list
         int insertMiddleAfterX(any x, any data);
         int insertMiddleCount(int count, any data);
 
+
         int delFirst();
         int delLast();
         //int delData(any data); //will add later
@@ -64,8 +65,31 @@ class list
             return o;
         }
 
+        // moar!
+        any getMiddleData();
+        node<any>* getMiddleNode();
+
         void display();
 };
+
+template <typename any>
+node<any>* list<any>::getMiddleNode() {
+    node<any>* slow = head;
+    node<any>* fast = head;
+
+    while(fast != nullptr && fast->next != nullptr) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    return slow;
+}
+
+template <typename any>
+any list<any>::getMiddleData() {
+    node<any>* iNode = this->getMiddleNode();
+    return iNode->data;
+}
 
 template <typename any>
 void list<any>::Empty()
