@@ -104,6 +104,15 @@ class String
 			return true;
 		return false;
 	}
+	
+	//assignment overload
+	String operator=(const String &s) {
+		String news;
+		news.feed = s.feed;
+		news._size = s._size;
+
+		return news;
+	}
 
 	//String slicing
 	String operator()(long,long);
@@ -287,19 +296,4 @@ bool String::endsWith(char val) {
 	if(this->feed[final_index] == val)
 		return true;
 	return false;
-}
-
-//Function definitions for String end here //
-int main() {
-	
-	//string s1 = "aash", s2 = "aash";
-	//cout<<s1.compare(s2);
-	
-	String s1 = "Hello Kartikay.";
-	String s2 = "Hello Kartikay.";
-	String substr = s1(3,8); //substring
-	cout<<s1;
-	cout<<s2;
-	cout<<substr;
-	cout<<(s1==s2);
 }

@@ -15,36 +15,36 @@ class point {
         point() { //3d point at origin
             this-> _isOrigin_ = true;
             this->is2D = false;
-            this->x = this->y = this->z = 0;
+            this->x = this->y = this->z = 0.;
         }
 
         point(double x, double y) { //2d point
-            if(x==0 && y==0)
-                point();
-            else {
-                this->x = x;
-                this->y = y;
-                this->z = 0;
-                this-> _isOrigin_ = this->isOrigin();
-            }
+            this->x = x;
+            this->y = y;
+            this->z = 0.;
+            this-> _isOrigin_ = this->isOrigin();
 
             this->is2D = true;
         }
 
 
         point(double x, double y, double z) { //3d point
-            if(x==0 && y==0 && z==0)
-                point();
-            else {
-                this->x = x;
-                this->y = y;
-                this->z = z;
-                this-> _isOrigin_ = this->isOrigin();
-            }
+            this->x = x;
+            this->y = y;
+            this->z = z;
+            this-> _isOrigin_ = this->isOrigin();
             this->is2D = false;
         }
 
-        bool isOrigin() {if(this->x==0&&this->y==0&&this->z==0) return true; //check if the point is origin
+        point(const point &p1) {
+            x = p1.x;
+            y = p1.y;
+            z = p1.z;
+            is2D = p1.is2D;
+            _isOrigin_ = p1._isOrigin_;
+        }
+
+        bool isOrigin() {if(this->x==0.&&this->y==0.&&this->z==0.) return true; //check if the point is origin
         return false;}
 
         //return value of components
@@ -62,12 +62,17 @@ class point {
         point operator*(double scalar);
         double operator&(point p1); //dot product
 
+
         // operations relational
 
         //advice: do not forget to wrap the objects with small brackets when using << operator to display the results else it creates an error.
         bool operator==(point p1); //compares distances between the points
         bool operator<(point p1); //compares distances from origin between the points
         bool operator>(point p1); //compares distances from origin between the points
+
+
+        // assignment operator overload
+        point operator=(point);
 
         // operations display
         friend ostream& operator<<(ostream& os, const point& p); //display  DS through ostream
@@ -86,9 +91,39 @@ class point {
             }
         }
 
+        double& operator[](char idx) {
+            switch(idx) {
+                case 'x' : return this->x;
+                case 'y' : return this->y;
+                case 'z' : return this->z;
+                default : 
+                    try {
+                        throw(idx);
+                    } catch(int m) {
+                        cout<<"Error: Wrong index used."<<"Value used = "<<m;
+                    }
+            }
+        }
+
+        
+        //check if 2d
+        bool _2D() {
+            return is2D;
+        }
+
         // Other methods
         double distance(point p); //calculate euclidean distance between the points
 };
+
+point point::operator=(point p1) {
+    this->x = p1.x;
+    this->y = p1.y;
+    this->z = p1.z;
+    this->is2D = p1.is2D;
+    this->_isOrigin_ = p1._isOrigin_;
+
+    return *this;
+}
 
 bool point::operator<(point p1) {
     point origin;
@@ -129,8 +164,13 @@ point point::operator+(double number) {
     point p;
     p.x = number + this->x;
     p.y = number + this->y;
-    p.z = number + this->z;
+    
+    if(this->is2D == false)
+        p.z = number + this->z;
 
+    if(this->is2D)
+        p.is2D = true;
+    
     return p;
 }
 
@@ -140,6 +180,8 @@ point point::operator+(point p1) {
     p.y = this->y + p1.y;
     p.z = this->z + p1.z;
 
+    if(this->is2D  && p1.is2D)
+        p.is2D = true;
     return p;
 }
 
@@ -149,6 +191,9 @@ point point::operator-(point p1) {
     p.x = this->x - p1.x;
     p.y = this->y - p1.y;
     p.z = this->z - p1.z;
+
+    if(this->is2D && p1.is2D)
+        p.is2D = true;
 
     return p;
 }
@@ -160,6 +205,8 @@ point point::operator*(double scalar) {
     p.y = scalar * (this->y);
     p.z = scalar * (this->z);
 
+    if(this->is2D)
+        p.is2D = true;
     return p;
 }
 
@@ -173,6 +220,5 @@ bool point::operator==(point p1) {
 
 double point::operator&(point p1) {
     double sum =  p1.x * this->x + p1.y * this->y +  p1.z * this->z;
-
     return sum;
 }
