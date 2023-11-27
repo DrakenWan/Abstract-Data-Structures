@@ -1,5 +1,5 @@
+#pragma once
 #include<cmath>
-#define index int
 
 using namespace std;
 
@@ -47,13 +47,18 @@ class point {
         bool isOrigin() {if(this->x==0.&&this->y==0.&&this->z==0.) return true; //check if the point is origin
         return false;}
 
+        //check if 2d
+        bool _2D() {
+            return is2D;
+        }
+
         //return value of components
         double _x() {return this->x;}
         double _y() {return this->y;}
         double _z() {return this->z;}
 
         //update components
-        void update(double data, index i);
+        void update(double data, int i);
 
         // operations arithmetic
         point operator+(point p1);
@@ -105,12 +110,6 @@ class point {
             }
         }
 
-        
-        //check if 2d
-        bool _2D() {
-            return is2D;
-        }
-
         // Other methods
         double distance(point p); //calculate euclidean distance between the points
 };
@@ -138,7 +137,7 @@ bool point::operator>(point p1) {
 }
 
 
-void point::update(double data, index i){
+void point::update(double data, int i){
     switch(i) {
         case 0 : this->x = data; break;
         case 1 : this->y = data; break;
