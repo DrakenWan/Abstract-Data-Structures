@@ -1,4 +1,5 @@
 //header file for singlylinkedlist
+#pragma once
 #include<iostream>
 
 using namespace std;

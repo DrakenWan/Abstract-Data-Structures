@@ -1,3 +1,4 @@
+#pragma once
 #include<iostream>
 #include<vector>
 #define dtype int
