@@ -66,6 +66,7 @@ class String
 		this->_size = this->feed.size();
 	}
 
+
 	// some operations
 	String capitalize();
 	String upper();
@@ -81,6 +82,8 @@ class String
 	friend ostream& operator<<(ostream& os, String s) {
 		for(long i=0; i<s.size(); i++)
 			os<<s.feed[i];
+
+		return os;
 	}
 
 	String operator*(int times);
@@ -106,13 +109,7 @@ class String
 	}
 	
 	//assignment overload
-	String operator=(const String &s) {
-		String news;
-		news.feed = s.feed;
-		news._size = s._size;
-
-		return news;
-	}
+	void operator=(const String &);
 
 	//String slicing
 	String operator()(long,long);
@@ -296,4 +293,9 @@ bool String::endsWith(char val) {
 	if(this->feed[final_index] == val)
 		return true;
 	return false;
+}
+
+void String::operator=(const String &s1) {
+	this->feed = s1.feed;
+	this->_size = s1._size;
 }

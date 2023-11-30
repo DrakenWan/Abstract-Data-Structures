@@ -1,12 +1,14 @@
 #pragma once
 #include "./point.h"
+#include "./String.h"
 #include<iostream>
+# define StringType String
 
 class location {
     
     long id;
     point loc;
-    std::string type;
+    StringType type;
     
     
     static long num;
@@ -19,33 +21,45 @@ class location {
             this->type = "None";
         }
 
-        location(point p1, std::string type) {
+        location(point p1, StringType type) {
+            this->id = ++num;
             this->loc = p1;
             this->type = type;
         }
 
         location(point p1) {
+            this->id = ++num;
             this->loc = p1;
             this->type = "None";
         }
         
         location(double x, double y, double z) {
+            this->id = ++num;
             this->loc = point(x, y, z);
             this->type = "None";
         }
 
         location(double x, double y) {
+            this->id = ++num;
             this->loc = point(x,y);
             this->type = "None";
         }
 
-        location(double x, double y, double z, std::string type) {
+        location(double x, double y, double z, StringType type) {
+            this->id = ++num;
             this->loc = point(x, y, z);
             this->type = type;
         }
 
-        location(double x, double y, std::string type) {
+        location(double x, double y, StringType type) {
+            this->id = ++num;
             this->loc = point(x, y);
+            this->type = type;
+        }
+
+        location(StringType type) {
+            this->id = ++num;
+            this->loc = point(0,0);
             this->type = type;
         }
 
@@ -56,7 +70,7 @@ class location {
 
             
         void updateLocDim(double,int);
-        void updateLocType(std::string);
+        void updateLocType(StringType);
         void updateLocation(point);
         void updateLocation(double, double);
         void updateLocation(double, double, double);
@@ -100,7 +114,7 @@ void location::updateLocation(double x, double y) {
 
 
 // update location type
-void location::updateLocType(std::string type) {
+void location::updateLocType(StringType type) {
     this->type = type;
 }
 

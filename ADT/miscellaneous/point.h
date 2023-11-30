@@ -77,7 +77,7 @@ class point {
 
 
         // assignment operator overload
-        point operator=(point);
+        void operator=(const point&);
 
         // operations display
         friend ostream& operator<<(ostream& os, const point& p); //display  DS through ostream
@@ -86,7 +86,17 @@ class point {
             switch(idx) {
                 case 0 : return this->x;
                 case 1 : return this->y;
-                case 2 : return this->z;
+                case 2 : 
+                    try {
+                        if(!this->is2D)
+                            return this->z;
+                        else
+                            throw(-1);
+                    }
+                    catch(int m) {
+                        cout<<"Error: 2D point.";
+                    }
+
                 default : 
                     try {
                         throw(idx);
@@ -100,7 +110,16 @@ class point {
             switch(idx) {
                 case 'x' : return this->x;
                 case 'y' : return this->y;
-                case 'z' : return this->z;
+                case 'z' : 
+                    try {
+                        if(!this->is2D)
+                            return this->z;
+                        else
+                            throw(-1);
+                    }
+                    catch(int m) {
+                        cout<<"Error: 2D point.";
+                    }
                 default : 
                     try {
                         throw(idx);
@@ -114,14 +133,12 @@ class point {
         double distance(point p); //calculate euclidean distance between the points
 };
 
-point point::operator=(point p1) {
+void point::operator=(const point &p1) {
     this->x = p1.x;
     this->y = p1.y;
     this->z = p1.z;
     this->is2D = p1.is2D;
     this->_isOrigin_ = p1._isOrigin_;
-
-    return *this;
 }
 
 bool point::operator<(point p1) {
@@ -156,6 +173,8 @@ ostream& operator<<(ostream& os, const point& p) {
     if(p.is2D == false) os<<','<<p.z;
 
     os<<')';
+
+    return os;
 }
 
 
