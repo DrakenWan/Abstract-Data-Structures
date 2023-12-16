@@ -34,3 +34,13 @@ Name is self-explanatory. It has attributes:-
 * `id`: unique identifier
 * `loc`: a `point` class instance
 * `type`: a std::string type representing the terrain/type of location, for instace, `open path` or `wall`.
+
+
+### MATRIX
+A matrix data structure. I am still building it up. It makes use of a single pointer array on which matrix values are placed in row major form. It has three members: val (which holds the values of matrix), row (number of rows) and col (number of columns).
+
+The matrix operations currently implemented so far:-
+* addition  [x]
+* subtraction [ ]
+* multiplication [ ]
+* transpose [x]

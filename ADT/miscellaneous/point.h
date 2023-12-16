@@ -172,7 +172,7 @@ ostream& operator<<(ostream& os, const point& p) {
 
     if(p.is2D == false) os<<','<<p.z;
 
-    os<<')';
+    os<<')';    
 
     return os;
 }
