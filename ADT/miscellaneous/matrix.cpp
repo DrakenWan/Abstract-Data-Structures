@@ -97,6 +97,7 @@ class matrix {
 
         /////// MATRIX OPERATIONS ///////
         matrix<DATA> operator+(matrix const& );
+        matrix<DATA> operator-(matrix const& obj);
 
         //transpose operator
         matrix<DATA> operator!();
@@ -135,6 +136,26 @@ matrix<DATA> matrix<DATA>::operator+(matrix const& obj) {
             for(int i=0; i<m.row; i++)
                 for(int j=0; j<m.col; j++)
                     *(m.val + i*m.col + j) = *(obj.val + i*obj.col + j) + *(val + i*this->col + j);
+
+            return m;
+        } else {
+            throw(-1);
+        }
+    } catch(int m) {
+        cout<<"\ncorresponding dimensions do not match.";
+    }
+}
+
+
+template<typename DATA>
+matrix<DATA> matrix<DATA>::operator-(matrix const& obj) {
+     try{
+        if(this->row == obj.row && this->col == obj.col) {
+            matrix<DATA> m(obj.row, obj.col);
+            // addition and insertion in row major form.
+            for(int i=0; i<m.row; i++)
+                for(int j=0; j<m.col; j++)
+                    *(m.val + i*m.col + j) = *(obj.val + i*obj.col + j) - *(val + i*this->col + j);
 
             return m;
         } else {
@@ -189,6 +210,7 @@ void matrix<DATA>::display()  {
 
 void init2dArray(int *array, int size_0, int size_1) {
     /*
+        UTIL FUNCTION
         Flattened 2d array in row major form will be initialised using this
     */
    cout<<"\nPlease insert "<<size_0*size_1<<" values in row major form for a "<<size_0<<'x'<<size_1<<" matrix:-\n";

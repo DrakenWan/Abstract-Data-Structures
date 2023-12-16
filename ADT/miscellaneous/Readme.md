@@ -41,6 +41,6 @@ A matrix data structure. I am still building it up. It makes use of a single poi
 
 The matrix operations currently implemented so far:-
 * addition  [x]
-* subtraction [ ]
+* subtraction [x]
 * multiplication [ ]
 * transpose [x]
