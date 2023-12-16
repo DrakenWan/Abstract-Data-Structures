@@ -123,6 +123,5 @@ ostream& operator<<(ostream& os, location& l) {
     os<<"\n[(location)id: "<<l.id<<",\n"
       <<"location: "<<l.loc<<",\n"
       <<"type: "<<l.type<<"]\n";
-
       return os;
 }

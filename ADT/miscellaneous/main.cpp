@@ -14,5 +14,8 @@ int main() {
     location l2("Wall");
     cout<<l1;
     cout<<l2;
+
+    int R=5, C=5;
+    
     return 0;   
 }
