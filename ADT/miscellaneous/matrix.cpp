@@ -1,5 +1,5 @@
 #include<iostream>
-
+#include<omp.h>
 
 using namespace std;
 
@@ -98,6 +98,7 @@ class matrix {
         /////// MATRIX OPERATIONS ///////
         matrix<DATA> operator+(matrix const& );
         matrix<DATA> operator-(matrix const& );
+        matrix<DATA> operator&(matrix const& ); //matrix multiply
 
         //transpose operator
         matrix<DATA> operator!();
@@ -129,6 +130,37 @@ matrix<DATA> eye(int n) {
 }
 
 ///// MATRIX OPERATIONS DEFINITIONS START HERE ////
+
+
+template<typename DATA>
+matrix<DATA> matrix<DATA>::operator&(matrix const &obj) {
+    try{
+        if(this->col != obj.row) 
+            throw(-1);
+
+
+        int i, j, k;
+        matrix<DATA> m(this->row, obj.col);
+        for(i=0; i<m.row; i++)
+            for(j=0; j<m.col; j++)
+                *(m.val + i*m.col + j) = (DATA)0; //change this later 
+                //add funct for it as DEFAULT value as addition inverse of
+                // that data
+
+
+        //else perform multiplication in parallel using openmp
+        #pragma omp parallel for private(i,j,k) shared(this->val, obj.val, m)
+        for(i=0; i<this->row; i++)
+            for(k=0; k<obj.row; k++)
+                for(j=0; j<obj.col; j++)
+                    *(m.val + i*m.col + j) += *(val + i*this->col + k) * *(obj.val + k*obj.col + j);
+
+        
+        return m;
+    } catch(int m) {
+        cout<<"\nError: Internal dimensions do not match.";
+    }
+}
 
 template<typename DATA>
 DATA matrix<DATA>::operator()(int r, int c)  {
@@ -274,9 +306,15 @@ int main() {
 
     cout<<m1(1,2);
 
-    matrix<float> m4 = eye<float>(5);
-
+    matrix<int> m4 = eye<int>(3);
+    matrix<int> m5(array1, 2, 3);
     m4.display();
+    m5.display();
+
+    matrix<int> m6 = m5 & m4;
+    
+    cout<<"\nMatrix multiplication result:-\n";
+    m6.display();
 
     delete array1;
     delete array2;
