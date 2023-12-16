@@ -155,7 +155,7 @@ matrix<DATA> matrix<DATA>::operator-(matrix const& obj) {
             // addition and insertion in row major form.
             for(int i=0; i<m.row; i++)
                 for(int j=0; j<m.col; j++)
-                    *(m.val + i*m.col + j) = *(obj.val + i*obj.col + j) - *(val + i*this->col + j);
+                    *(m.val + i*m.col + j) =  *(val + i*this->col + j) - *(obj.val + i*obj.col + j);
 
             return m;
         } else {
@@ -165,7 +165,6 @@ matrix<DATA> matrix<DATA>::operator-(matrix const& obj) {
         cout<<"\ncorresponding dimensions do not match.";
     }
 }
-
 
 
 template<typename DATA>
@@ -225,24 +224,24 @@ int main() {
         col=3;
 
     int *array1 = new int[row*col];
-    //int *array2 = new int[row*col];
+    int *array2 = new int[row*col];
     init2dArray(array1, row, col);
-    //init2dArray(array2, row, col);
+    init2dArray(array2, row, col);
 
     matrix<int> m1(array1, row, col);
-    //matrix<int> m2(array2, row, col);
+    matrix<int> m2(array2, row, col);
     
-    matrix<int> m3 = m1.transpose();
+    matrix<int> m3 = m1 - m2;
 
     m1.display();
-   // m2.display();
+    m2.display();
     m3.display();
 
 
     delete array1;
-    //delete array2;
+    delete array2;
     array1 = NULL;
-    //array2 = NULL;
+    array2 = NULL;
 
     return 0;
 }
