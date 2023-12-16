@@ -1,5 +1,6 @@
 #include<iostream>
 #include<omp.h>
+#include<stdexcept>
 
 using namespace std;
 
@@ -134,44 +135,40 @@ matrix<DATA> eye(int n) {
 
 template<typename DATA>
 matrix<DATA> matrix<DATA>::operator&(matrix const &obj) {
-    try{
-        if(this->col != obj.row) 
-            throw(-1);
+        if(this->col != obj.row) {
+            throw std::invalid_argument("Internal dimensions do not match.");
+            
+        }
+        else {
+            int i, j, k;
+            matrix<DATA> m(this->row, obj.col);
+            for(i=0; i<m.row; i++)
+                for(j=0; j<m.col; j++)
+                    *(m.val + i*m.col + j) = (DATA)0; //change this later 
+                    //add funct for it as DEFAULT value as addition inverse of
+                    // that data
 
 
-        int i, j, k;
-        matrix<DATA> m(this->row, obj.col);
-        for(i=0; i<m.row; i++)
-            for(j=0; j<m.col; j++)
-                *(m.val + i*m.col + j) = (DATA)0; //change this later 
-                //add funct for it as DEFAULT value as addition inverse of
-                // that data
+            //else perform multiplication in parallel using openmp
+            #pragma omp parallel for private(i,j,k) shared(this->val, obj.val, m)
+            for(i=0; i<this->row; i++)
+                for(k=0; k<obj.row; k++)
+                    for(j=0; j<obj.col; j++)
+                        *(m.val + i*m.col + j) += *(val + i*this->col + k) * *(obj.val + k*obj.col + j);
 
-
-        //else perform multiplication in parallel using openmp
-        #pragma omp parallel for private(i,j,k) shared(this->val, obj.val, m)
-        for(i=0; i<this->row; i++)
-            for(k=0; k<obj.row; k++)
-                for(j=0; j<obj.col; j++)
-                    *(m.val + i*m.col + j) += *(val + i*this->col + k) * *(obj.val + k*obj.col + j);
-
+            
+            return m;
+        }
         
-        return m;
-    } catch(int m) {
-        cout<<"\nError: Internal dimensions do not match.";
-    }
 }
 
 template<typename DATA>
 DATA matrix<DATA>::operator()(int r, int c)  {
-    try {
-        if(r < this->row && c < this->col) {
-            return *(val + r*this->col + c);
+    
+    if(r < this->row && c < this->col) {
+        return *(val + r*this->col + c);
     } else {
-        throw(-1);
-    }
-    } catch(int m) {
-        cout<<"Exeption: index values exceed the size of the matrix.";
+        throw std::invalid_argument("Indices exceed the dimension size.");
     }
 }
 
@@ -195,27 +192,23 @@ matrix<DATA> matrix<DATA>::transpose() {
 
 template<typename DATA>
 matrix<DATA> matrix<DATA>::operator+(matrix const& obj) {
-    try{
-        if(this->row == obj.row && this->col == obj.col) {
-            matrix<DATA> m(obj.row, obj.col);
-            // addition and insertion in row major form.
-            for(int i=0; i<m.row; i++)
-                for(int j=0; j<m.col; j++)
-                    *(m.val + i*m.col + j) = *(obj.val + i*obj.col + j) + *(val + i*this->col + j);
+    if(this->row == obj.row && this->col == obj.col) {
+        matrix<DATA> m(obj.row, obj.col);
+        // addition and insertion in row major form.
+        for(int i=0; i<m.row; i++)
+            for(int j=0; j<m.col; j++)
+                *(m.val + i*m.col + j) = *(obj.val + i*obj.col + j) + *(val + i*this->col + j);
 
-            return m;
-        } else {
-            throw(-1);
-        }
-    } catch(int m) {
-        cout<<"\ncorresponding dimensions do not match.";
+        return m;
+    } else {
+        throw std::invalid_argument("dimensions do not match for addition to be valid.");
     }
 }
 
 
 template<typename DATA>
 matrix<DATA> matrix<DATA>::operator-(matrix const& obj) {
-     try{
+
         if(this->row == obj.row && this->col == obj.col) {
             matrix<DATA> m(obj.row, obj.col);
             // subtraction and insertion in row major form.
@@ -225,11 +218,8 @@ matrix<DATA> matrix<DATA>::operator-(matrix const& obj) {
 
             return m;
         } else {
-            throw(-1);
-        }
-    } catch(int m) {
-        cout<<"\ncorresponding dimensions do not match.";
-    }
+            throw std::invalid_argument("Dimensions do not match for subtraction to be valid.");
+        } 
 }
 
 
@@ -245,17 +235,11 @@ void matrix<DATA>::insertAll()  {
 
 template<typename DATA>
 void matrix<DATA>::insertAt(DATA value, int r, int c)  {
-    try {
         if( (r>-1 && r < this->row) && (c>-1 && c<this->col)) {
             *(val + (this->col)*r + c) = value;
         } else {
-            throw(-1);
+            throw std::invalid_argument("The index values exceed the dimension size of the matrix.");
         }
-    } catch(int m) {
-        if(-1) {
-            cout<<"Wrong index values input.";
-        }
-    }
 }
 
 template<typename DATA>
@@ -292,10 +276,10 @@ int main() {
     int *array1 = new int[row*col];
     int *array2 = new int[row*col];
     init2dArray(array1, row, col); // 2x3 array
-    init2dArray(array2, col, row); // 3x2 array
+    init2dArray(array2, row, col); // 3x2 array
 
     matrix<int> m1(array1, row, col); //2x3 matrix
-    matrix<int> m2(array2, col, row); //3x2 matrix
+    matrix<int> m2(array2, row, col); //3x2 matrix
     
     matrix<int> m3 = m1 & m2;
 
@@ -304,7 +288,7 @@ int main() {
 
     cout<<"\nMatrix Multiplication Result:-\n";
     m3.display();
-    
+
     delete array1;
     delete array2;
     array1 = NULL;
