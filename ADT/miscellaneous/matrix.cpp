@@ -25,7 +25,7 @@ class matrix {
 
     // memory allocation for internal data structure holding the values
     void getMemoryforVal(int row, int col) {
-        this->val = new int[row*col];
+        this->val = new DATA[row*col];
     }
 
     public:
@@ -97,17 +97,51 @@ class matrix {
 
         /////// MATRIX OPERATIONS ///////
         matrix<DATA> operator+(matrix const& );
-        matrix<DATA> operator-(matrix const& obj);
+        matrix<DATA> operator-(matrix const& );
 
         //transpose operator
         matrix<DATA> operator!();
-
         //transpose operation explicit method
         matrix<DATA> transpose();
 
+
+        //accessibility operations overload
+        DATA operator()(int, int);
+
 };
 
+
+//// identity matrix
+template<typename DATA>
+matrix<DATA> eye(int n) {
+    matrix<DATA> m(n, n);
+    
+    for(int i=0; i<n; i++)
+        for(int j=0; j<n; j++) {
+            if(i == j) {
+                m.insertAt(1, i, j);
+            } else {
+                m.insertAt(0, i, j);
+            }
+        }
+
+    return m;
+}
+
 ///// MATRIX OPERATIONS DEFINITIONS START HERE ////
+
+template<typename DATA>
+DATA matrix<DATA>::operator()(int r, int c)  {
+    try {
+        if(r < this->row && c < this->col) {
+            return *(val + r*this->col + c);
+    } else {
+        throw(-1);
+    }
+    } catch(int m) {
+        cout<<"Exeption: index values exceed the size of the matrix.";
+    }
+}
 
 template<typename DATA>
 matrix<DATA> matrix<DATA>::operator!() {
@@ -152,7 +186,7 @@ matrix<DATA> matrix<DATA>::operator-(matrix const& obj) {
      try{
         if(this->row == obj.row && this->col == obj.col) {
             matrix<DATA> m(obj.row, obj.col);
-            // addition and insertion in row major form.
+            // subtraction and insertion in row major form.
             for(int i=0; i<m.row; i++)
                 for(int j=0; j<m.col; j++)
                     *(m.val + i*m.col + j) =  *(val + i*this->col + j) - *(obj.val + i*obj.col + j);
@@ -237,6 +271,12 @@ int main() {
     m2.display();
     m3.display();
 
+
+    cout<<m1(1,2);
+
+    matrix<float> m4 = eye<float>(5);
+
+    m4.display();
 
     delete array1;
     delete array2;
