@@ -291,31 +291,20 @@ int main() {
 
     int *array1 = new int[row*col];
     int *array2 = new int[row*col];
-    init2dArray(array1, row, col);
-    init2dArray(array2, row, col);
+    init2dArray(array1, row, col); // 2x3 array
+    init2dArray(array2, col, row); // 3x2 array
 
-    matrix<int> m1(array1, row, col);
-    matrix<int> m2(array2, row, col);
+    matrix<int> m1(array1, row, col); //2x3 matrix
+    matrix<int> m2(array2, col, row); //3x2 matrix
     
-    matrix<int> m3 = m1 - m2;
+    matrix<int> m3 = m1 & m2;
 
     m1.display();
     m2.display();
+
+    cout<<"\nMatrix Multiplication Result:-\n";
     m3.display();
-
-
-    cout<<m1(1,2);
-
-    matrix<int> m4 = eye<int>(3);
-    matrix<int> m5(array1, 2, 3);
-    m4.display();
-    m5.display();
-
-    matrix<int> m6 = m5 & m4;
     
-    cout<<"\nMatrix multiplication result:-\n";
-    m6.display();
-
     delete array1;
     delete array2;
     array1 = NULL;
