@@ -100,6 +100,7 @@ class matrix {
         matrix<DATA> operator+(matrix const& );
         matrix<DATA> operator-(matrix const& );
         matrix<DATA> operator&(matrix const& ); //matrix multiply
+        matrix<DATA> operator*(DATA scalar); //scalar multiplication (scalar on rhs of *)
 
         //transpose operator
         matrix<DATA> operator!();
@@ -132,6 +133,19 @@ matrix<DATA> eye(int n) {
 
 ///// MATRIX OPERATIONS DEFINITIONS START HERE ////
 
+template<typename DATA>
+matrix<DATA> matrix<DATA>::operator*(DATA scalar) {
+    matrix<DATA> m(this->row, this->col);
+
+    for(int i=0; i<this->row; i++)
+        for(int j=0; j<this->col; j++) {
+            int temp = *(val + (this->col)*i + j);
+            *(m.val + i*m.col + j) = scalar * temp;
+        }
+
+    return m;
+}
+            
 
 template<typename DATA>
 matrix<DATA> matrix<DATA>::operator&(matrix const &obj) {
@@ -271,15 +285,17 @@ void init2dArray(int *array, int size_0, int size_1) {
 int main() {
 
     int row=2, 
-        col=3;
+        col=3,
+        row2=3,
+        col2=2;
 
     int *array1 = new int[row*col];
-    int *array2 = new int[row*col];
+    int *array2 = new int[row2*col2];
     init2dArray(array1, row, col); // 2x3 array
-    init2dArray(array2, row, col); // 3x2 array
+    init2dArray(array2, row2, col2); // 3x2 array
 
     matrix<int> m1(array1, row, col); //2x3 matrix
-    matrix<int> m2(array2, row, col); //3x2 matrix
+    matrix<int> m2(array2, row2, col2); //3x2 matrix
     
     matrix<int> m3 = m1 & m2;
 
@@ -289,12 +305,15 @@ int main() {
     cout<<"\nMatrix Multiplication Result:-\n";
     m3.display();
 
+    matrix<int> m4 = m3*2;
+    m4.display();
+
     delete array1;
     delete array2;
     array1 = NULL;
     array2 = NULL;
 
-    return 0;
+    return 1;
 }
 
 
