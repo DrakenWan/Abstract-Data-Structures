@@ -12,7 +12,7 @@ template<typename DATA>
 class matrix {
     /*  
         matrix abstract DS reflects properties and behaviour of a matrix
-        
+
         DATA MEMEBERS:-
             val = flattened 2d array of type DATA in row major form
             row = number of rows of the matrix
@@ -117,7 +117,7 @@ class matrix {
         matrix<DATA> operator!();
         //transpose operation explicit method
         matrix<DATA> transpose();
-
+        matrix<DATA> T(){ return this->transpose();};
 
         //accessibility operations overload
         DATA operator()(int, int);
@@ -341,13 +341,13 @@ int main() {
     // array2 = NULL;
 
 
-    int r = 10, c = 10;
+    int r = 5, c = 4;
     int *arr1 = new int[r*c], *arr2= new int[r*c];
     init2dRandArray(arr1, r, c);
-    init2dRandArray(arr2, r, c);
+    init2dRandArray(arr2, c, r);
 
     matrix<int> m10(arr1, r, c);
-    matrix<int> m11(arr2, r, c);
+    matrix<int> m11(arr2, c, r);
     matrix<int> m12 = m10 & m11;
 
     m10.display();
@@ -355,6 +355,8 @@ int main() {
     cout<<"\nMatrix Mul Result:-\n";
     m12.display();
 
+    matrix<int> m11T = m11.T();
+    m11T.display();
     delete arr1;
     delete arr2;
     arr1 = NULL;
