@@ -2,18 +2,29 @@
 #include<omp.h>
 #include<stdexcept>
 
+
+//extra imports for utility
+#include<random>
+
 using namespace std;
 
 template<typename DATA>
 class matrix {
-    /*
-        val = flattened 2d array of type DATA in row major form
-        row = number of rows of the matrix
-        col = number of columns of the matrix
+    /*  
+        matrix abstract DS reflects properties and behaviour of a matrix
+        
+        DATA MEMEBERS:-
+            val = flattened 2d array of type DATA in row major form
+            row = number of rows of the matrix
+            col = number of columns of the matrix
 
-        Note: memory is dynamically allocated for the `val` 
-        member variable.  It's lifetime is until 
-        the object instance of `matrix` defining it is alive.
+        Note: 
+            1.  memory is dynamically allocated for the `val` 
+                member variable.  It's lifetime is until 
+                the object instance of `matrix` defining it is alive.
+            2.  This class object makes use of openMP paralleisation to 
+                take advantage of parallel computing in some operations
+                such as matrix multiplication.
     */
     DATA *val;
     int row, col;
@@ -240,7 +251,7 @@ matrix<DATA> matrix<DATA>::operator-(matrix const& obj) {
 template<typename DATA>
 void matrix<DATA>::insertAll()  {
     int i,j;
-    cout<<"\nNote: you have to insert "<<this->row*this->col<<" values. Values will be filled row-major wise.\n";
+    cout<<"\nNote: you have to insert "<<this->row*this->col<<" values. Values will be filled row-major wise in a "<<this->row<<'x'<<this->col<<" matrix.\n";
     for(i=0; i<this->row; i++)
         for(j=0; j<this->col; j++)
             cin>>*(val + (this->col)*i + j);
@@ -282,38 +293,74 @@ void init2dArray(int *array, int size_0, int size_1) {
             cin>>*(array + i*size_1 + j);
 }
 
+void init2dRandArray(int *array, int size_0, int size_1) {
+    /*
+     UTIL FUNCTION
+        Flattened 2d array in row major form will be initialised using a
+        uniform integer distribution.
+    */
+
+   cout<<"\nInitializing our random 2d integer array";
+   std::default_random_engine generator;
+   std::uniform_int_distribution<int> distribution(0, 9);
+
+   for(int i=0; i<size_0; i++)
+    for(int j=0; j<size_1; j++)
+        *(array + i*size_1 + j) = distribution(generator);
+}
+
 int main() {
 
-    int row=2, 
-        col=3,
-        row2=3,
-        col2=2;
+    // int row=2, 
+    //     col=3,
+    //     row2=3,
+    //     col2=2;
 
-    int *array1 = new int[row*col];
-    int *array2 = new int[row2*col2];
-    init2dArray(array1, row, col); // 2x3 array
-    init2dArray(array2, row2, col2); // 3x2 array
+    // int *array1 = new int[row*col];
+    // int *array2 = new int[row2*col2];
+    // init2dArray(array1, row, col); // 2x3 array
+    // init2dArray(array2, row2, col2); // 3x2 array
 
-    matrix<int> m1(array1, row, col); //2x3 matrix
-    matrix<int> m2(array2, row2, col2); //3x2 matrix
+    // matrix<int> m1(array1, row, col); //2x3 matrix
+    // matrix<int> m2(array2, row2, col2); //3x2 matrix
     
-    matrix<int> m3 = m1 & m2;
+    // matrix<int> m3 = m1 & m2;
 
-    m1.display();
-    m2.display();
+    // m1.display();
+    // m2.display();
 
-    cout<<"\nMatrix Multiplication Result:-\n";
-    m3.display();
+    // cout<<"\nMatrix Multiplication Result:-\n";
+    // m3.display();
 
-    matrix<int> m4 = m3*2;
-    m4.display();
+    // matrix<int> m4 = m3*2;
+    // m4.display();
 
-    delete array1;
-    delete array2;
-    array1 = NULL;
-    array2 = NULL;
+    // delete array1;
+    // delete array2;
+    // array1 = NULL;
+    // array2 = NULL;
 
-    return 1;
+
+    int r = 10, c = 10;
+    int *arr1 = new int[r*c], *arr2= new int[r*c];
+    init2dRandArray(arr1, r, c);
+    init2dRandArray(arr2, r, c);
+
+    matrix<int> m10(arr1, r, c);
+    matrix<int> m11(arr2, r, c);
+    matrix<int> m12 = m10 & m11;
+
+    m10.display();
+    m11.display();
+    cout<<"\nMatrix Mul Result:-\n";
+    m12.display();
+
+    delete arr1;
+    delete arr2;
+    arr1 = NULL;
+    arr2 = NULL;
+
+    return 0;
 }
 
 
