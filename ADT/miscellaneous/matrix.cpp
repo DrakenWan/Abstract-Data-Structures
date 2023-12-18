@@ -122,27 +122,104 @@ class matrix {
         //accessibility operations overload
         DATA operator()(int, int);
 
+        // raise each element to an integer power
+        matrix<DATA> operator^(int);
+        ////////////////  OPERATIONS END /////////////////
+        
+        
+        /// Generate Augmented matrix (vertical stack or horizontal stack) ///
+        matrix<DATA> hStack(matrix const& ); // horizontal stack - hStack
+        matrix<DATA> vStack(matrix const& ); // vertical  stack - vStack
+        matrix<DATA> stack(matrix const& obj, bool vert=false); //generalized stack - stack
+        //////////////////////////////////////////////////////////////////////
+
+
 };
 
 
-//// identity matrix
+//// STACKING OPERATIONS ////
 template<typename DATA>
-matrix<DATA> eye(int n) {
-    matrix<DATA> m(n, n);
+matrix<DATA> matrix<DATA>::stack(matrix const& obj, bool vert) {
+    if(vert)
+        return this->vStack(obj);
+    else
+        return this->hStack(obj);
+}
+
+template<typename DATA>
+matrix<DATA> matrix<DATA>::hStack(matrix const& obj) {
+    if(this->row != obj.row)
+        throw std::invalid_argument("The row dimensions do not match.");
     
-    for(int i=0; i<n; i++)
-        for(int j=0; j<n; j++) {
-            if(i == j) {
-                m.insertAt(1, i, j);
-            } else {
-                m.insertAt(0, i, j);
-            }
-        }
+    // initialize the augmented matrix
+    matrix<DATA> m(this->row, this->col + obj.col);
+
+    for(int i=0; i<m.row; i++) {
+        for(int j=0; j<this->col; j++)
+            *(m.val + i*m.col + j) = *(val + (this->col)*i + j);
+
+        for(int j=0; j<obj.col; j++)
+            *(m.val + i*m.col + (j+this->col)) = *(obj.val + i*obj.col + j);
+    }
 
     return m;
 }
 
+template<typename DATA>
+matrix<DATA> matrix<DATA>::vStack(matrix const& obj) {
+    if(this->col != obj.col)
+        throw std::invalid_argument("The column dimensions do not match.");
+
+    // initialize our augmented matrix
+    matrix<DATA> m(this->row + obj.row, this->col);
+
+    
+    for(int j=0; j<m.col; j++) {
+        for(int i=0; i<this->row; i++)
+            *(m.val + i*m.col + j) = *(val + i*m.col + j);
+
+        for(int i=0; i<obj.row; i++)
+            *(m.val + (i+this->row)*m.col + j) = *(obj.val + i*obj.col + j);
+    }
+
+    return m;
+    
+}
+//// STACKING OPERATIONS END ////
+
+
+
 ///// MATRIX OPERATIONS DEFINITIONS START HERE ////
+
+template<typename DATA>
+matrix<DATA> matrix<DATA>::operator^(int pow) {
+    /*
+        This is not a numerically sound operation.
+        Use at your own risk.
+        This is only used for positive integer powers.
+        Will probably just use math.pow function which is
+        numerically stable. 
+
+        NOTE:
+            Just want to see how this restricted logic works for me.
+            In case of integer matrices, this is not an issue but when
+            it would come to dealing with floats using this operation
+            it might lead to cases where the data is lost.
+    */
+    matrix<int> m(this->row, this->col);
+
+    for(int i=0; i<(m.row*m.col); i++) {
+        int prod=1;
+
+        //exponent logic using loop
+        for(int j=0; j<pow; j++)
+            prod *= *(val + i);
+        
+        *(m.val + i) = prod;
+    }
+
+    return m;
+}
 
 template<typename DATA>
 matrix<DATA> matrix<DATA>::operator*(DATA scalar) {
@@ -281,6 +358,23 @@ void matrix<DATA>::display()  {
 
 
 /////// MAIN FUNCTION AND UTILS/////////
+//// identity matrix
+template<typename DATA>
+matrix<DATA> eye(int n) {
+    matrix<DATA> m(n, n);
+    
+    for(int i=0; i<n; i++)
+        for(int j=0; j<n; j++) {
+            if(i == j) {
+                m.insertAt(1, i, j);
+            } else {
+                m.insertAt(0, i, j);
+            }
+        }
+
+    return m;
+}
+
 
 void init2dArray(int *array, int size_0, int size_1) {
     /*
@@ -361,6 +455,51 @@ int main() {
     delete arr2;
     arr1 = NULL;
     arr2 = NULL;
+
+
+    //augmentation 
+    cout<<"\nGenerating Horinzontal stack matrix:-\n";
+    matrix<int> eye5 = eye<int>(r);
+
+    cout<<"matrix m10 | ";
+    m10.display();
+    cout<<"Identity matrix 5x5 | ";
+    eye5.display();
+
+    matrix<int> augmentedMatrix = m10.hStack(eye5);
+
+    cout<<"\nAugmented matrix | ";
+    augmentedMatrix.display();
+
+
+    cout<<"\nGenerating Horinzontal stack matrix:-\n";
+    matrix<int> eye4 = eye<int>(c);
+
+    cout<<"matrix m10 | ";
+    m10.display();
+
+    cout<<"Identity matrix 4x4 | ";
+    eye4.display();
+
+    matrix<int> augmentedMatrix2 = m10.vStack(eye4);
+    cout<<"\nAugmented matrix | ";
+    augmentedMatrix2.display();
+
+    // exponend
+    cout<<"\n\nRaise each element to an integer power:-\n";
+    
+    int *arrA = new int[2*2];
+    init2dArray(arrA, 2, 2);
+    matrix<int> A(arrA, 2, 2);
+    delete arrA;
+    arrA = NULL;
+
+    cout<<"matrix A | ";
+    A.display();
+
+    matrix<int> A3 = A^3;
+    cout<<"\nResultant cube valued matrix | ";
+    A3.display();
 
     return 0;
 }
