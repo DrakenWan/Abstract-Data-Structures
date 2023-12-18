@@ -46,3 +46,5 @@ The matrix operations currently implemented so far:-
 * scalar multiplication [x]
 * transpose [x]
 * inverse [ ]
+* stack [x] - to generate augmented matrices (vertical stack and horizontal stack)
+![Alt text](image.png)
