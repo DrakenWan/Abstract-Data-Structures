@@ -6,6 +6,9 @@
 //extra imports for utility
 #include<random>
 
+// macros for deallocation
+#define deAlloc(x) delete[] x; x = NULL;
+
 using namespace std;
 
 
@@ -176,6 +179,22 @@ class matrix {
 
 };
 
+//// QUERY METHOD DEFINITIONS ////
+
+template<typename DATA>
+bool matrix<DATA>::isSymmetric() {
+    if(this->row == this->col)
+     {
+        matrix<DATA> Transpose = this->T();
+        if(Transpose == *this)
+            return true;
+     }
+
+     return false;
+}
+
+/////////////////////////////////
+
 
 //// STACKING OPERATIONS ////
 template<typename DATA>
@@ -236,15 +255,14 @@ bool matrix<DATA>::operator==(matrix const& m) {
     
     if(row == m.row && col == m.col) {
         bool equal = true;
-        for(int i=0; i<this->row; i++)
-            for(int j=0; j<this->col; j++)
-                {
-                    if( this(i,j) != m(i,j))
-                        {
-                            equal = false;
-                            break;
-                        }
-                }
+        for(int i=0; i<row*col; i++)
+            {
+                if(*(val + i) != *(m.val + i))
+                    {
+                        equal = false;
+                        break;
+                    }
+            }
         return equal;
     } else {
         return false;
@@ -454,7 +472,8 @@ void matrix<DATA>::insertAt(DATA value, int r, int c)  {
 template<typename DATA>
 void matrix<DATA>::display()  {
     int i,j;
-    cout<<"Matrix:-\n";
+    //cout<<"Matrix:-\n";
+    cout<<endl;
     for(i=0; i<this->row; i++) {
         for(j=0; j<this->col; j++)
             cout<<*(val + (this->col)*i + j )<<" ";
@@ -510,131 +529,48 @@ void init2dRandArray(int *array, int size_0, int size_1) {
         *(array + i*size_1 + j) = distribution(generator);
 }
 
+
 int main() {
 
-    // int row=2, 
-    //     col=3,
-    //     row2=3,
-    //     col2=2;
+    int row = 4, col = 5;
+    int *array = new int[row*col];
+    init2dRandArray(array, row, col);
 
-    // int *array1 = new int[row*col];
-    // int *array2 = new int[row2*col2];
-    // init2dArray(array1, row, col); // 2x3 array
-    // init2dArray(array2, row2, col2); // 3x2 array
-
-    // matrix<int> m1(array1, row, col); //2x3 matrix
-    // matrix<int> m2(array2, row2, col2); //3x2 matrix
-    
-    // matrix<int> m3 = m1 & m2;
-
-    // m1.display();
-    // m2.display();
-
-    // cout<<"\nMatrix Multiplication Result:-\n";
-    // m3.display();
-
-    // matrix<int> m4 = m3*2;
-    // m4.display();
-
-    // delete array1;
-    // delete array2;
-    // array1 = NULL;
-    // array2 = NULL;
-
-
-    int r = 5, c = 4;
-    int *arr1 = new int[r*c], *arr2= new int[r*c];
-    init2dRandArray(arr1, r, c);
-    init2dRandArray(arr2, c, r);
-
-    matrix<int> m10(arr1, r, c);
-    matrix<int> m11(arr2, c, r);
-    matrix<int> m12 = m10 & m11;
-
-    delete[] arr1;
-    delete[] arr2;
-    arr1 = NULL;
-    arr2 = NULL;
-
-    m10.display();
-    m11.display();
-    cout<<"\nMatrix Mul Result:-\n";
-    m12.display();
-
-    matrix<int> m11T = m11.T();
-    m11T.display();
-    
-
-    //augmentation 
-    cout<<"\nGenerating Horinzontal stack matrix:-\n";
-    matrix<int> eye5 = eye<int>(r);
-
-    cout<<"matrix m10 | ";
-    m10.display();
-    cout<<"Identity matrix 5x5 | ";
-    eye5.display();
-
-    matrix<int> augmentedMatrix = m10.hStack(eye5);
-
-    cout<<"\nAugmented matrix | ";
-    augmentedMatrix.display();
-
-
-    cout<<"\nGenerating Horinzontal stack matrix:-\n";
-    matrix<int> eye4 = eye<int>(c);
-
-    cout<<"matrix m10 | ";
-    m10.display();
-
-    cout<<"Identity matrix 4x4 | ";
-    eye4.display();
-
-    matrix<int> augmentedMatrix2 = m10.vStack(eye4);
-    cout<<"\nAugmented matrix | ";
-    augmentedMatrix2.display();
-
-    // exponend
-    cout<<"\n\nRaise each element to an integer power:-\n";
-    
-    int *arrA = new int[2*2];
-    init2dArray(arrA, 2, 2);
-    matrix<int> A(arrA, 2, 2);
-    delete[] arrA;
-    arrA = NULL;
-
-    cout<<"matrix A | ";
+    matrix<int> A(array, row, col);
     A.display();
 
-    matrix<int> A3 = A^3;
-    cout<<"\nResultant cube valued matrix | ";
-    A3.display();
-    
+    // do this everytime you deallocate array
+    deAlloc(array);
+    // temporarily a #define macros will be placed here
 
-    cout<<"\n1X1 Matrix example:-\n";
-    int val = 10;
-    int *arr = &val;
-    matrix<int> B(arr,1,1);
+    int row2 = 5, col2 = 5;
+    array = new int[row2*col2];
+    init2dRandArray(array, row2, col2);
+    matrix<int> B(array, row2, col2);
     B.display();
+
+    matrix<int> C = B.slice(0,3,1,3);
+    C.display();
+    deAlloc(array);
+
+    matrix<int> eye4 = eye<int>(row);
+    matrix<int> eye4_2 = eye<int>(row);
+    matrix<int> augmentedMat = A.hStack(eye4);
+    augmentedMat.display();
+
+    int N = 3;
+    array = new int[N*N];
+    init2dArray(array, N, N);
+    matrix<int> D(array, N);
+
+    D.display();
+
+    matrix<int> tD = D.T();
+    tD.display();
+    deAlloc(array);
     
-    cout<<endl;
-    cout<<B(0,0)<<endl;
-
-    // Matrix indexing example
-     cout<<"\nMatrix slicing example:- (Slicing [(1:2),(0:1)]\n";
-     cout<<"Original matrix m10 | ";
-     m10.display();
-
-    matrix<int> subMat10 = m10.slice(1,5,2,4);
-    cout<<subMat10.rows()<<'x'<<subMat10.cols()<<" Submatrix | ";
-    subMat10.display();
-
-    matrix<int> dimM10 = m10.getDims();
-    dimM10.display();
-
-
-    cout<<"\nChecking if two matrix are equal:-";
-    cout<<"\nFirst we do initialization of two matrices:-\n";
-
+    cout<<"Is D symmetric?\n";
+    (D.isSymmetric()) ? cout<<"Yes!" : cout<<"No!";
     return 0;
 }
 
