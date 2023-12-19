@@ -32,7 +32,7 @@ class matrix {
 
     //deallocate memory for Val
     void delMemoryforVal() {
-        delete this->val;
+        delete[] this->val;
         this->val = NULL;
     }
 
@@ -57,12 +57,18 @@ class matrix {
 
     public:
         //getdimensions
-        int getDim(int axis=0) {
-            if(axis=0) return this->row;
-            if(axis=1) return this->col;
-            else
-                throw std::invalid_argument("Wrong axis. Accepted set of values {0,1}");
+        matrix<DATA> getDims() {
+            /*
+                Returns a 1x2 integer matrix (say Dims) with row in Dims(0,0) and col in Dims(0,1) 
+            */
+
+           matrix<int> Dims(1,2);
+           Dims(0,0) = this->row;
+           Dims(0,1) = this->col;
+           
+           return Dims;
         }
+
         int rows() {return this->row;}
         int cols() {return this->col;}
 
@@ -128,7 +134,7 @@ class matrix {
         
         ~matrix() {
             delete this->val;
-            this->val = nullptr;
+            this->val = NULL;
             //cout<<"\nCleared heap memory for member `val`.";
         }
 
@@ -137,15 +143,16 @@ class matrix {
         matrix<DATA> operator-(matrix const& );
         matrix<DATA> operator&(matrix const& ); //matrix multiply
         matrix<DATA> operator*(DATA scalar); //scalar multiplication (scalar on rhs of *)
+        bool operator==(matrix const &); // matrix equal operation
 
         //transpose operator
-        matrix<DATA> operator!();
+        matrix<DATA> operator!(); 
         //transpose operation explicit method
         matrix<DATA> transpose();
         matrix<DATA> T(){ return this->transpose();};
 
         //accessibility operations overload
-        DATA operator()(int, int); //access an element of the matrix
+        DATA& operator()(int, int); //access an element of the matrix
         //void operator()(Params, Params);
 
         // sliceu!
@@ -162,6 +169,10 @@ class matrix {
         matrix<DATA> stack(matrix const& obj, bool vert=false); //generalized stack - stack
         //////////////////////////////////////////////////////////////////////
 
+
+        /// QUERY methods
+        bool isSquare() { if(this->col == this->row) return true; else return false;}
+        bool isSymmetric();
 
 };
 
@@ -219,6 +230,27 @@ matrix<DATA> matrix<DATA>::vStack(matrix const& obj) {
 
 
 ///// MATRIX OPERATIONS DEFINITIONS START HERE ////
+
+template<typename DATA>
+bool matrix<DATA>::operator==(matrix const& m) {
+    
+    if(row == m.row && col == m.col) {
+        bool equal = true;
+        for(int i=0; i<this->row; i++)
+            for(int j=0; j<this->col; j++)
+                {
+                    if( this(i,j) != m(i,j))
+                        {
+                            equal = false;
+                            break;
+                        }
+                }
+        return equal;
+    } else {
+        return false;
+    }
+}
+
 
 template<typename DATA>
 matrix<DATA> matrix<DATA>::operator^(int pow) {
@@ -294,7 +326,7 @@ matrix<DATA> matrix<DATA>::operator&(matrix const &obj) {
 }
 
 template<typename DATA>
-DATA matrix<DATA>::operator()(int r, int c)  {
+DATA& matrix<DATA>::operator()(int r, int c)  {
     
     if(r < this->row && c < this->col) {
         return *(val + r*this->col + c);
@@ -519,6 +551,11 @@ int main() {
     matrix<int> m11(arr2, c, r);
     matrix<int> m12 = m10 & m11;
 
+    delete[] arr1;
+    delete[] arr2;
+    arr1 = NULL;
+    arr2 = NULL;
+
     m10.display();
     m11.display();
     cout<<"\nMatrix Mul Result:-\n";
@@ -526,11 +563,7 @@ int main() {
 
     matrix<int> m11T = m11.T();
     m11T.display();
-    delete arr1;
-    delete arr2;
-    arr1 = NULL;
-    arr2 = NULL;
-
+    
 
     //augmentation 
     cout<<"\nGenerating Horinzontal stack matrix:-\n";
@@ -566,7 +599,7 @@ int main() {
     int *arrA = new int[2*2];
     init2dArray(arrA, 2, 2);
     matrix<int> A(arrA, 2, 2);
-    delete arrA;
+    delete[] arrA;
     arrA = NULL;
 
     cout<<"matrix A | ";
@@ -591,9 +624,17 @@ int main() {
      cout<<"Original matrix m10 | ";
      m10.display();
 
-    matrix<int> subMat10 = m10.slice(0,5,0,2);
-    cout<<subMat10.getDim(0)<<'x'<<subMat10.getDim(1)<<" Submatrix | ";
+    matrix<int> subMat10 = m10.slice(1,5,2,4);
+    cout<<subMat10.rows()<<'x'<<subMat10.cols()<<" Submatrix | ";
     subMat10.display();
+
+    matrix<int> dimM10 = m10.getDims();
+    dimM10.display();
+
+
+    cout<<"\nChecking if two matrix are equal:-";
+    cout<<"\nFirst we do initialization of two matrices:-\n";
+
     return 0;
 }
 
