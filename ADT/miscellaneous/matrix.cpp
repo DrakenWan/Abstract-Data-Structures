@@ -8,6 +8,7 @@
 
 using namespace std;
 
+
 template<typename DATA>
 class matrix {
     /*  
@@ -40,7 +41,31 @@ class matrix {
         this->val = new DATA[row*col];
     }
 
+    
+    // validate the Param values
+    bool validateParams(int x, int y, int dim) {
+        bool validatex = (x > -1 && x < dim+1);
+        bool validatey = (y > -1 && y < dim+1);
+        bool validatexlty = (x < y);
+        if( validatex && validatey && validatexlty)
+            return true;
+        else
+            return false;
+    }
+    
+    //////////////////////////
+
     public:
+        //getdimensions
+        int getDim(int axis=0) {
+            if(axis=0) return this->row;
+            if(axis=1) return this->col;
+            else
+                throw std::invalid_argument("Wrong axis. Accepted set of values {0,1}");
+        }
+        int rows() {return this->row;}
+        int cols() {return this->col;}
+
         // initialize a square matrix
         matrix(int n) {
             this->row = this->col = n;
@@ -120,7 +145,11 @@ class matrix {
         matrix<DATA> T(){ return this->transpose();};
 
         //accessibility operations overload
-        DATA operator()(int, int);
+        DATA operator()(int, int); //access an element of the matrix
+        //void operator()(Params, Params);
+
+        // sliceu!
+        matrix<DATA> slice(int, int, int, int);
 
         // raise each element to an integer power
         matrix<DATA> operator^(int);
@@ -271,6 +300,52 @@ DATA matrix<DATA>::operator()(int r, int c)  {
         return *(val + r*this->col + c);
     } else {
         throw std::invalid_argument("Indices exceed the dimension size.");
+    }
+}
+
+
+// slicing operations
+template<typename DATA>
+matrix<DATA> matrix<DATA>::slice(int x_0, int y_0, int x_1, int y_1) {
+    /*
+        Takes in 4 integer parameters:-
+            x_0 : start index of row dimension
+            y_0 : end index of row dimension (exclusive)
+            x_1 : start index of col dimension
+            y_1 : end index of col dimension (exclusive)
+
+        RETURNS 
+           a (y_0 - x_0) x (y_1 - x_1) submatrix from the given input matrix
+        
+        USAGE
+            Suppose you have a 5x4  matrix of some random integervalues
+            You invoke `matrix<int> subMatrix = A.slice(1,4, 1,2)`. This will
+            return a 2x1 submatrix of the original matrix.
+
+              5x4 Matrix                        2x1 sub matrix
+            [[1, 2, 3, 4],                          
+             [1, 4, 3, 2],                           [[4],
+             [3, 1, 2, 4],         =====>             [1]]
+             [2, 3, 4, 1],
+             [4, 2, 1, 3]]
+    */
+    bool validation = (this->validateParams(x_0, y_0, this->row)) && (this->validateParams(x_1, y_1, this->col));
+    //cout<<"Params _0"<<x_0<<','<<y_0;
+    //cout<<"\nParams _1"<<x_1<<','<<y_1;
+
+    if (validation) {
+        matrix<DATA> m(y_0 - x_0, y_1 - x_1);
+
+        for(int i=0; i<m.row; i++) {
+            for(int j=0; j<m.col; j++) {
+                *(m.val + i*m.col + j) = *(val + (i + x_0)*(this->col) + (j + x_1));
+            }
+        }
+
+        return m;
+
+    } else {
+        throw std::invalid_argument("Bad indices reported. Check your index Params.");
     }
 }
 
@@ -500,7 +575,25 @@ int main() {
     matrix<int> A3 = A^3;
     cout<<"\nResultant cube valued matrix | ";
     A3.display();
+    
 
+    cout<<"\n1X1 Matrix example:-\n";
+    int val = 10;
+    int *arr = &val;
+    matrix<int> B(arr,1,1);
+    B.display();
+    
+    cout<<endl;
+    cout<<B(0,0)<<endl;
+
+    // Matrix indexing example
+     cout<<"\nMatrix slicing example:- (Slicing [(1:2),(0:1)]\n";
+     cout<<"Original matrix m10 | ";
+     m10.display();
+
+    matrix<int> subMat10 = m10.slice(0,5,0,2);
+    cout<<subMat10.getDim(0)<<'x'<<subMat10.getDim(1)<<" Submatrix | ";
+    subMat10.display();
     return 0;
 }
 

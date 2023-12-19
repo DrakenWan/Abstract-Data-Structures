@@ -46,6 +46,7 @@
         "xtr1common": "cpp",
         "xtree": "cpp",
         "complex": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "random": "cpp"
     }
 }
