@@ -320,13 +320,13 @@ matrix<DATA> matrix<DATA>::slice(int x_0, int y_0, int x_1, int y_1) {
         USAGE
             Suppose you have a 5x4  matrix of some random integervalues
             You invoke `matrix<int> subMatrix = A.slice(1,4, 1,2)`. This will
-            return a 2x1 submatrix of the original matrix.
+            return a 3x1 submatrix of the original matrix.
 
-              5x4 Matrix                        2x1 sub matrix
+              5x4 Matrix                        3x1 sub matrix
             [[1, 2, 3, 4],                          
              [1, 4, 3, 2],                           [[4],
-             [3, 1, 2, 4],         =====>             [1]]
-             [2, 3, 4, 1],
+             [3, 1, 2, 4],         =====>             [1],
+             [2, 3, 4, 1],                            [3]] 
              [4, 2, 1, 3]]
     */
     bool validation = (this->validateParams(x_0, y_0, this->row)) && (this->validateParams(x_1, y_1, this->col));
