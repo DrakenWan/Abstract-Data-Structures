@@ -9,8 +9,6 @@
 // macros for deallocation
 #define deAlloc(x) delete[] x; x = NULL;
 
-using namespace std;
-
 
 template<typename DATA>
 class matrix {
@@ -138,7 +136,7 @@ class matrix {
         ~matrix() {
             delete this->val;
             this->val = NULL;
-            //cout<<"\nCleared heap memory for member `val`.";
+            //std::cout<<"\nCleared heap memory for member `val`.";
         }
 
         /////// MATRIX OPERATIONS ///////
@@ -173,11 +171,79 @@ class matrix {
         //////////////////////////////////////////////////////////////////////
 
 
+        /// aggregate functions ///
+        // max
+        matrix<DATA> max(int dim=-1);
+
+        //argmax
+        matrix<DATA> argmax(int dim=-1);
+        
+        // min
+        matrix<DATA> min(int dim=-1);
+
+        //argmin
+        matrix<DATA> argmin(int dim=-1);
+        //// aggregate functions end ////
+
+
         /// QUERY methods
         bool isSquare() { if(this->col == this->row) return true; else return false;}
         bool isSymmetric();
 
 };
+
+/////// AGGREGATE FUNCTIONS ///////
+template<typename DATA>
+matrix<DATA> matrix<DATA>::max(int dim) {
+    DATA maxElem;
+    if(dim == -1) {
+            /* Returns a 1x1 matrix of max value */
+            matrix<DATA> m0(1,1);
+
+            // might subroutine the below repetitive code
+            maxElem = *val;
+            for(int i=1; i<this->row*this->col; i++)
+                if( maxElem < *(val + i)) {
+                    maxElem = *(val + i);
+                }
+
+            m0.insertAt(maxElem, 0, 0);
+            return m0;
+    } //dim == -1
+     else {
+    
+        if(dim == 0) {
+
+                /* Returns a 1xcol matrix of max value in each jth column
+                this operation is performed along the 0th axis (row axis)
+                */
+
+                matrix<DATA> m1(1, this->col);
+
+                for(int j=0; j<this->col; j++) {
+                    maxElem = *(val +  j);
+
+                    for(int i=1; i<this->row; i++)
+                        if( maxElem < *(val + i*(this->col) + j) )
+                            maxElem = *(val + i*(this->col) + j);
+
+                    m1.insertAt(maxElem, 0,j);
+                }
+                return m1;
+        } // dim == 0
+
+        else {
+            if(dim == 1) {
+                
+            } else {
+                throw std::invalid_argument("Invalid dim index used.");
+            }
+        } 
+    }
+    
+}
+
+////////////////////////////////
 
 //// QUERY METHOD DEFINITIONS ////
 
@@ -380,8 +446,8 @@ matrix<DATA> matrix<DATA>::slice(int x_0, int y_0, int x_1, int y_1) {
              [4, 2, 1, 3]]
     */
     bool validation = (this->validateParams(x_0, y_0, this->row)) && (this->validateParams(x_1, y_1, this->col));
-    //cout<<"Params _0"<<x_0<<','<<y_0;
-    //cout<<"\nParams _1"<<x_1<<','<<y_1;
+    //std::cout<<"Params _0"<<x_0<<','<<y_0;
+    //std::cout<<"\nParams _1"<<x_1<<','<<y_1;
 
     if (validation) {
         matrix<DATA> m(y_0 - x_0, y_1 - x_1);
@@ -453,10 +519,10 @@ matrix<DATA> matrix<DATA>::operator-(matrix const& obj) {
 template<typename DATA>
 void matrix<DATA>::insertAll()  {
     int i,j;
-    cout<<"\nNote: you have to insert "<<this->row*this->col<<" values. Values will be filled row-major wise in a "<<this->row<<'x'<<this->col<<" matrix.\n";
+    std::cout<<"\nNote: you have to insert "<<this->row*this->col<<" values. Values will be filled row-major wise in a "<<this->row<<'x'<<this->col<<" matrix.\n";
     for(i=0; i<this->row; i++)
         for(j=0; j<this->col; j++)
-            cin>>*(val + (this->col)*i + j);
+            std::cin>>*(val + (this->col)*i + j);
 }
 
 
@@ -472,12 +538,12 @@ void matrix<DATA>::insertAt(DATA value, int r, int c)  {
 template<typename DATA>
 void matrix<DATA>::display()  {
     int i,j;
-    //cout<<"Matrix:-\n";
-    cout<<endl;
+    //std::cout<<"Matrix:-\n";
+    std::cout<<std::endl;
     for(i=0; i<this->row; i++) {
         for(j=0; j<this->col; j++)
-            cout<<*(val + (this->col)*i + j )<<" ";
-        cout<<"\n";
+            std::cout<<*(val + (this->col)*i + j )<<" ";
+        std::cout<<"\n";
     }
 }
 
@@ -507,10 +573,10 @@ void init2dArray(int *array, int size_0, int size_1) {
         UTIL FUNCTION
         Flattened 2d array in row major form will be initialised using this
     */
-   cout<<"\nPlease insert "<<size_0*size_1<<" values in row major form for a "<<size_0<<'x'<<size_1<<" matrix:-\n";
+   std::cout<<"\nPlease insert "<<size_0*size_1<<" values in row major form for a "<<size_0<<'x'<<size_1<<" matrix:-\n";
     for(int i=0; i<size_0; i++)
         for(int j=0; j<size_1; j++)
-            cin>>*(array + i*size_1 + j);
+            std::cin>>*(array + i*size_1 + j);
 }
 
 void init2dRandArray(int *array, int size_0, int size_1) {
@@ -520,7 +586,7 @@ void init2dRandArray(int *array, int size_0, int size_1) {
         uniform integer distribution.
     */
 
-   cout<<"\nInitializing our random 2d integer array";
+   std::cout<<"\nInitializing our random 2d integer array";
    std::default_random_engine generator;
    std::uniform_int_distribution<int> distribution(0, 9);
 
@@ -533,44 +599,29 @@ void init2dRandArray(int *array, int size_0, int size_1) {
 int main() {
 
     int row = 4, col = 5;
-    int *array = new int[row*col];
-    init2dRandArray(array, row, col);
-
-    matrix<int> A(array, row, col);
-    A.display();
-
-    // do this everytime you deallocate array
-    deAlloc(array);
-    // temporarily a #define macros will be placed here
-
-    int row2 = 5, col2 = 5;
-    array = new int[row2*col2];
-    init2dRandArray(array, row2, col2);
-    matrix<int> B(array, row2, col2);
-    B.display();
-
-    matrix<int> C = B.slice(0,3,1,3);
-    C.display();
-    deAlloc(array);
-
-    matrix<int> eye4 = eye<int>(row);
-    matrix<int> eye4_2 = eye<int>(row);
-    matrix<int> augmentedMat = A.hStack(eye4);
-    augmentedMat.display();
+    int *array;
 
     int N = 3;
     array = new int[N*N];
     init2dArray(array, N, N);
     matrix<int> D(array, N);
-
+    deAlloc(array);
     D.display();
 
     matrix<int> tD = D.T();
     tD.display();
-    deAlloc(array);
     
-    cout<<"Is D symmetric?\n";
-    (D.isSymmetric()) ? cout<<"Yes!" : cout<<"No!";
+    
+    std::cout<<"Is D symmetric?\n";
+    (D.isSymmetric()) ? std::cout<<"Yes!" : std::cout<<"No!";
+
+    matrix<int> maxofD = D.max();
+    std::cout<<"\nMax element in D is:-\n";
+    maxofD.display();
+
+    matrix<int> maxofDaxis0 = D.max(0);
+    std::cout<<"\nMax elements along rows:-\n";
+    maxofDaxis0.display();
     return 0;
 }
 
