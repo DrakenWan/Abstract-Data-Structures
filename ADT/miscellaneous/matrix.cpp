@@ -7,7 +7,7 @@
 #include<random>
 
 // macros for deallocation
-#define deAlloc(x) delete[] x; x = NULL;
+#define deAlloc(x) delete[] x; x = nullptr;
 
 
 template<typename DATA>
@@ -27,6 +27,12 @@ class matrix {
             2.  This class object makes use of openMP paralleisation to 
                 take advantage of parallel computing in some operations
                 such as matrix multiplication.
+
+        Guideline:
+            1: While using a matrix operation ensure you close the operands with 
+               parenthesis with the binary or unary operator that is being used
+                For example, to perform multiplication of A and B to give C we will
+                             write "matrix<int> C = (A & B);"
     */
     DATA *val;
     int row, col;
@@ -134,8 +140,8 @@ class matrix {
         void display();
         
         ~matrix() {
-            delete this->val;
-            this->val = NULL;
+            delete[] val;
+            val = NULL;
             //std::cout<<"\nCleared heap memory for member `val`.";
         }
 
@@ -234,7 +240,23 @@ matrix<DATA> matrix<DATA>::max(int dim) {
 
         else {
             if(dim == 1) {
-                
+                /*
+                    Returns a rowx1 matrix of max value in each ith row
+                    this operation is performed along the 1th axis (col axis)
+                */
+
+               matrix<DATA> m2(this->row, 1);
+               for(int i=0; i<this->row; i++) {
+                    maxElem = *(val + i*(this->col));
+
+                    for(int j=1; j<this->col; j++) {
+                        if( maxElem < *(val + i*(this->col) + j) )
+                            maxElem = *(val + i*(this->col) +j);
+                    }
+
+                    m2.insertAt(maxElem, i, 0);
+               }
+              return m2;
             } else {
                 throw std::invalid_argument("Invalid dim index used.");
             }
@@ -538,7 +560,7 @@ void matrix<DATA>::insertAt(DATA value, int r, int c)  {
 template<typename DATA>
 void matrix<DATA>::display()  {
     int i,j;
-    //std::cout<<"Matrix:-\n";
+    std::cout<<"Matrix:-\n";
     std::cout<<std::endl;
     for(i=0; i<this->row; i++) {
         for(j=0; j<this->col; j++)
@@ -550,10 +572,28 @@ void matrix<DATA>::display()  {
 
 
 /////// MAIN FUNCTION AND UTILS/////////
+
+template<typename DATA>
+matrix<DATA> diagonal(int n, DATA value) {
+    matrix<DATA> m(n);
+    
+    for(int i=0; i<n; i++)
+        for(int j=0; j<n; j++)
+            {
+                if(i==j)
+                    m.insertAt(value, i, j);
+                else
+                    m.insertAt(0, i, j);
+            }
+    
+    return m;
+}
+
+
 //// identity matrix
 template<typename DATA>
 matrix<DATA> eye(int n) {
-    matrix<DATA> m(n, n);
+    matrix<DATA> m(n);
     
     for(int i=0; i<n; i++)
         for(int j=0; j<n; j++) {
@@ -606,7 +646,9 @@ int main() {
     init2dArray(array, N, N);
     matrix<int> D(array, N);
     deAlloc(array);
+
     D.display();
+    
 
     matrix<int> tD = D.T();
     tD.display();
@@ -614,6 +656,7 @@ int main() {
     
     std::cout<<"Is D symmetric?\n";
     (D.isSymmetric()) ? std::cout<<"Yes!" : std::cout<<"No!";
+    std::cout<<"\n";
 
     matrix<int> maxofD = D.max();
     std::cout<<"\nMax element in D is:-\n";
@@ -622,6 +665,23 @@ int main() {
     matrix<int> maxofDaxis0 = D.max(0);
     std::cout<<"\nMax elements along rows:-\n";
     maxofDaxis0.display();
+
+    matrix<int> maxofDaxis1 = D.max(1);
+    std::cout<<"\nMax elements along columns:-\n";
+    maxofDaxis1.display();
+
+    matrix<int> maxoftDaxis1 = tD.max(0);
+    std::cout<<"\nMax elements of D.T along columns:-\n";
+    maxoftDaxis1.display();
+
+    matrix<int> Diag5 = diagonal(5, 3);
+    Diag5.display();
+
+    matrix<int> eye5 = eye<int>(5);
+    eye5.display();
+
+        matrix<int> DDT = (D & tD);
+        DDT.display();
     return 0;
 }
 
