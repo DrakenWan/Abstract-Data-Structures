@@ -1,11 +1,9 @@
 #pragma once
 #include<vector>
 
-using namespace std;
-
 template<typename S>
 class stack {
-    vector<S> content;
+    std::vector<S> content;
     int length;
     public:
         stack() {
@@ -35,7 +33,7 @@ void stack<S>::push(S value)
         this->length = content.size();
     } catch(std::exception e)
     {
-        cout<<"Error! Memory overflow!";
+        std::cout<<"Error! Memory overflow!";
     }
 }
 
@@ -48,13 +46,15 @@ S stack<S>::pop(bool verbose)
     if(length != 0)
     {
     S value = this->content.back();
-    if(verbose) cout<<"Deleted content value: "<<value;
+    if(verbose) std::cout<<"Deleted content value: "<<value;
     this->content.pop_back();
     this->content.shrink_to_fit(); //this will shrink the size //pop_back alone doesn't shrink the size
     this->length = content.size(); 
     return value; 
+    } else {
+        throw std::underflow_error("Stack underflow.\n");
     }
-    cout<<"Stack underflow.\n";
+    
 }
 
 template <typename S>
@@ -69,7 +69,7 @@ template <typename S>
             return value;
         }
      else {
-         cout<<"\nStack Empty\n";
+         std::cout<<"\nStack Empty\n";
          S value;
          return value;
      }
@@ -88,11 +88,11 @@ void stack<S>::clear()
         {
             this->pop();
         }
-        cout<<"Stack cleared.\n";
+        std::cout<<"Stack cleared.\n";
     }
     else
     {
-        cout<<"Stack is already clear.\n";
+        std::cout<<"Stack is already clear.\n";
     }
     
 }
@@ -104,14 +104,14 @@ void stack<S>::toString()
         shows string representation of the internal contents
      */
 
-    cout<<"\n[";
+    std::cout<<"\n[";
     for(int i=0; i<length; i++)
     {
         if(i != length - 1)
-            cout<<this->content[i]<<"->";
+            std::cout<<this->content[i]<<"->";
         else
-            cout<<this->content[i]<<"(top)";
+            std::cout<<this->content[i]<<"(top)";
     }
-    if(this->length == 0) cout<<"(empty)";
-    cout<<"]\n";
+    if(this->length == 0) std::cout<<"(empty)";
+    std::cout<<"]\n";
 }

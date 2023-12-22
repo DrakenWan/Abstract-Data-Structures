@@ -1,12 +1,10 @@
 #pragma once
-#define dtype int
 #include<vector>
 
-using namespace std;
 
 template<typename S>
 class queue {
-	vector<S> data;
+	std::vector<S> data;
 
 	int verbose;
 	/*
@@ -17,7 +15,7 @@ class queue {
 	public:
 		queue(int verbose=0) {
 			this->verbose=verbose;
-			if(this->verbose) cout<<"Queue created!\n";
+			if(this->verbose) std::cout<<"Queue created!\n";
 		}
 		
 		void enqueue(S val) {
@@ -29,7 +27,7 @@ class queue {
 			x = this->data[0];
 			this->data.erase(this->data.begin());
 			this->data.shrink_to_fit();
-			if(this->verbose) cout<<endl<<x<<" deleted.\n";
+			if(this->verbose) std::cout<<std::endl<<x<<" deleted.\n";
 			return x;
 		}
 		
@@ -40,11 +38,11 @@ class queue {
 		}
 
 		void display() {
-			if(this->verbose) cout<<"Queue Data:- ";
-			cout<<"\n[(front)-->  ";
+			if(this->verbose) std::cout<<"Queue Data:- ";
+			std::cout<<"\n[(front)-->  ";
 			for(auto i = this->data.begin(); i != this->data.end(); ++i) {
-					cout<<*i<<"  ";
+					std::cout<<*i<<"  ";
 			}
-			cout<<"  <--(rear)]";
+			std::cout<<"  <--(rear)]";
 		}
 };

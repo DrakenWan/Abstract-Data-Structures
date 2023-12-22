@@ -3,13 +3,13 @@
 #include<vector>
 #define dtype int
 #define dtype_smpl 0 //give a sample dtype value here for reference
-using namespace std;
+
 
 
 // min heap representation used
 class pqueue {
-        vector< pair<dtype, int> > data;
-        void swap(pair<dtype, int>&, pair<dtype, int>&);
+        std::vector< std::pair<dtype, int> > data;
+        void swap(std::pair<dtype, int>&, std::pair<dtype, int>&);
 
     public:
         bool isEmpty() {
@@ -17,22 +17,22 @@ class pqueue {
             return false;
         }
 
-        void enqueue(pair<dtype, int>);
-        pair<dtype, int> dequeue(bool verbose=false);
-        pair<dtype, int> peek();
+        void enqueue(std::pair<dtype, int>);
+        std::pair<dtype, int> dequeue(bool verbose=false);
+        std::pair<dtype, int> peek();
         void print();
 };
 
-pair<dtype, int> pqueue::peek() {
+std::pair<dtype, int> pqueue::peek() {
     if(this->data.size() == 0) {
-        cout<<"Pqueue is empty.";
-        pair<dtype, int> s(dtype_smpl,0); //not a generalized value returned //change it later
+        std::cout<<"Pqueue is empty.";
+        std::pair<dtype, int> s(dtype_smpl,0); //not a generalized value returned //change it later
         return s;
     }
     return this->data[0];
 }
 
-void pqueue::enqueue(pair<dtype, int> value) {
+void pqueue::enqueue(std::pair<dtype, int> value) {
     // insert at the end
     this->data.push_back(value);
 
@@ -50,21 +50,21 @@ void pqueue::enqueue(pair<dtype, int> value) {
      }
 }
 
-pair<dtype, int> pqueue::dequeue(bool verbose) {
+std::pair<dtype, int> pqueue::dequeue(bool verbose) {
 
     // I will swap last element with the root and then pop the root swapped to last
     // and then to maintain the pqueue invariant do what is required
     int last = this->data.size() - 1; 
-    pair<dtype, int> root(dtype_smpl, 0); 
+    std::pair<dtype, int> root(dtype_smpl, 0); 
 
     // if pqueue is empty
     if(last < 0)  {
-        cout<<"ERROR; There are no elements in the queue.";
+        std::cout<<"ERROR; There are no elements in the queue.";
         return root;
     }
     this->swap(this->data[0], this->data[last]);
     root = this->data[last];
-    if(verbose) cout<<"Element "<<root.first<<" with priority "<<root.second<<".\n";
+    if(verbose) std::cout<<"Element "<<root.first<<" with priority "<<root.second<<".\n";
 
     this->data.pop_back(); //remove last element
     this->data.resize(last); //reduce size/capacity of vector ds
@@ -94,22 +94,26 @@ pair<dtype, int> pqueue::dequeue(bool verbose) {
             swap(this->data[child1], this->data[lidx]);
             lidx = child1;
         }
-        else if( child2 < this->data.size() && this->data[child2].second < this->data[lidx].second ) 
-        {
-            swap(this->data[child2], this->data[lidx]);
-            lidx = child2;
-        }
-        else {
-            return root;
+        else  {
+            if( child2 < this->data.size() && this->data[child2].second < this->data[lidx].second ) 
+            {
+                swap(this->data[child2], this->data[lidx]);
+                lidx = child2;
+            }
+            else {
+                return root;
+            }
         }
         child1 = (lidx+1)*2 - 1;
         child2 = (lidx+1)*2;
         
     } //while loot
+
+    return root;
 }
 
-void pqueue::swap(pair<dtype, int> &a, pair<dtype, int> &b) {
-    pair<dtype, int> temp = a;
+void pqueue::swap(std::pair<dtype, int> &a, std::pair<dtype, int> &b) {
+    std::pair<dtype, int> temp = a;
     a = b;
     b = temp;
 }
@@ -117,8 +121,8 @@ void pqueue::swap(pair<dtype, int> &a, pair<dtype, int> &b) {
 
 void pqueue::print() {
     
-    cout<<endl<<"[";
+    std::cout<<std::endl<<"[";
     for(auto i : this->data)
-        cout<<"("<<i.first<<","<<i.second<<")";
-    cout<<"]"<<endl;
+        std::cout<<"("<<i.first<<","<<i.second<<")";
+    std::cout<<"]"<<std::endl;
 }

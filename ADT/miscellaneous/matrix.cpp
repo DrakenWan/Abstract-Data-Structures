@@ -192,11 +192,14 @@ class matrix {
         //// aggregate functions end ////
 
 
+
+
         /// QUERY methods
         bool isSquare() { if(this->col == this->row) return true; else return false;}
         bool isSymmetric();
-
+        DATA item();
 };
+
 
 /////// AGGREGATE FUNCTIONS ///////
 template<typename DATA>
@@ -265,7 +268,73 @@ matrix<DATA> matrix<DATA>::max(int dim) {
     
 }
 
-////////////////////////////////
+
+template<typename DATA>
+matrix<DATA> matrix<DATA>::argmax(int dim) {
+    int maxIdx_i, maxIdx_j;
+    if(dim == -1) {
+        /*
+            Calculate the index of max element in entire matrix
+            Returns a 1x2 matrix with ith index at (0,0) and jth index at (0,1)
+        */
+            matrix<DATA> m0(1,2);
+
+            // might subroutine the below repetitive code
+            maxIdx_i = 0;
+            maxIdx_j = 0;
+            DATA maxElem = *(val + maxIdx_i*(this->col) + maxIdx_j);
+            for(int i=0; i<this->row; i++) 
+                for(int j=0; j<this->col; j++)
+                    {
+                        if(maxElem < *(val + i*(this->col) + j))
+                            {
+                                maxElem = *(val + i*(this->col) + j);
+                                maxIdx_i = i;
+                                maxIdx_j = j;
+                            }
+                    }
+
+            // insert the indices at (0,0) and (0,1)
+            m0.insertAt(maxIdx_i, 0, 0);
+            m0.insertAt(maxIdx_j, 0, 1);
+            return m0;
+    } else {
+        if(dim == 0) {
+
+                /* Returns a 1xcol matrix of index of max value in each jth column
+                this operation is performed along the 0th axis (row axis)
+                */
+
+                matrix<DATA> m1(1, this->col);
+
+                for(int j=0; j<this->col; j++) {
+                    int maxIdx_i = 0;
+                    DATA maxElem = *(val + maxIdx_i*(this->col) + j);
+                    for(int i=1; i<this->row; i++)
+                        if( maxElem < *(val + i*(this->col) + j) ) {
+                            maxElem = *(val + i*(this->col) + j);
+                            maxIdx_i = i;
+                        }
+
+                    m1.insertAt(maxIdx_i, 0,j);
+                }
+                return m1;
+        } // dim == 0 condn end
+         else {
+            if(dim == 1) {
+                matrix<DATA> m2(1,1);
+                m2.insertAt(1,0,0);
+                return m2;
+            } //dim == 1 condn end
+            else {
+                throw std::invalid_argument("The axis value is not correct.");
+            }
+        }
+    }
+}
+
+
+/////// AGGREGATE FUNCTIONS END ////////////
 
 //// QUERY METHOD DEFINITIONS ////
 
@@ -281,6 +350,15 @@ bool matrix<DATA>::isSymmetric() {
      return false;
 }
 
+
+// template<typename DATA>
+// DATA matrix<DATA>::item() {
+//     if(this->row == 1  && this->col == 1) {
+//         return *val; 
+//     } else {
+//         throw std::invalid_argument("To throw an item out it is supposed to be 1x1 matrix.");
+//     }
+// }
 /////////////////////////////////
 
 
@@ -487,6 +565,8 @@ matrix<DATA> matrix<DATA>::slice(int x_0, int y_0, int x_1, int y_1) {
     }
 }
 
+
+// TRANSPOSE OPERATION
 template<typename DATA>
 matrix<DATA> matrix<DATA>::operator!() {
     matrix<DATA> m(this->col, this->row);
@@ -494,7 +574,8 @@ matrix<DATA> matrix<DATA>::operator!() {
     //using insertAt operation to fill in the elements
     for(int i=0; i<m.row; i++)
         for(int j=0; j<m.col; j++)
-            *(m.val + i*m.col + j) = *(val + (this->row)*j + i);
+            m.insertAt(*(val + (this->col)*j + i),i,j);
+            //*(m.val + i*m.col + j) = *(val + (m.row)*i + j);
 
     return m;
 }
@@ -560,8 +641,7 @@ void matrix<DATA>::insertAt(DATA value, int r, int c)  {
 template<typename DATA>
 void matrix<DATA>::display()  {
     int i,j;
-    std::cout<<"Matrix:-\n";
-    std::cout<<std::endl;
+    std::cout<<"\nMatrix:-\n";
     for(i=0; i<this->row; i++) {
         for(j=0; j<this->col; j++)
             std::cout<<*(val + (this->col)*i + j )<<" ";
@@ -680,8 +760,49 @@ int main() {
     matrix<int> eye5 = eye<int>(5);
     eye5.display();
 
-        matrix<int> DDT = (D & tD);
-        DDT.display();
+    matrix<int> DDT = (D & tD);
+    DDT.display();
+
+    std::cout<<"\n\nDONE DONE DONE\n\n\n";
+
+    std::cout<<"\n\nMax element in D | ";
+    matrix<int> maxD = D.max();
+    maxD.display();
+
+    std::cout<<"\n\nIndices of max element in D | ";
+    matrix<int> maxDidx = D.argmax();
+    maxDidx.display();
+
+
+    std::cout<<"\nMax element along 0th axis in D | ";
+    matrix<int> maxDaxis0 = D.max(0);
+    maxDaxis0.display();
+    std::cout<<"\nIndices of max element along 0th axis in D | ";
+    matrix<int> maxDaxis0Idx = D.argmax(0);
+    maxDaxis0Idx.display();
+
+
+    int *arara = new int[4];
+    init2dArray(arara, 4, 1);
+    
+    matrix<int> v1(arara, 4, 1);
+    deAlloc(arara);
+
+    v1.display();
+
+    matrix<int> v1T = v1.T();
+    v1T.display();
+
+    int r=3, c=4;
+    int *array2 = new int[r*c];
+    init2dRandArray(array2, r, c);
+    matrix<int> A(array2, r, c);
+    deAlloc(array2);
+
+    A.display();
+
+    matrix<int> tA = !A;
+    tA.display();
     return 0;
 }
 

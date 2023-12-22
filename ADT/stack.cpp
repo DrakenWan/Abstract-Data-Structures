@@ -39,5 +39,13 @@ int main()
     s2.pop();
     s2.toString();
     cout<<s2.StackLength();
+    cout<<endl<<endl<<"new new new";
+    stack<int> s3;
+    s3.push(69);
+    s3.toString();
+    cout<<s3.peek();
+    cout<<s3.pop();
+    s3.toString();
+
     return 0;
 }
