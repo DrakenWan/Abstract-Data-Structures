@@ -351,14 +351,14 @@ bool matrix<DATA>::isSymmetric() {
 }
 
 
-// template<typename DATA>
-// DATA matrix<DATA>::item() {
-//     if(this->row == 1  && this->col == 1) {
-//         return *val; 
-//     } else {
-//         throw std::invalid_argument("To throw an item out it is supposed to be 1x1 matrix.");
-//     }
-// }
+template<typename DATA>
+DATA matrix<DATA>::item() {
+    if(this->row == 1  && this->col == 1) {
+        return *val; 
+    } else {
+        throw std::invalid_argument("To throw an item out it is supposed to be 1x1 matrix.");
+    }
+}
 /////////////////////////////////
 
 
@@ -798,11 +798,17 @@ int main() {
     init2dRandArray(array2, r, c);
     matrix<int> A(array2, r, c);
     deAlloc(array2);
-
+    
     A.display();
 
     matrix<int> tA = !A;
     tA.display();
+
+    
+    matrix<int> maxv1 = v1.max();
+    v1.display();
+    std::cout<<std::endl<<maxv1.item();
+
     return 0;
 }
 
