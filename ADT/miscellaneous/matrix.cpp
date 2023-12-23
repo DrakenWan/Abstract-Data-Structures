@@ -322,9 +322,26 @@ matrix<DATA> matrix<DATA>::argmax(int dim) {
         } // dim == 0 condn end
          else {
             if(dim == 1) {
-                matrix<DATA> m2(1,1);
-                m2.insertAt(1,0,0);
-                return m2;
+                /*
+                    Returns a rowx1 matrix with index of max value in each ith row
+                    this operation is performed along the 1th axis (col axis)
+                */
+
+               matrix<DATA> m2(this->row, 1);
+               for(int i=0; i<this->row; i++) {
+                    int maxIdx_j = 0;
+                    DATA maxElem = *(val + i*(this->col) + maxIdx_j);
+                    
+                    for(int j=1; j<this->col; j++) {
+                        if( maxElem < *(val + i*(this->col) + j) ) {
+                            maxElem = *(val + i*(this->col) + j);
+                            maxIdx_j = j;
+                        } 
+                    }
+
+                    m2.insertAt(maxIdx_j, i, 0);
+               }
+              return m2;
             } //dim == 1 condn end
             else {
                 throw std::invalid_argument("The axis value is not correct.");
@@ -717,98 +734,40 @@ void init2dRandArray(int *array, int size_0, int size_1) {
 
 
 int main() {
-
-    int row = 4, col = 5;
     int *array;
-
-    int N = 3;
+    int N = 10;
     array = new int[N*N];
-    init2dArray(array, N, N);
+    init2dRandArray(array, N, N);
+
+    // create our D matrix
     matrix<int> D(array, N);
     deAlloc(array);
 
     D.display();
     
-
-    matrix<int> tD = D.T();
-    tD.display();
-    
-    
-    std::cout<<"Is D symmetric?\n";
-    (D.isSymmetric()) ? std::cout<<"Yes!" : std::cout<<"No!";
-    std::cout<<"\n";
-
-    matrix<int> maxofD = D.max();
-    std::cout<<"\nMax element in D is:-\n";
-    maxofD.display();
-
-    matrix<int> maxofDaxis0 = D.max(0);
-    std::cout<<"\nMax elements along rows:-\n";
-    maxofDaxis0.display();
-
-    matrix<int> maxofDaxis1 = D.max(1);
-    std::cout<<"\nMax elements along columns:-\n";
-    maxofDaxis1.display();
-
-    matrix<int> maxoftDaxis1 = tD.max(0);
-    std::cout<<"\nMax elements of D.T along columns:-\n";
-    maxoftDaxis1.display();
-
-    matrix<int> Diag5 = diagonal(5, 3);
-    Diag5.display();
-
-    matrix<int> eye5 = eye<int>(5);
-    eye5.display();
-
-    matrix<int> DDT = (D & tD);
-    DDT.display();
-
-    std::cout<<"\n\nDONE DONE DONE\n\n\n";
-
-    std::cout<<"\n\nMax element in D | ";
+    std::cout<<"\n\nFinding max and its indices:-";
+    std::cout<<"\nMax element in entire matrix: | ";
     matrix<int> maxD = D.max();
     maxD.display();
+    std::cout<<" at index ";
+    matrix<int> maxDIdx = D.argmax();
+    maxDIdx.display();
 
-    std::cout<<"\n\nIndices of max element in D | ";
-    matrix<int> maxDidx = D.argmax();
-    maxDidx.display();
+    std::cout<<"\n\nMax in each column (or along rows / 0th axis):- ";
+    matrix<int> maxD0axis = D.max(0);
+    maxD0axis.display();
+    matrix<int> maxD0axisIdx = D.argmax(0);
+    std::cout<<" at index ";
+    maxD0axisIdx.display();
 
-
-    std::cout<<"\nMax element along 0th axis in D | ";
-    matrix<int> maxDaxis0 = D.max(0);
-    maxDaxis0.display();
-    std::cout<<"\nIndices of max element along 0th axis in D | ";
-    matrix<int> maxDaxis0Idx = D.argmax(0);
-    maxDaxis0Idx.display();
-
-
-    int *arara = new int[4];
-    init2dArray(arara, 4, 1);
-    
-    matrix<int> v1(arara, 4, 1);
-    deAlloc(arara);
-
-    v1.display();
-
-    matrix<int> v1T = v1.T();
-    v1T.display();
-
-    int r=3, c=4;
-    int *array2 = new int[r*c];
-    init2dRandArray(array2, r, c);
-    matrix<int> A(array2, r, c);
-    deAlloc(array2);
-    
-    A.display();
-
-    matrix<int> tA = !A;
-    tA.display();
+    std::cout<<"\n\nMax in each row (or along columns / 1th axis):- ";
+    matrix<int> maxD1axis = D.max(1);
+    maxD1axis.display();
+    matrix<int> maxD1axisIdx = D.argmax(1);
+    std::cout<<" at index ";
+    maxD1axisIdx.display();
 
     
-    matrix<int> maxv1 = v1.max();
-    v1.display();
-    std::cout<<std::endl<<maxv1.item();
-
     return 0;
 }
 
