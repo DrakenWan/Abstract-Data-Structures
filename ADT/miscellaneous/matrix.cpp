@@ -14,11 +14,14 @@
 //path
 #define SAVEPATH "matrixSaves/"
 #define F_EXT ".trix"
+
+
+
 template<typename DATA>
 class matrix {
     /*  
         matrix abstract DS reflects properties and behaviour of a matrix
-
+        
         DATA MEMEBERS:-
             val = flattened 2d array of type DATA in row major form
             row = number of rows of the matrix
@@ -33,7 +36,12 @@ class matrix {
                 such as matrix multiplication.
 
         Guideline:
-            1: While using a matrix operation ensure you close the operands with 
+            1: It is mandatory that you make use of data types that are of numerical
+               type to initialise the internal values of matrix.
+            2: It is recommended to use float or double numerical type to initialise
+               the `val` array of the matrix object. Certain operations lose precision
+                in results when using `int` numerical types 
+            3: While using a matrix operation ensure you close the operands with 
                parenthesis with the binary or unary operator that is being used
                 For example, to perform multiplication of A and B to give C we will
                              write "matrix<int> C = (A & B);"
@@ -161,6 +169,9 @@ class matrix {
         //transpose operation explicit method
         matrix<DATA> transpose();
         matrix<DATA> T(){ return this->transpose();};
+
+        // matrix inverse operation
+        matrix<DATA> inv(); //experimental
 
         //accessibility operations overload
         DATA& operator()(int, int); //access an element of the matrix
@@ -606,10 +617,46 @@ matrix<DATA> matrix<DATA>::vStack(matrix const& obj) {
     
 }
 //// STACKING OPERATIONS END ////
-
-
+template<typename DATA>
+matrix<DATA> eye(int);
 
 ///// MATRIX OPERATIONS DEFINITIONS START HERE ////
+
+template<typename DATA>
+matrix<DATA> matrix<DATA>::inv() {
+
+    int n = this->row;
+    int m = this->col;
+
+    if(n != m)
+        exit(1);
+
+    matrix<DATA> I = eye<DATA>(n);
+    matrix<DATA> augmentedMatrix = this->hStack(I);
+
+    // Gaussian elimination
+    for(int i=0; i<n; i++) {
+        DATA diagElem = augmentedMatrix(i, i);
+        for(int j=0; j< 2*n; ++j) {
+            augmentedMatrix(i, j) /= diagElem;
+        }
+
+        //eliminate other rows
+        for(int k=0; k<n; ++k) {
+            if( k != i) {
+                DATA factor = augmentedMatrix(k, i);
+                for(int j=0; j<2 * n; ++j) {
+                    augmentedMatrix(k, j) -= factor * augmentedMatrix(i,j);
+                }
+            }
+        }
+    }
+
+    // inverse in right half of aug matrix
+    matrix<DATA> inverse = augmentedMatrix.slice(0, n, n, 2*n);
+    return inverse;
+}
+
 
 template<typename DATA>
 bool matrix<DATA>::operator==(matrix const& m) {
@@ -910,7 +957,7 @@ bool matrix<DATA>::loadMatrix(const std::string& filename) {
 
 
 
-/////// MAIN FUNCTION AND UTILS/////////
+/////// MAIN FUNCTION/////////
 
 template<typename DATA>
 matrix<DATA> diagonal(int n, DATA value) {
@@ -947,8 +994,8 @@ matrix<DATA> eye(int n) {
 }
 
 
-
-void init2dArray(int *array, int size_0, int size_1) {
+template<typename DATA>
+void init2dArray(DATA *array, int size_0, int size_1) {
     /*
         UTIL FUNCTION
         Flattened 2d array in row major form will be initialised using this
@@ -958,6 +1005,7 @@ void init2dArray(int *array, int size_0, int size_1) {
         for(int j=0; j<size_1; j++)
             std::cin>>*(array + i*size_1 + j);
 }
+
 
 void init2dRandArray(int *array, int size_0, int size_1) {
     /*
@@ -975,6 +1023,9 @@ void init2dRandArray(int *array, int size_0, int size_1) {
         *(array + i*size_1 + j) = distribution(generator);
 }
 
+
+
+/////////
 
 int main() {
     int *array;
@@ -1003,7 +1054,22 @@ int main() {
     A.display();
 
     A.saveMatrix("matA");
+    
+    std::cout<<"\n\nMatrix inverse\n\n";
+    
+    N=2;
 
+
+
+    float *flarray = new float[N*N];
+    init2dArray<float>(flarray, N, N);
+    matrix<float> B(flarray, N);
+    deAlloc(array);
+
+    B.display();
+    matrix<float> invB = B.inv();
+
+    invB.display();
 
 
     // std::cout<<"\n\nFinding max and its indices:-";
