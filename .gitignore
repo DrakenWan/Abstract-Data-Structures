@@ -2,3 +2,6 @@
 **/*.exe
 **/*/*.exe
 experiments.cpp
+*.trix
+**/*.trix
+**/*/*.trix

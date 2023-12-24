@@ -2,14 +2,18 @@
 #include<omp.h>
 #include<stdexcept>
 
+// I/O File
+#include<fstream>
 
 //extra imports for utility
 #include<random>
 
 // macros for deallocation
-#define deAlloc(x) delete[] x; x = nullptr;
+#define deAlloc(x) delete[] x; x = NULL;
 
-
+//path
+#define SAVEPATH "matrixSaves/"
+#define F_EXT ".trix"
 template<typename DATA>
 class matrix {
     /*  
@@ -131,7 +135,7 @@ class matrix {
         }
 
         // insert/update all the elements in row major form into the internal data structure
-        void insertAll();
+        void insertAll(int r=-1, int c=-1);
 
         // insert value at rth row and cth column
         void insertAt(DATA, int, int);
@@ -160,7 +164,26 @@ class matrix {
 
         //accessibility operations overload
         DATA& operator()(int, int); //access an element of the matrix
-        //void operator()(Params, Params);
+        
+        //change dimensions
+        void changeDims(int r, int c) {
+            /*
+                This function will reset memory.
+                It will reshape the matrix and
+                remove old data and reallocate
+                memory for new data.
+                with caution.
+            */
+
+           //resetting rows and cols
+           this->row = r;
+           this->col = c;
+
+
+           this->delMemoryforVal();
+           this->getMemoryforVal(r, c);
+        }
+
 
         // sliceu!
         matrix<DATA> slice(int, int, int, int);
@@ -198,6 +221,10 @@ class matrix {
         bool isSquare() { if(this->col == this->row) return true; else return false;}
         bool isSymmetric();
         DATA item();
+
+        /// File operations I/O
+        bool saveMatrix(const std::string&);
+        bool loadMatrix(const std::string&);
 };
 
 
@@ -502,7 +529,6 @@ matrix<DATA> matrix<DATA>::argmax(int dim) {
 }
 
 
-
 /////// AGGREGATE FUNCTIONS END ////////////
 
 //// QUERY METHOD DEFINITIONS ////
@@ -789,7 +815,10 @@ matrix<DATA> matrix<DATA>::operator-(matrix const& obj) {
 
 
 template<typename DATA>
-void matrix<DATA>::insertAll()  {
+void matrix<DATA>::insertAll(int r, int c)  {
+    if(r > -1 &&  c > -1)
+        this->changeDims(r, c);
+    
     int i,j;
     std::cout<<"\nNote: you have to insert "<<this->row*this->col<<" values. Values will be filled row-major wise in a "<<this->row<<'x'<<this->col<<" matrix.\n";
     for(i=0; i<this->row; i++)
@@ -817,6 +846,67 @@ void matrix<DATA>::display()  {
         std::cout<<"\n";
     }
 }
+
+
+///// FILE OPERATIONS ON MATRIX - I/O //////
+
+///// File operation on saving a matrix
+template<typename DATA>
+bool matrix<DATA>::saveMatrix(const std::string& filename) {
+    std::string fullpath = SAVEPATH + filename + F_EXT;
+    std::ofstream saveFile(fullpath);
+
+    if(saveFile.is_open()) {
+        // saving the dimensions
+        saveFile<<row<<" "<<col<<"\n";
+
+        // saving the flattened array elements (row major)
+        for(int i=0; i<row; i++) {
+            for(int j=0; j<col; j++) {
+                saveFile<<*(val + i*col + j)<<" ";
+            }
+            saveFile<<"\n";
+        }
+
+        saveFile.close();
+        std::cout<<"Matrix saved as file `"<<filename<<F_EXT<<"` successfully.\n";
+        return true;
+    } else {
+        std::cout<<"Unable to open file at  `"<<fullpath<<"`\n";
+        return false;
+    }
+}
+
+///// File operation on loading a matrix
+template<typename DATA>
+bool matrix<DATA>::loadMatrix(const std::string& filename) {
+    std::string fullpath = SAVEPATH + filename + F_EXT;
+    std::ifstream loadFile(fullpath);
+
+    if(loadFile.is_open()) {
+        int loadR, loadC;
+        loadFile>>loadR>>loadC;
+
+        //resize the matrix
+        this->changeDims(loadR, loadC);
+
+        //reading matrix values from file
+        for(int i=0; i<this->row; i++){
+            for(int j=0; j<this->col; j++) {
+                loadFile >> *(val + i*(this->col) + j);
+            }
+        }
+
+        loadFile.close();
+        std::cout<<"Matrix has been successfully loaded from `"<<fullpath<<"`.\n";
+        return true;
+    } else {
+        return false;
+    }
+}
+
+///// FILE OPERATIONS ON MATRIX END HERE ////
+
 
 
 
@@ -855,6 +945,7 @@ matrix<DATA> eye(int n) {
 
     return m;
 }
+
 
 
 void init2dArray(int *array, int size_0, int size_1) {
@@ -897,51 +988,69 @@ int main() {
 
     D.display();
     
-    std::cout<<"\n\nFinding max and its indices:-";
-    std::cout<<"\nMax element in entire matrix: | ";
-    matrix<int> maxD = D.max();
-    maxD.display();
-    std::cout<<" at index ";
-    matrix<int> maxDIdx = D.argmax();
-    maxDIdx.display();
+    D.saveMatrix("matrixD");
 
-    std::cout<<"\n\nMax in each column (or along rows / 0th axis):- ";
-    matrix<int> maxD0axis = D.max(0);
-    maxD0axis.display();
-    matrix<int> maxD0axisIdx = D.argmax(0);
-    std::cout<<" at index ";
-    maxD0axisIdx.display();
+    matrix<int> dupD(0,0);
 
-    std::cout<<"\n\nMax in each row (or along columns / 1th axis):- ";
-    matrix<int> maxD1axis = D.max(1);
-    maxD1axis.display();
-    matrix<int> maxD1axisIdx = D.argmax(1);
-    std::cout<<" at index ";
-    maxD1axisIdx.display();
+    dupD.loadMatrix("matrixD");
+    dupD.display();
+
+    array = new int[10*10];
+    init2dRandArray(array, 10, 10);
+
+    matrix<int> A(array, 10);
+    deAlloc(array);
+    A.display();
+
+    A.saveMatrix("matA");
 
 
-    std::cout<<"\nMin element in entire matrix: | ";
-    matrix<int> minD = D.min();
-    minD.display();
-    std::cout<<" at index ";
-    matrix<int> minDIdx = D.argmin();
-    minDIdx.display();
+
+    // std::cout<<"\n\nFinding max and its indices:-";
+    // std::cout<<"\nMax element in entire matrix: | ";
+    // matrix<int> maxD = D.max();
+    // maxD.display();
+    // std::cout<<" at index ";
+    // matrix<int> maxDIdx = D.argmax();
+    // maxDIdx.display();
+
+    // std::cout<<"\n\nMax in each column (or along rows / 0th axis):- ";
+    // matrix<int> maxD0axis = D.max(0);
+    // maxD0axis.display();
+    // matrix<int> maxD0axisIdx = D.argmax(0);
+    // std::cout<<" at index ";
+    // maxD0axisIdx.display();
+
+    // std::cout<<"\n\nMax in each row (or along columns / 1th axis):- ";
+    // matrix<int> maxD1axis = D.max(1);
+    // maxD1axis.display();
+    // matrix<int> maxD1axisIdx = D.argmax(1);
+    // std::cout<<" at index ";
+    // maxD1axisIdx.display();
 
 
-    std::cout<<"\n\nMin in each column ( or along rows / 0th axis):- ";
-    matrix<int> minD0axis = D.min(0);
-    minD0axis.display();
-    matrix<int> minD0axisIdx = D.argmin(0);
-    std::cout<<" at index ";
-    minD0axisIdx.display();
+    // std::cout<<"\nMin element in entire matrix: | ";
+    // matrix<int> minD = D.min();
+    // minD.display();
+    // std::cout<<" at index ";
+    // matrix<int> minDIdx = D.argmin();
+    // minDIdx.display();
 
 
-    std::cout<<"\n\nMin in each row (or along columns / 1th axis):- ";
-    matrix<int> minD1axis = D.min(1);
-    minD1axis.display();
-    matrix<int> minD1axisIdx = D.argmin(1);
-    std::cout<<" at index ";
-    minD1axisIdx.display();
+    // std::cout<<"\n\nMin in each column ( or along rows / 0th axis):- ";
+    // matrix<int> minD0axis = D.min(0);
+    // minD0axis.display();
+    // matrix<int> minD0axisIdx = D.argmin(0);
+    // std::cout<<" at index ";
+    // minD0axisIdx.display();
+
+
+    // std::cout<<"\n\nMin in each row (or along columns / 1th axis):- ";
+    // matrix<int> minD1axis = D.min(1);
+    // minD1axis.display();
+    // matrix<int> minD1axisIdx = D.argmin(1);
+    // std::cout<<" at index ";
+    // minD1axisIdx.display();
 
     return 0;
 }
