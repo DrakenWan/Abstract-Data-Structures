@@ -48,7 +48,12 @@ The matrix operations currently implemented so far:-
 * inverse [ ]
 * stack [x] - to generate augmented matrices (vertical stack and horizontal stack)
 * slicing submatrices [x]
-
+* Aggregate functions [ ]
+    * max [x]
+    * argmax [x]
+    * min [x]
+    * argmin [x]
+    
 * Images for my reference
 
     -![Alt text](image.png)
