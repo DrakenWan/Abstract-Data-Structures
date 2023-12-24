@@ -202,6 +202,157 @@ class matrix {
 
 
 /////// AGGREGATE FUNCTIONS ///////
+
+///// Min
+template<typename DATA>
+matrix<DATA> matrix<DATA>::min(int dim) {
+     DATA minElem;
+    if(dim == -1) {
+            /* Returns a 1x1 matrix of max value */
+            matrix<DATA> m0(1,1);
+
+            // might subroutine the below repetitive code
+            minElem = *val;
+            for(int i=1; i<this->row*this->col; i++)
+                if( minElem > *(val + i)) {
+                    minElem = *(val + i);
+                }
+
+            m0.insertAt(minElem, 0, 0);
+            return m0;
+    } //dim == -1
+     else {
+    
+        if(dim == 0) {
+
+                /* Returns a 1xcol matrix of max value in each jth column
+                this operation is performed along the 0th axis (row axis)
+                */
+
+                matrix<DATA> m1(1, this->col);
+
+                for(int j=0; j<this->col; j++) {
+                    minElem = *(val +  j);
+
+                    for(int i=1; i<this->row; i++)
+                        if( minElem > *(val + i*(this->col) + j) )
+                            minElem = *(val + i*(this->col) + j);
+
+                    m1.insertAt(minElem, 0,j);
+                }
+                return m1;
+        } // dim == 0
+
+        else {
+            if(dim == 1) {
+                /*
+                    Returns a rowx1 matrix of max value in each ith row
+                    this operation is performed along the 1th axis (col axis)
+                */
+
+               matrix<DATA> m2(this->row, 1);
+               for(int i=0; i<this->row; i++) {
+                    minElem = *(val + i*(this->col));
+
+                    for(int j=1; j<this->col; j++) {
+                        if( minElem > *(val + i*(this->col) + j) )
+                            minElem = *(val + i*(this->col) +j);
+                    }
+
+                    m2.insertAt(minElem, i, 0);
+               }
+              return m2;
+            } else {
+                throw std::invalid_argument("Invalid dim index used.");
+            }
+        } 
+    }
+}
+
+//// Indices of Min element
+template<typename DATA>
+matrix<DATA> matrix<DATA>::argmin(int dim) {
+int minIdx_i, minIdx_j;
+    if(dim == -1) {
+        /*
+            Calculate the index of max element in entire matrix
+            Returns a 1x2 matrix with ith index at (0,0) and jth index at (0,1)
+        */
+            matrix<DATA> m0(1,2);
+
+            // might subroutine the below repetitive code
+            minIdx_i = 0;
+            minIdx_j = 0;
+            DATA minElem = *(val + minIdx_i*(this->col) + minIdx_j);
+            for(int i=0; i<this->row; i++) 
+                for(int j=0; j<this->col; j++)
+                    {
+                        if(minElem > *(val + i*(this->col) + j))
+                            {
+                                minElem = *(val + i*(this->col) + j);
+                                minIdx_i = i;
+                                minIdx_j = j;
+                            }
+                    }
+
+            // insert the indices at (0,0) and (0,1)
+            m0.insertAt(minIdx_i, 0, 0);
+            m0.insertAt(minIdx_j, 0, 1);
+            return m0;
+    } else {
+        if(dim == 0) {
+
+                /* Returns a 1xcol matrix of index of max value in each jth column
+                this operation is performed along the 0th axis (row axis)
+                */
+
+                matrix<DATA> m1(1, this->col);
+
+                for(int j=0; j<this->col; j++) {
+                    int minIdx_i = 0;
+                    DATA minElem = *(val + minIdx_i*(this->col) + j);
+                    for(int i=1; i<this->row; i++)
+                        if( minElem > *(val + i*(this->col) + j) ) {
+                            minElem = *(val + i*(this->col) + j);
+                            minIdx_i = i;
+                        }
+
+                    m1.insertAt(minIdx_i, 0,j);
+                }
+                return m1;
+        } // dim == 0 condn end
+         else {
+            if(dim == 1) {
+                /*
+                    Returns a rowx1 matrix with index of max value in each ith row
+                    this operation is performed along the 1th axis (col axis)
+                */
+
+               matrix<DATA> m2(this->row, 1);
+               for(int i=0; i<this->row; i++) {
+                    int minIdx_j = 0;
+                    DATA minElem = *(val + i*(this->col) + minIdx_j);
+                    
+                    for(int j=1; j<this->col; j++) {
+                        if( minElem > *(val + i*(this->col) + j) ) {
+                            minElem = *(val + i*(this->col) + j);
+                            minIdx_j = j;
+                        } 
+                    }
+
+                    m2.insertAt(minIdx_j, i, 0);
+               }
+              return m2;
+            } //dim == 1 condn end
+            else {
+                throw std::invalid_argument("The axis value is not correct.");
+            }
+        }
+    }
+}
+
+
+//// Max
 template<typename DATA>
 matrix<DATA> matrix<DATA>::max(int dim) {
     DATA maxElem;
@@ -268,7 +419,7 @@ matrix<DATA> matrix<DATA>::max(int dim) {
     
 }
 
-
+/// Indices of max
 template<typename DATA>
 matrix<DATA> matrix<DATA>::argmax(int dim) {
     int maxIdx_i, maxIdx_j;
@@ -349,6 +500,7 @@ matrix<DATA> matrix<DATA>::argmax(int dim) {
         }
     }
 }
+
 
 
 /////// AGGREGATE FUNCTIONS END ////////////
@@ -735,7 +887,7 @@ void init2dRandArray(int *array, int size_0, int size_1) {
 
 int main() {
     int *array;
-    int N = 10;
+    int N = 4;
     array = new int[N*N];
     init2dRandArray(array, N, N);
 
@@ -767,7 +919,30 @@ int main() {
     std::cout<<" at index ";
     maxD1axisIdx.display();
 
-    
+
+    std::cout<<"\nMin element in entire matrix: | ";
+    matrix<int> minD = D.min();
+    minD.display();
+    std::cout<<" at index ";
+    matrix<int> minDIdx = D.argmin();
+    minDIdx.display();
+
+
+    std::cout<<"\n\nMin in each column ( or along rows / 0th axis):- ";
+    matrix<int> minD0axis = D.min(0);
+    minD0axis.display();
+    matrix<int> minD0axisIdx = D.argmin(0);
+    std::cout<<" at index ";
+    minD0axisIdx.display();
+
+
+    std::cout<<"\n\nMin in each row (or along columns / 1th axis):- ";
+    matrix<int> minD1axis = D.min(1);
+    minD1axis.display();
+    matrix<int> minD1axisIdx = D.argmin(1);
+    std::cout<<" at index ";
+    minD1axisIdx.display();
+
     return 0;
 }
 
