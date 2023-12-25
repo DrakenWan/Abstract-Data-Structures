@@ -2,12 +2,13 @@
 #include<omp.h>
 #include<stdexcept>
 
-// I/O File
+// I/O with File
 #include<fstream>
 
 //extra imports for utility
 #include<random>
 
+namespace linear{
 // macros for deallocation
 #define deAlloc(x) delete[] x; x = NULL;
 
@@ -966,7 +967,7 @@ void matrix<DATA>::insertAt(DATA value, int r, int c)  {
 template<typename DATA>
 void matrix<DATA>::updateWithArray(DATA* array, int r, int c) {
     if (r <0 && c < 0)
-        throw::invalid_argument("Bad dimension values.");
+        throw std::invalid_argument("Bad dimension values.");
 
     this->changeDims(r, c);
     for(int i=0; i<this->row; i++)
@@ -1083,7 +1084,7 @@ matrix<DATA> eye(int n) {
 
     return m;
 }
-
+} //linear namespace
 
 template<typename DATA>
 void init2dArray(DATA *array, int size_0, int size_1) {
@@ -1117,6 +1118,8 @@ void init2dRandArray(int *array, int size_0, int size_1) {
 
 
 /////////
+
+using namespace linear;
 
 int main() {
     int *array;
