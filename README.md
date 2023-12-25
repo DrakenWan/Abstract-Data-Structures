@@ -1,4 +1,4 @@
-# Abstract-Data-Structures and Algorithms
+# Abstract Data Structures
 
 I am trying to create a repository with Data structures and algorithms from scratch. I am actively working over this library right now. Feel free to help in anyway possible. I am revisiting my Algorithms lessons and doing this helps me revise better. This also helps me practice and stay connected to C++.
 
