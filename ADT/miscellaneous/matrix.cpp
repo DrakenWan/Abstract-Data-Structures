@@ -102,6 +102,13 @@ class matrix {
         int cols() const {return this->col;}
         ///// get mat dims end //////
 
+        // initialize empty matrix
+        matrix() {
+            // advise against using this.
+            this->row = this->col = 0;
+            getMemoryforVal(this->row, this->col);
+        }
+
         // initialize a square matrix
         matrix(int n) {
             this->row = this->col = n;
@@ -158,6 +165,9 @@ class matrix {
 
         // insert value at rth row and cth column
         void insertAt(DATA, int, int);
+
+        // update using flattened array
+        void updateWithArray(DATA*, int, int);
 
         // display contents in a 2d grid form
         void display();
@@ -952,6 +962,18 @@ void matrix<DATA>::insertAt(DATA value, int r, int c)  {
         }
 }
 
+
+template<typename DATA>
+void matrix<DATA>::updateWithArray(DATA* array, int r, int c) {
+    if (r <0 && c < 0)
+        throw::invalid_argument("Bad dimension values.");
+
+    this->changeDims(r, c);
+    for(int i=0; i<this->row; i++)
+        for(int j=0; j<this->col; j++)
+            *(val + i*(this->col) + j) = *(array + i*(this->col) + j);
+}
+
 template<typename DATA>
 void matrix<DATA>::display()  {
     int i,j;
@@ -1124,7 +1146,10 @@ int main() {
 
     A.saveMatrix("matA");
     
-    
+    matrix<float> C;
+    C.loadMatrix("matA");
+    C(1,2) = 0.5;
+    C.display();
     
     
     std::cout<<"\n\nMatrix inverse\n\n";
