@@ -45,7 +45,7 @@ The matrix operations currently implemented so far:-
 * multiplication [x]
 * scalar multiplication [x]
 * transpose [x]
-* inverse [x] (experimental- uses gaussian elimination)
+* inverse [x] (experimental- uses gaussian elimination with partial pivoting)
 * stack [x] - to generate augmented matrices (vertical stack and horizontal stack)
 * slicing submatrices [x]
 * Aggregate functions [ ]
