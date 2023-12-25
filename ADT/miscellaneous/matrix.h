@@ -1117,59 +1117,59 @@ void init2dRandArray(int *array, int size_0, int size_1) {
 
 
 
-/////////
+// /////////
 
-using namespace linear;
+// using namespace linear;
 
-int main() {
-    int *array;
-    int N = 4;
-    array = new int[N*N];
-    init2dRandArray(array, N, N);
+// int main() {
+//     int *array;
+//     int N = 4;
+//     array = new int[N*N];
+//     init2dRandArray(array, N, N);
 
-    // create our D matrix
-    matrix<int> D(array, N);
-    deAlloc(array);
+//     // create our D matrix
+//     matrix<int> D(array, N);
+//     deAlloc(array);
 
-    D.display();
+//     D.display();
     
-    D.saveMatrix("matrixD");
+//     D.saveMatrix("matrixD");
 
-    matrix<int> dupD(0,0);
+//     matrix<int> dupD(0,0);
 
-    dupD.loadMatrix("matrixD");
-    dupD.display();
+//     dupD.loadMatrix("matrixD");
+//     dupD.display();
 
-    array = new int[10*10];
-    init2dRandArray(array, 10, 10);
+//     array = new int[10*10];
+//     init2dRandArray(array, 10, 10);
 
-    matrix<int> A(array, 10);
-    deAlloc(array);
-    A.display();
+//     matrix<int> A(array, 10);
+//     deAlloc(array);
+//     A.display();
 
-    A.saveMatrix("matA");
+//     A.saveMatrix("matA");
     
-    matrix<float> C;
-    C.loadMatrix("matA");
-    C(1,2) = 0.5;
-    C.display();
+//     matrix<float> C;
+//     C.loadMatrix("matA");
+//     C(1,2) = 0.5;
+//     C.display();
     
     
-    std::cout<<"\n\nMatrix inverse\n\n";
-    N=3;
-    float *flarray = new float[N*N];
-    init2dArray<float>(flarray, N, N);
-    matrix<float> B(flarray, N);
-    deAlloc(array);
+//     std::cout<<"\n\nMatrix inverse\n\n";
+//     N=3;
+//     float *flarray = new float[N*N];
+//     init2dArray<float>(flarray, N, N);
+//     matrix<float> B(flarray, N);
+//     deAlloc(array);
 
-    B.display();
-    matrix<float> invB = B.inv();
+//     B.display();
+//     matrix<float> invB = B.inv();
 
-    invB.display();
+//     invB.display();
 
     
-    return 0;
-}
+//     return 0;
+// }
 
 
 /////// MAIN FUNCTION AND UTILS END HERE /////////
