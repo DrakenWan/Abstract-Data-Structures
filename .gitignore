@@ -5,5 +5,3 @@ experiments.cpp
 *.trix
 **/*.trix
 **/*/*.trix
-/ADT/miscellaneous/experiments.cpp
-/misc++
