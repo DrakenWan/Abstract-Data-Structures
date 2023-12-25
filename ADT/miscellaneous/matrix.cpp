@@ -63,6 +63,7 @@ class matrix {
     
     // validate the Param values
     bool validateParams(int x, int y, int dim) {
+        // explicitly used for `slice` operation
         bool validatex = (x > -1 && x < dim+1);
         bool validatey = (y > -1 && y < dim+1);
         bool validatexlty = (x < y);
@@ -72,11 +73,20 @@ class matrix {
             return false;
     }
     
+    // validate the index
+    bool isValidIndex(int r, int c) const {
+        matrix<int> dims = this->getDims();
+        int nRows = dims(0,0);
+        int nCols = dims(0,1);
+        return r >= 0 && r < nRows && c >= 0 && c < nCols;
+    }
     //////////////////////////
 
+
+
     public:
-        //getdimensions
-        matrix<DATA> getDims() {
+        // Getting matrix dimensions /////
+        matrix<int> getDims() const {
             /*
                 Returns a 1x2 integer matrix (say Dims) with row in Dims(0,0) and col in Dims(0,1) 
             */
@@ -88,8 +98,9 @@ class matrix {
            return Dims;
         }
 
-        int rows() {return this->row;}
-        int cols() {return this->col;}
+        int rows() const {return this->row;}
+        int cols() const {return this->col;}
+        ///// get mat dims end //////
 
         // initialize a square matrix
         matrix(int n) {
@@ -163,7 +174,7 @@ class matrix {
         matrix<DATA> operator&(matrix const& ); //matrix multiply
         matrix<DATA> operator*(DATA scalar); //scalar multiplication (scalar on rhs of *)
         bool operator==(matrix const &); // matrix equal operation
-
+    
         //transpose operator
         matrix<DATA> operator!(); 
         //transpose operation explicit method
@@ -203,6 +214,13 @@ class matrix {
         matrix<DATA> operator^(int);
         ////////////////  OPERATIONS END /////////////////
         
+        /// Swap Rows ///
+        void swapRows(int,int);
+        ////////////////
+
+        /// Swap Cols ///
+        void swapCols(int, int);
+        ////////////////
         
         /// Generate Augmented matrix (vertical stack or horizontal stack) ///
         matrix<DATA> hStack(matrix const& ); // horizontal stack - hStack
@@ -237,6 +255,38 @@ class matrix {
         bool saveMatrix(const std::string&);
         bool loadMatrix(const std::string&);
 };
+
+///// Swap functions /////
+template<typename DATA>
+void matrix<DATA>::swapRows(int row1, int row2) {
+    if( !isValidIndex(row1, 0) || !isValidIndex(row2, 0)) {
+        throw std::invalid_argument("Row dim indices are wrong.\n");
+        return;
+    }
+    
+    for(int j=0; j<col; j++) {
+        DATA temp = *(val + row1*col + j);
+        *(val + row1*col + j) = *(val + row2*col + j);
+        *(val + row2*col + j) = temp;
+    }
+}
+
+template<typename DATA>
+void matrix<DATA>::swapCols(int col1, int col2) {
+    if( !isValidIndex(0, col1) || !isValidIndex(0, col2)) {
+        throw std::invalid_argument("Column dim indices are wrong.\n");
+        return;
+    }
+
+    for (int i = 0; i<row; ++i) {
+        DATA temp = *(val + i*col + col1);
+        *(val + i*col + col1) = *(val + i*col + col2);
+        *(val + i*col + col2) = temp;
+    }
+}
+
+
+///// SWAP functions end here /////
 
 
 /////// AGGREGATE FUNCTIONS ///////
@@ -628,32 +678,51 @@ matrix<DATA> matrix<DATA>::inv() {
     int n = this->row;
     int m = this->col;
 
-    if(n != m)
-        exit(1);
+    if(n != m) {
+        std::length_error("Not a square matrix.");
+    }
 
-    matrix<DATA> I = eye<DATA>(n);
-    matrix<DATA> augmentedMatrix = this->hStack(I);
+    matrix<DATA> I = eye<DATA>(n); // nxn Identity matrix
+    matrix<DATA> augMat = this->hStack(I); // nx2n augmented Matrix
 
-    // Gaussian elimination
     for(int i=0; i<n; i++) {
-        DATA diagElem = augmentedMatrix(i, i);
-        for(int j=0; j< 2*n; ++j) {
-            augmentedMatrix(i, j) /= diagElem;
+        //finding the pivot
+        int pivotRow = i;
+        for(int k=i+1; k<n; k++) {
+            if(abs(augMat(k,i)) > abs(augMat(pivotRow, i))) {
+                pivotRow = k;
+            }
         }
 
-        //eliminate other rows
-        for(int k=0; k<n; ++k) {
+        if(augMat(pivotRow,i) == 0) {
+            throw std::domain_error("Matrix is singular. Cannot find inverse.");
+        }
+
+        //swapping rows in augMat
+        augMat.swapRows(i, pivotRow);
+
+        //Applying gaussian elimination
+        DATA pivot = augMat(i, i);
+
+        // row scaling
+        for(int j=0; j<2*n; j++) {
+            augMat(i, j) /=  pivot;
+        }
+
+        for(int k=0; k<n; k++) {
             if( k != i) {
-                DATA factor = augmentedMatrix(k, i);
-                for(int j=0; j<2 * n; ++j) {
-                    augmentedMatrix(k, j) -= factor * augmentedMatrix(i,j);
+                DATA factor = augMat(k, i);
+
+                // row combine for augMat
+                for(int j=0; j<2*n; j++) {
+                    augMat(k, j) -= factor * augMat(i, j);
                 }
-            }
+            } // if k!= i condn end
         }
     }
 
     // inverse in right half of aug matrix
-    matrix<DATA> inverse = augmentedMatrix.slice(0, n, n, 2*n);
+    matrix<DATA> inverse = augMat.slice(0, n, n, 2*n);
     return inverse;
 }
 
@@ -1055,12 +1124,11 @@ int main() {
 
     A.saveMatrix("matA");
     
-    std::cout<<"\n\nMatrix inverse\n\n";
     
-    N=2;
-
-
-
+    
+    
+    std::cout<<"\n\nMatrix inverse\n\n";
+    N=3;
     float *flarray = new float[N*N];
     init2dArray<float>(flarray, N, N);
     matrix<float> B(flarray, N);
@@ -1071,52 +1139,6 @@ int main() {
 
     invB.display();
 
-
-    // std::cout<<"\n\nFinding max and its indices:-";
-    // std::cout<<"\nMax element in entire matrix: | ";
-    // matrix<int> maxD = D.max();
-    // maxD.display();
-    // std::cout<<" at index ";
-    // matrix<int> maxDIdx = D.argmax();
-    // maxDIdx.display();
-
-    // std::cout<<"\n\nMax in each column (or along rows / 0th axis):- ";
-    // matrix<int> maxD0axis = D.max(0);
-    // maxD0axis.display();
-    // matrix<int> maxD0axisIdx = D.argmax(0);
-    // std::cout<<" at index ";
-    // maxD0axisIdx.display();
-
-    // std::cout<<"\n\nMax in each row (or along columns / 1th axis):- ";
-    // matrix<int> maxD1axis = D.max(1);
-    // maxD1axis.display();
-    // matrix<int> maxD1axisIdx = D.argmax(1);
-    // std::cout<<" at index ";
-    // maxD1axisIdx.display();
-
-
-    // std::cout<<"\nMin element in entire matrix: | ";
-    // matrix<int> minD = D.min();
-    // minD.display();
-    // std::cout<<" at index ";
-    // matrix<int> minDIdx = D.argmin();
-    // minDIdx.display();
-
-
-    // std::cout<<"\n\nMin in each column ( or along rows / 0th axis):- ";
-    // matrix<int> minD0axis = D.min(0);
-    // minD0axis.display();
-    // matrix<int> minD0axisIdx = D.argmin(0);
-    // std::cout<<" at index ";
-    // minD0axisIdx.display();
-
-
-    // std::cout<<"\n\nMin in each row (or along columns / 1th axis):- ";
-    // matrix<int> minD1axis = D.min(1);
-    // minD1axis.display();
-    // matrix<int> minD1axisIdx = D.argmin(1);
-    // std::cout<<" at index ";
-    // minD1axisIdx.display();
 
     return 0;
 }
