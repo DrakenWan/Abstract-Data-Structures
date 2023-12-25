@@ -1047,10 +1047,6 @@ bool matrix<DATA>::loadMatrix(const std::string& filename) {
 ///// FILE OPERATIONS ON MATRIX END HERE ////
 
 
-
-
-/////// MAIN FUNCTION/////////
-
 template<typename DATA>
 matrix<DATA> diagonal(int n, DATA value) {
     matrix<DATA> m(n);
@@ -1114,62 +1110,3 @@ void init2dRandArray(int *array, int size_0, int size_1) {
     for(int j=0; j<size_1; j++)
         *(array + i*size_1 + j) = distribution(generator);
 }
-
-
-
-// /////////
-
-// using namespace linear;
-
-// int main() {
-//     int *array;
-//     int N = 4;
-//     array = new int[N*N];
-//     init2dRandArray(array, N, N);
-
-//     // create our D matrix
-//     matrix<int> D(array, N);
-//     deAlloc(array);
-
-//     D.display();
-    
-//     D.saveMatrix("matrixD");
-
-//     matrix<int> dupD(0,0);
-
-//     dupD.loadMatrix("matrixD");
-//     dupD.display();
-
-//     array = new int[10*10];
-//     init2dRandArray(array, 10, 10);
-
-//     matrix<int> A(array, 10);
-//     deAlloc(array);
-//     A.display();
-
-//     A.saveMatrix("matA");
-    
-//     matrix<float> C;
-//     C.loadMatrix("matA");
-//     C(1,2) = 0.5;
-//     C.display();
-    
-    
-//     std::cout<<"\n\nMatrix inverse\n\n";
-//     N=3;
-//     float *flarray = new float[N*N];
-//     init2dArray<float>(flarray, N, N);
-//     matrix<float> B(flarray, N);
-//     deAlloc(array);
-
-//     B.display();
-//     matrix<float> invB = B.inv();
-
-//     invB.display();
-
-    
-//     return 0;
-// }
-
-
-/////// MAIN FUNCTION AND UTILS END HERE /////////
