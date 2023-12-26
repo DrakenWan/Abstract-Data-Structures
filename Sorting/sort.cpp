@@ -20,12 +20,12 @@ class Sort {
 		long partition(vector<S>&, long, long);
 		void quick(vector<S>&, long, long);
 		void swap(S &a, S &b)
-        { //swap utility function
-            S temp;
-            temp = a;
-            a = b;
-            b = temp;
-        }
+            { //swap utility function
+                S temp;
+                temp = a;
+                a = b;
+                b = temp;
+            }
 
         void returnSortedArray() {
             return this->data;
@@ -44,7 +44,7 @@ class Sort {
 
         void changeData(vector<S>);
 		void changeData(S val, long idx) {
-            if(idx < this->length)
+            if(idx > -1 && idx < this->length)
                 this->data[idx] = val;
         }
 

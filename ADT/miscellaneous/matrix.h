@@ -267,6 +267,13 @@ class matrix {
         bool loadMatrix(const std::string&);
 };
 
+// function declarations for some outside class functions
+template<typename DATA>
+matrix<DATA> eye(int);
+
+template<typename DATA>
+matrix<DATA> diagonal(int, DATA);
+
 ///// Swap functions /////
 template<typename DATA>
 void matrix<DATA>::swapRows(int row1, int row2) {
@@ -678,8 +685,7 @@ matrix<DATA> matrix<DATA>::vStack(matrix const& obj) {
     
 }
 //// STACKING OPERATIONS END ////
-template<typename DATA>
-matrix<DATA> eye(int);
+
 
 ///// MATRIX OPERATIONS DEFINITIONS START HERE ////
 
