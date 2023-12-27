@@ -43,7 +43,7 @@ int main() {
     float *flarray = new float[N*N];
     init2dArray<float>(flarray, N, N);
     linear::matrix<float> B(flarray, N);
-    deAlloc(array);
+    deAlloc(flarray);
 
     B.display();
     linear::matrix<float> invB = B.inv();
@@ -63,6 +63,26 @@ int main() {
     // B.loadMatrix("matrixD");
 
     // B.inv().display();
+
+    std::cout<<"\n\nMatrix solve Ax= b\n\n";
+    N=3;
+    int M=4;
+    flarray = new float[N*M];
+    init2dArray<float>(flarray, N, M);
+    linear::matrix<float> MatA(flarray, N);
+    deAlloc(flarray);
+
+    MatA.display();
+
+    flarray = new float[N*1];
+    init2dArray<float>(flarray, N, 1);
+    linear::matrix<float> vecB(flarray, N, 1);
+    deAlloc(flarray);
+
+    linear::matrix<float> solAb = MatA.solve(vecB);
+
+    std::cout<<"Ax = b, gives x = \n";
+    solAb.display();
 
     return 0;   
 }

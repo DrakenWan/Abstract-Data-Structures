@@ -85,7 +85,7 @@ class matrix {
     
 
     /// Gaussian Elimination private method
-    void gaussianElimination(matrix<DATA>&, int);
+    void gaussianElimination(matrix<DATA>&, int, int);
 
     /// Gaussian Elimination ends here ///
 
@@ -193,17 +193,11 @@ class matrix {
     
         //transpose operator
         matrix<DATA> operator!(); 
-        //transpose operation explicit method
-        matrix<DATA> transpose();
-        matrix<DATA> T(){ return this->transpose();};
-
-        // matrix inverse operation
-        matrix<DATA> inv(); //experimental
 
         //accessibility operations overload
         DATA& operator()(int, int); //access an element of the matrix
         
-        //change dimensions
+        //change dimensions //inline
         void changeDims(int r, int c) {
             /*
                 This function will reset memory.
@@ -222,6 +216,9 @@ class matrix {
            this->getMemoryforVal(r, c);
         }
 
+        //transpose operation explicit method
+        matrix<DATA> transpose();
+        matrix<DATA> T(){ return this->transpose();};
 
         // sliceu!
         matrix<DATA> slice(int, int, int, int);
@@ -259,8 +256,11 @@ class matrix {
         matrix<DATA> argmin(int dim=-1);
         //// aggregate functions end ////
 
+        // matrix inverse operation
+        matrix<DATA> inv(); //experimental
 
-
+        // solve Ax = b
+        matrix<DATA> solve(const matrix<DATA>&); //experimental
 
         /// QUERY methods
         bool isSquare() { if(this->col == this->row) return true; else return false;}
@@ -314,9 +314,12 @@ void matrix<DATA>::swapCols(int col1, int col2) {
 
 ///// GAUSSIAN ELIMINATION /////
 template<typename DATA>
-void matrix<DATA>::gaussianElimination(matrix<DATA>& augMat, int n) {
+void matrix<DATA>::gaussianElimination(matrix<DATA>& augMat, int n, int m) {
 
-     for(int i=0; i<n; i++) {
+    //test
+    int minDim = ((n < m) ? n : m);
+
+     for(int i=0; i<minDim; i++) {  //test : minDim replaced n here
         //finding the pivot
         int pivotRow = i;
         for(int k=i+1; k<n; k++) {
@@ -336,7 +339,7 @@ void matrix<DATA>::gaussianElimination(matrix<DATA>& augMat, int n) {
         DATA pivot = augMat(i, i);
 
         // row scaling
-        for(int j=0; j<2*n; j++) {
+        for(int j=0; j< m; j++) {
             augMat(i, j) /=  pivot;
         }
 
@@ -345,7 +348,7 @@ void matrix<DATA>::gaussianElimination(matrix<DATA>& augMat, int n) {
                 DATA factor = augMat(k, i);
 
                 // row combine for augMat
-                for(int j=0; j<2*n; j++) {
+                for(int j=0; j<m; j++) {
                     augMat(k, j) -= factor * augMat(i, j);
                 }
             } // if k!= i condn end
@@ -355,6 +358,31 @@ void matrix<DATA>::gaussianElimination(matrix<DATA>& augMat, int n) {
 
 ///// GAUSSIAN ELIMINATION ENDS HERE ////
 
+//// SOLVE AX = B /////
+template<typename DATA>
+matrix<DATA> matrix<DATA>::solve(const matrix<DATA>& b) {
+    int n = this->row;
+    int m = this->col; // n x m dims
+
+    // if( n != m) {
+    //     throw std::length_error("Not a square matrix.");
+    // }
+
+    // validate the shape of b
+    if( b.rows() != n || b.cols() != 1) {
+        throw std::invalid_argument("The dimensions do not match with A.");
+    }
+    
+    matrix<DATA> augMat = this->hStack(b); // [A | b]
+
+    gaussianElimination(augMat, augMat.rows(), augMat.cols());
+
+    // get the solution from the rightmost colimns of augMat
+    matrix<DATA> sol = augMat.slice(0, n, n, n+1);
+    return sol;
+}
+
+///////////////////////
 
 /////// AGGREGATE FUNCTIONS ///////
 
@@ -753,7 +781,7 @@ matrix<DATA> matrix<DATA>::inv() {
 
 
     // Calling gaussianElimination on augMat
-    this->gaussianElimination(augMat, n);
+    this->gaussianElimination(augMat, augMat.rows(), augMat.cols());
 
 
     // inverse in right half of augmented matrix (augMat)
