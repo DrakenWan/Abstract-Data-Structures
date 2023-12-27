@@ -82,7 +82,12 @@ class matrix {
         return r >= 0 && r < nRows && c >= 0 && c < nCols;
     }
     //////////////////////////
+    
 
+    /// Gaussian Elimination private method
+    void gaussianElimination(matrix<DATA>&, int);
+
+    /// Gaussian Elimination ends here ///
 
 
     public:
@@ -305,6 +310,50 @@ void matrix<DATA>::swapCols(int col1, int col2) {
 
 
 ///// SWAP functions end here /////
+
+
+///// GAUSSIAN ELIMINATION /////
+template<typename DATA>
+void matrix<DATA>::gaussianElimination(matrix<DATA>& augMat, int n) {
+
+     for(int i=0; i<n; i++) {
+        //finding the pivot
+        int pivotRow = i;
+        for(int k=i+1; k<n; k++) {
+            if(abs(augMat(k,i)) > abs(augMat(pivotRow, i))) {
+                pivotRow = k;
+            }
+        }
+
+        if(augMat(pivotRow,i) == 0) {
+            throw std::domain_error("Matrix is singular. Cannot find inverse.");
+        }
+
+        //swapping rows in augMat
+        augMat.swapRows(i, pivotRow);
+
+        //Applying gaussian elimination
+        DATA pivot = augMat(i, i);
+
+        // row scaling
+        for(int j=0; j<2*n; j++) {
+            augMat(i, j) /=  pivot;
+        }
+
+        for(int k=0; k<n; k++) {
+            if( k != i) {
+                DATA factor = augMat(k, i);
+
+                // row combine for augMat
+                for(int j=0; j<2*n; j++) {
+                    augMat(k, j) -= factor * augMat(i, j);
+                }
+            } // if k!= i condn end
+        }
+    }
+}
+
+///// GAUSSIAN ELIMINATION ENDS HERE ////
 
 
 /////// AGGREGATE FUNCTIONS ///////
@@ -702,43 +751,12 @@ matrix<DATA> matrix<DATA>::inv() {
     matrix<DATA> I = eye<DATA>(n); // nxn Identity matrix
     matrix<DATA> augMat = this->hStack(I); // nx2n augmented Matrix
 
-    for(int i=0; i<n; i++) {
-        //finding the pivot
-        int pivotRow = i;
-        for(int k=i+1; k<n; k++) {
-            if(abs(augMat(k,i)) > abs(augMat(pivotRow, i))) {
-                pivotRow = k;
-            }
-        }
 
-        if(augMat(pivotRow,i) == 0) {
-            throw std::domain_error("Matrix is singular. Cannot find inverse.");
-        }
+    // Calling gaussianElimination on augMat
+    this->gaussianElimination(augMat, n);
 
-        //swapping rows in augMat
-        augMat.swapRows(i, pivotRow);
 
-        //Applying gaussian elimination
-        DATA pivot = augMat(i, i);
-
-        // row scaling
-        for(int j=0; j<2*n; j++) {
-            augMat(i, j) /=  pivot;
-        }
-
-        for(int k=0; k<n; k++) {
-            if( k != i) {
-                DATA factor = augMat(k, i);
-
-                // row combine for augMat
-                for(int j=0; j<2*n; j++) {
-                    augMat(k, j) -= factor * augMat(i, j);
-                }
-            } // if k!= i condn end
-        }
-    }
-
-    // inverse in right half of aug matrix
+    // inverse in right half of augmented matrix (augMat)
     matrix<DATA> inverse = augMat.slice(0, n, n, 2*n);
     return inverse;
 }
