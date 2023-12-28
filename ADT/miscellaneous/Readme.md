@@ -1,12 +1,38 @@
-## Miscellaneous Data Structures
-Any sort of miscellaneous data structure that doesn't fit into the broadly/generally taught DS are put here. These can be something that are conceptual or very restrictive or specialised in their working. Below is the list of some of the data structures created so far. I will keep adding more and keep refining the existing ones.
+# Miscellaneous Data Structures
+Any sort of data structure that doesn't fit into the broadly classified data structures are put here. These can be something that are specialised in their use or behaviour. Below is the list of some of the data structures created so far. I will keep adding more and keep refining the existing ones. Below are explanations or guidelines explaining the data structures in this directory.
 
 
-## Data Structures
+## Point
 
-### Point
+Point data structure is a concept of a point in a 2d or 3d space. It only accomodates for 2d or 3d points. This can be used in different areas such as concept of location can be realised using this data structure.
 
-Point data structure is a concept of a point in a 2d or 3d space. This DS only accomodates for 2d or 3d points. This can be used in different areas such as concept of location can be realised using this data structure.
+### Initialize a point
+There are several ways to define a point. By default calling a point initializes a point in 3D space.
+
+```cpp
+
+// Define a 3d point in space at origin (0,0,0)
+point p;
+
+// Define a 2d point at (1,0.5)
+double x=1.0, y=0.5;
+point p2(x, y);
+
+// Define a 3d point at (3,1,2)
+double x=3.0, y=1.0, z=2.0;
+point p3(x,y,z);
+
+// initialize a point `p4` with values of `p3`
+point p4 = p3;
+```
+
+### Operations with points
+There are several operations that you can perform. A lot of these will be explained using examples.
+
+#### Addition
+```
+
+```
 
 
 ### Agent
@@ -39,6 +65,11 @@ Name is self-explanatory. It has attributes:-
 ### MATRIX
 A matrix data structure. I am still building it up. It makes use of a single pointer array on which matrix values are placed in row major form. It has three members: val (which holds the values of matrix), row (number of rows) and col (number of columns).
 
+###
+
+#### Methods
+* **asd** :
+
 The matrix operations currently implemented so far:-
 * addition  [x]  
 * subtraction [x]
@@ -53,8 +84,3 @@ The matrix operations currently implemented so far:-
     * argmax [x]
     * min [x]
     * argmin [x]
-    
-* Images for my reference
-
-    -![Alt text](image.png)
-    -![Alt text](image-1.png)

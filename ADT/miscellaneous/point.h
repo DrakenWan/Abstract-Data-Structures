@@ -53,9 +53,9 @@ class point {
         }
 
         //return value of components
-        double _x() {return this->x;}
-        double _y() {return this->y;}
-        double _z() {return this->z;}
+        double const _x() {return this->x;}
+        double const _y() {return this->y;}
+        double const _z() {return this->z;}
 
         //update components
         void update(double data, int i);
