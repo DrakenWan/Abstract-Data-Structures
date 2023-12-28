@@ -12,7 +12,7 @@ In the ADT subfolder, there are three main abstract data structures of `stack`, 
 
 ### Miscellaneous
 
-[./ADT/miscellaneous/](Jump to `miscellaneous` folder. Click here.)
+[Jump to `miscellaneous` folder. Click here.](./ADT/miscellaneous/)
 
 Data structures that serve a specific purpose. For example, I have defined a `matrix` data structure that exhibits the properties and behaviour of a matrix in linear algebra. There are some valid linear algebra operations that can be performed in `matrix` class.
 
