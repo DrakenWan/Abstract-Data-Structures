@@ -7,10 +7,10 @@ using namespace std;
 int main() {
 
     //// experiments ////
-    point p1(-1,0,2);
-    point p2(2,0,1);
-    cout<<endl<<(p1&p2);
+    point p1(1, 0, 2);
+    point p2(-2, 0, 1);
 
+    cout<<p1.distance(p2);
 
     //// experimends ////
 

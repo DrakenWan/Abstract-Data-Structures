@@ -1,4 +1,5 @@
 #pragma once
+#include<stdexcept>
 #include<cmath>
 
 using namespace std;
@@ -87,22 +88,12 @@ class point {
                 case 0 : return this->x;
                 case 1 : return this->y;
                 case 2 : 
-                    try {
-                        if(!this->is2D)
-                            return this->z;
-                        else
-                            throw(-1);
-                    }
-                    catch(int m) {
-                        cout<<"Error: 2D point.";
-                    }
-
+                    if(!this->is2D)
+                        return this->z;
+                    else
+                        throw std::invalid_argument("Not a 3d point.");
                 default : 
-                    try {
-                        throw(idx);
-                    } catch(int m) {
-                        cout<<"Error: Wrong index used."<<"Value used = "<<m;
-                    }
+                    throw std::invalid_argument("Wrong axis index used.");
             }
         }
 
@@ -111,21 +102,12 @@ class point {
                 case 'x' : return this->x;
                 case 'y' : return this->y;
                 case 'z' : 
-                    try {
-                        if(!this->is2D)
-                            return this->z;
-                        else
-                            throw(-1);
-                    }
-                    catch(int m) {
-                        cout<<"Error: 2D point.";
-                    }
+                   if(!this->is2D)
+                        return this->z;
+                    else
+                        throw std::invalid_argument("Not a 3d point.");
                 default : 
-                    try {
-                        throw(idx);
-                    } catch(int m) {
-                        cout<<"Error: Wrong index used."<<"Value used = "<<m;
-                    }
+                    throw std::invalid_argument("Wrong axis index used.");
             }
         }
 
@@ -230,7 +212,8 @@ point point::operator*(double scalar) {
 
 
 bool point::operator==(point p1) {
-    if( this->distance(p1) == 0 )
+    point origin;
+    if( this->distance(origin) == p1.distance(origin))
         return true;
     return false;
 }

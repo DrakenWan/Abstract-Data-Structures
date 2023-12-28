@@ -48,6 +48,7 @@ point p5(1, 0.5, -1.5);
 point p6 = p4 + p5; // outputs - (2,2.5,-1.5)
 std::cout << p6;
 std::cout << p6._2D(); // outputs - 1
+// _2D() method checks whether a point is 2d or not
 
 // adding a scalar to all elements of a point
 double scalar = 0.5;
@@ -78,6 +79,66 @@ double p1dotp2 = p1&p2;
 std::cout << p1dotp2; // outputs - 0
 ```
 
+### Relational operations
+These compares distances of both points from origin while comparing. The logic will be changed asap.
+
+```cpp
+point p1(1,0,0);
+point p2(2,0,0);
+point p3, p4;
+
+point p5(-1,0,0);
+point p6(1,0,0);
+
+std::cout << (p1 < p2>); // outputs - 1
+std::cout << (p3 == p4); // outputs - 1
+std::cout << (p5 == p6); // outputs - 1
+```
+
+### Indexing
+You can access the internal elements of a point using [] indexing operator
+
+```cpp
+point p1(1.5, -1, 3.2);
+
+std::cout<<"\nAccess element from x-axis:-\n";
+std::cout<<p1['x']<<std::endl;
+std::cout<<p1[0]<<std::endl<<std::endl;
+
+std::cout<<"\nAccess element from y-axis:-\n";
+std::cout<<p1['y']<<std::endl;
+std::cout<<p1[1]<<std::endl<<std::endl;
+
+std::cout<<"\nAccess element from z-axis:-\n";
+std::cout<<p1['z']<<std::endl;
+std::cout<<p1[2]<<std::endl<<std::endl;
+
+point p2(1.5, 2);
+std::cout<<"\nTrying to access z-axis element on a 2d point:-\n";
+std::cout<<p2[2]; // will throw an exception
+```
+
+You can even change the internal element using indexing operator []
+```cpp
+point p3(0.5, 0.5, 2);
+
+std::cout<<p1<<std::endl;
+
+//changing z axis value to 0.5
+p3[2] = 0.5;
+std::cout<<p1;
+```
+
+### distance
+
+Distance method calculates the distance between two given points.
+
+```cpp
+point p1(1, 0, 2);
+point p2(-2, 0, 1);
+std::cout << p1.distance(p2); // outputs - 3.16228
+```
+
 
 ## Agent
 
@@ -96,7 +157,12 @@ This is the complex class that I have created. It tries to realise the concept o
 
 ## String
 
-This is also still in works. String data structure is basically trying to achieve what every other string class out there does. The internal data structure that holds the data is made of std::vector. I will give utmost care to each and every method I conceive and see if there is an efficient way to perform certain operation.
+This is also still in works. String data structure is basically trying to achieve what every other string class out there does. The internal data structure that holds the data is made of `std::vector`. I will give utmost care to each and every method I conceive and see if there is an efficient way to perform certain operation.
+
+There are two data members in the string class- `feed` and `_size`. `_size` keeps track of the length of the string and `feed` is the internal standard vector data structure that holds the values of string.
+
+Unlike python string, this string is mutable. We can change the internal elements of a string.
+
 
 
 ## Location
