@@ -89,17 +89,12 @@ class String
 	String operator*(int times);
 
 	char& operator[](long idx) {
-		try{
-			if(idx > -1 && idx < this->size())
-				return this->feed[idx];
-			else if(idx >= -this->size() && idx < 0 )
-				return this->feed[this->size() + idx];
-			else
-				throw(idx);
-				
-		} catch(long val) {
-			cout<<"\nError: "<<val<<" index is out of range.";
-		}
+		if(idx > -1 && idx < this->size())
+			return this->feed[idx];
+		else if(idx >= -this->size() && idx < 0 )
+			return this->feed[this->size() + idx];
+		else
+			throw std::invalid_argument("Index value out of range.");
 	}
 
 	bool operator==(String s) {
@@ -173,47 +168,31 @@ String String::operator*(int times) {
 
 String String::operator()(long start, long end){
 	String s = *this, toss;
-	try{
-		if(start >= end)
-			throw(-1);
-		if(start >= 0 && end >= 0){
-			if(start >= this->size() || end >= this->size() && s.size() != 1)
-				throw(0);
-			else {
-				for(long i=start; i<end; i++)
-					toss.append(s[i]);
+	
+	if(start >= end)
+		throw std::invalid_argument("Start index greater than end index.");
+	if(start >= 0 && end >= 0){
+		if(start >= this->size() || end >= this->size() && s.size() != 1)
+			throw std::invalid_argument("Index out of range.");
+		else {
+			for(long i=start; i<end; i++)
+				toss.append(s[i]);
 
-				return toss;
-			}
+			return toss;
 		}
-		else if(start < 0 && end < 0) {
-			if(start < -this->size() || end < -this->size())
-				throw(0);
-			else {
-				for(long i=start; i<=end; i++)
-					toss.append(s[i]);
+	}
+	else if(start < 0 && end < 0) {
+		if(start < -this->size() || end < -this->size())
+			throw std::invalid_argument("Index out of range.");
+		else {
+			for(long i=start; i<=end; i++)
+				toss.append(s[i]);
 
-				return toss;
-			}
+			return toss;
 		}
-		else throw(1);
-	} //try ends
-	catch(int val) {
-		cout<<"\nError: ";
-		switch(val) {
-			case 0 :
-				cout<<"Index out of range.";
-				break;
-			case -1 :
-				cout<<"Start index greater than end index.";
-				break;
-			case 1 :
-				cout<<"Unexceptional error in slicing String.";
-				break;
-			default :
-				cout<<"Unreadable error code thrown.";
-		}
-	} //catch ends
+	}
+	else 
+		throw std::invalid_argument("Undetectable error in index values.");
 }
 
 String String::operator+(char c) {

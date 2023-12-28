@@ -163,6 +163,79 @@ There are two data members in the string class- `feed` and `_size`. `_size` keep
 
 Unlike python string, this string is mutable. We can change the internal elements of a string.
 
+### Initializing string
+The default initialisation is an empty string with size `0`.
+```cpp
+// empty string
+String empty;
+std::cout<<empty; // prints nothing
+
+// initializing a string with size 10
+String size10String(10);
+std::cout<<size10String; // prints nothing
+
+//initializing string with a vector<char> as input
+vector<char> data = {'K', 'a', 'r', 't', 'i', 'k', 'a', 'y'};
+String name(data);
+std::cout<<name; // outputs - Kartikay
+
+//initialize with a const char* literal
+String name = "Kartikay";
+std::cout<<name;
+
+// initialize a string with value from an old string
+String name = "Kartikay";
+String candidate = name;
+std::cout<<candidate; // outputs - Kartikay
+```
+
+### String operations
+
+There are some operations that can be performed on string using the overloaded binary operator methods for +, *, etc
+
+#### Concatenate
+`+` is the concatenate operation.
+
+```cpp
+String greet = "Hello ";
+String name = "Kartikay";
+String end = "!!";
+String greeting = greet + name + end;
+std::cout<<greeting; //Outputs - Hello Kartikay!!
+```
+
+You can also concatenate a character to the string using `+`
+
+```cpp
+String end2 = '!';
+String greeting2 = (greet + name) + end2;
+std::cout << greeting; // Outputs - Hello Kartikay!
+```
+
+Concatenation can also using `append` method.
+
+#### Manipulate internal elements
+
+These operations are some generic implementations that make modifications to the internal elements and return a newly created String after the modification to the internal elements.
+Some of the operations are descriptive by their names and have very standard names such as `capitalize`, `upper`, `lower`, `split`, `strip`, etc.
+
+
+```cpp
+// Capitalize the first letter in the string
+String sentence = "hello i am New To this Field.";
+std::cout<<sentence.capitalize();
+
+// convert lowercase letters to uppercase
+std::cout<<sentence.upper();
+
+// convert uppercase letters
+std::cout<<sentence.lower();
+
+std::cout<<sentence.startsWith('h'); // outputs - 1
+std::cout<<sentence.endsWith('.'); //outputs - 1
+
+
+```
 
 
 ## Location

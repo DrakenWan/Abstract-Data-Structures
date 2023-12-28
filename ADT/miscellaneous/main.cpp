@@ -1,17 +1,23 @@
 #include<iostream>
-#include "./point.h"
+#include "String.h"
+//#include "./point.h"
 //#include "./matrix.h"
 
 using namespace std;
 
 int main() {
 
+
     //// experiments ////
-    point p1(1, 0, 2);
-    point p2(-2, 0, 1);
+    
+    String sentence = "hello i am new to this field.";
+    cout<<endl;
+    std::cout<<sentence.capitalize()<<endl;
+    std::cout<<sentence.upper()<<endl;
+    std::cout<<sentence.lower()<<endl;
 
-    cout<<p1.distance(p2);
-
+    std::cout<<sentence.startsWith('h'); // outputs - 1
+    std::cout<<sentence.endsWith('.'); //outputs - 1
     //// experimends ////
 
     // int *array;
