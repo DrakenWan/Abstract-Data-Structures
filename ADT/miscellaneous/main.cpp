@@ -7,10 +7,9 @@ using namespace std;
 int main() {
 
     //// experiments ////
-    point p1(1,0.5, -0.5);
-    double scalar = 0.5;
-    point p2 = p1 + scalar;
-    cout<<p2;
+    point p1(-1,0,2);
+    point p2(2,0,1);
+    cout<<endl<<(p1&p2);
 
 
     //// experimends ////

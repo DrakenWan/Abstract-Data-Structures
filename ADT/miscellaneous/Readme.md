@@ -4,7 +4,7 @@ Any sort of data structure that doesn't fit into the broadly classified data str
 
 ## Point
 
-Point data structure is a concept of a point in a 2d or 3d space. It only accomodates for 2d or 3d points. This can be used in different areas such as concept of location can be realised using this data structure.
+Point data structure is a concept of a point in a 2d or 3d space. It only accomodates for 2d or 3d points. This can be used in different areas such as concept of location can be realised using this data structure. Don't forget to include the header file `point.h` in your source file.
 
 ### Initialize a point
 There are several ways to define a point. By default calling a point initializes a point in 3D space.
@@ -63,7 +63,20 @@ Note: there is no operation defined for subtracting a scalar from a point yet.
 
 #### Scalar multiplication
 
+```cpp
+point p1(-2,4,2);
+double scalar = 0.5;
+point p2 = p1*scalar;
+std::cout << p2; // outputs = (-1,2,1)
+```
 
+### Dot product
+```cpp
+point p1(-1,0,2);
+point p2(2,0,1);
+double p1dotp2 = p1&p2;
+std::cout << p1dotp2; // outputs - 0
+```
 
 ### Agent
 
