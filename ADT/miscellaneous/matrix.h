@@ -21,6 +21,9 @@ namespace linear{
 template<typename DATA>
 class matrix {
     /*  
+        Help taken from:-
+            - math.libretexts.org
+            - Michael T Heath
         matrix abstract DS reflects properties and behaviour of a matrix
         
         DATA MEMEBERS:-

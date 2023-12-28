@@ -11,6 +11,9 @@ There are several standard data structures and many other specific purpose data 
 In the ADT subfolder, there are three main abstract data structures of `stack`, `queue` and `priority queue`. Then there are different implementations of `tree` data structures that will go into `trees` folder. There is a folder present for `graph` data structures. Some of these folders have their own `Readme``files that you can read for more details on these.
 
 ### Miscellaneous
+
+[./ADT/miscellaneous/](Jump to `miscellaneous` folder. Click here.)
+
 Data structures that serve a specific purpose. For example, I have defined a `matrix` data structure that exhibits the properties and behaviour of a matrix in linear algebra. There are some valid linear algebra operations that can be performed in `matrix` class.
 
 
