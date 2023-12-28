@@ -30,9 +30,39 @@ point p4 = p3;
 There are several operations that you can perform. A lot of these will be explained using examples.
 
 #### Addition
+Adding two points will just add elements of corresponding dimensions of the points.
+
+Adding a 2d point with 3d point will result in a 3d point
+
+
+```cpp
+// adding two points
+point p1(1, 2.5, 0.5);
+point p2(-1, 0, 1);
+point p3 = p1 + p2;
+std::cout << p3; // outputs - (0, 3.5, 1.5)
+
+// adding a 2d pt with 3d pt
+point p4(1,2);
+point p5(1, 0.5, -1.5);
+point p6 = p4 + p5; // outputs - (2,2.5,-1.5)
+std::cout << p6;
+std::cout << p6._2D(); // outputs - 1
+
+// adding a scalar to all elements of a point
+double scalar = 0.5;
+point p7 (1, 0.5, -0.5);
+point p8 = p7 + scalar;
+std::cout << p8; // outputs - (1.5, 1, 0)
 ```
 
-```
+#### Subtraction
+Subtraction follows the same pattern as addition.
+
+Note: there is no operation defined for subtracting a scalar from a point yet.
+
+#### Scalar multiplication
+
 
 
 ### Agent
