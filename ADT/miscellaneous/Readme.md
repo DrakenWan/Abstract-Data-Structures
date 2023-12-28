@@ -78,40 +78,38 @@ double p1dotp2 = p1&p2;
 std::cout << p1dotp2; // outputs - 0
 ```
 
-### Agent
+
+## Agent
 
 Agent DS is just something I wanted to conceive for a long time I am thinking of creating an agent that can traverse a 2d map. An agent has a name, weight and location. Location makes use of Point data structure.
 
 
-### Polygon
+## Polygon
 
 This is still in progress. Basically trying to achieve a data structure that succinctly captures the essence of a polygon. I am trying my best. xD. I have done some progress on it but I need to verify some results.
 
 
-### Complex
+## Complex
 
 This is the complex class that I have created. It tries to realise the concept of complex numbers using this data structure. I have added methods that accomodate for certain arithmetic operations that are eligible for complex numbers. Also added some operator overloads to access the components of the data structure or compare the values.
 
 
-### String
+## String
 
 This is also still in works. String data structure is basically trying to achieve what every other string class out there does. The internal data structure that holds the data is made of std::vector. I will give utmost care to each and every method I conceive and see if there is an efficient way to perform certain operation.
 
 
-### Location
+## Location
 Name is self-explanatory. It has attributes:-
 * `id`: unique identifier
 * `loc`: a `point` class instance
 * `type`: a std::string type representing the terrain/type of location, for instace, `open path` or `wall`.
 
 
-### MATRIX
+## MATRIX
 A matrix data structure. I am still building it up. It makes use of a single pointer array on which matrix values are placed in row major form. It has three members: val (which holds the values of matrix), row (number of rows) and col (number of columns).
 
-###
 
-#### Methods
-* **asd** :
 
 The matrix operations currently implemented so far:-
 * addition  [x]  
