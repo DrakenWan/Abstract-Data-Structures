@@ -70,7 +70,7 @@ point p2 = p1*scalar;
 std::cout << p2; // outputs = (-1,2,1)
 ```
 
-### Dot product
+#### Dot product
 ```cpp
 point p1(-1,0,2);
 point p2(2,0,1);
