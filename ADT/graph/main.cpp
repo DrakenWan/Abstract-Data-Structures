@@ -5,17 +5,7 @@
 using namespace std;
 
 int main() {
-
-    vector<vector<int>> aloo = {
-        {0, 1, 0, 1},
-        {1, 0, 1, 0},
-        {0, 1, 0, 1},
-        {1, 0, 1, 0}
-    };
-    cout<<aloo.size();
-
     graph::uGraph g(10);
-    //g.adjacencyMatrix(aloo);
     /*
         S - 0
         A - 1
@@ -46,18 +36,7 @@ int main() {
     g.addEdge(6, 4, 3);
     g.addEdge(6, 9, 8);
 
-    //g.print();
-    vector<int> nodes = g.nodes();
-
-    //cout<<"Nodes of our graph:-\n";
-    //printVector(nodes);
-
-    //int idx = 2;
-    //int node = nodes[idx];
-    //cout<<endl<<node;
-    //vector<int> succs = g.returnAdjacentNodes(node);
-
-    //graph::printVector(succs);
+    
 
 
     int node_index = 0;
@@ -74,12 +53,6 @@ int main() {
 
     dtype goal = 9;
     g.ucs(node_index, goal);
-    cout<<endl;
-
-    cout<<endl<<endl<<"indexing example g["<<node_index<<"] returns adjacent nodes of "<<node_index<<":-\n";
-
-    graph::printVector(g[node_index]);
-
     cout<<endl<<"UCS Traversal from node g["<<node_index<<"] to our goal 4.\n";
     g.ucs(node_index, 4);
     cout<<endl;

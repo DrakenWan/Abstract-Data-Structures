@@ -16,9 +16,32 @@ Below few headings will cover some basic topics about graphs that I have learnt.
 ![exampleGraph](exampleGraph.png)
 
 ```cpp
+//// previous definitions in main ////
+graph::uGraph g(10);
+// code for graph g to be initialised. Above image as reference 
+int start = 0;
+int goal = 9;
+std::cout<<"UCS traversal from node "<< node_index <<" to "<<goal<<".\n";
+g.ucs(start, goal);
+std::cout<<"\n";
 
-
+start = 0;
+goal = 4;
+std::cout<<"UCS traversal from node "<< node_index <<" to "<<goal<<".\n";
+g.ucs(start, goal);
+std::cout<<"\n";
+////// rest of code in main /////
 ```
+
+This will give output:- &nbsp;
+> UCS Traversal from node 0 to 9.
+> 0 4 2 6 
+> Found goal 9 at cost 13
+> 
+> UCS Traversal from node 0 to 4.
+> 0
+> Found goal 4 at cost 2
+
 
 ## TYPES
 
