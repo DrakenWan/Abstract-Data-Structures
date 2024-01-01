@@ -1,4 +1,4 @@
-<small> NOTE: I will refactor and cleanup this markdown file asap </small>
+<small> Sourced from: ![geeks4geeks](https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/)</small>
  
 # GRAPHS 
 
