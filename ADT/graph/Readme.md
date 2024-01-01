@@ -59,7 +59,7 @@ This will give output:- &nbsp;
 3.  A graph in which edges do not have any direction is called Undirected Graph.
 
 4.  **Directed graph** has edges with direction. 
-    Illustration1-
+    
     ![123](https://media.geeksforgeeks.org/wp-content/uploads/20200630114438/directed.jpg)
 
 5.  **Connected Graph** is one in which from one node we can
@@ -68,21 +68,19 @@ This will give output:- &nbsp;
 6. **Disconnected graph**: You guessed it! Atleast one node has to
     be not reachable from a node
 
-    Illustration2:-
     ![124](https://media.geeksforgeeks.org/wp-content/uploads/20200630121400/connected1.jpg)
 
 7.  **Regular Graph** is one in which degree of every vertex is equal
     to the other vertices of graph
 
 8.  **Complete Graph**: from each node there is an edge to each other node    
-    Illustration3:-
+    
     ![125](https://media.geeksforgeeks.org/wp-content/uploads/20200630122008/regular.jpg)
 
 9.  **Cycle Graph**: graph is a cycle in itself. Degree of each vertex is 2.
 10. **Cyclice Graph**: A graph containing atleast one cycle
 
-    Illustration4:-
-    ![126](https://media.geeksforgeeks.org/wp-content/uploads/20200630122225/cyclic.jpg)
+    ![126](https://media.geeksforgeeks.org/wp-content/uploads/20200630122225W/cyclic.jpg)
 
 11. **Directed Acyclic Graph**: A directed graph that does not co-
     ntain any cycle
@@ -90,7 +88,7 @@ This will give output:- &nbsp;
 12. **Bipartite Graph**: A graph in which vertices can be divided into
     two sets st. in each set vertices do not contain any edge
     between them.
-
+W
 13. **Weighted Graph**:
     A graph in which edges are already specified with suit-
     able weight is known as weighted graph.
@@ -108,7 +106,6 @@ This will give output:- &nbsp;
 [Linked List](../linked%20lists/), [Trees](../trees/) and [Heaps](../heap/) are special cases of graphs.
 
 
-**Illustration:-**
 ![130](https://media.geeksforgeeks.org/wp-content/uploads/20200630123458/tree_vs_graph.jpg)
 
 ## Representation of Graphs
@@ -122,14 +119,12 @@ There are two ways to store a graph:-
 - rows and columns are vertices
 - each value represents the weight of the edge between the vertices
 
-**Illustration:-**
 ![140](https://media.geeksforgeeks.org/wp-content/uploads/20200630124726/adjacency_mat1.jpg)
 
 ### ADJACENCY LIST 
 - represented as a collection of `linked lists`.
 - array of pointer which points to the edges connected to that vertex (better understood through illustration below)
 
-**Illustration:-**
 ![141](https://media.geeksforgeeks.org/wp-content/uploads/20200630125356/adjacency_list.jpg)
 
 ### Adjacency Matrix vs Adjacency List
