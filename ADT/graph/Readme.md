@@ -1,4 +1,4 @@
-<small> Sourced from: ![geeks4geeks](https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/)</small>
+<small> Sourced from: [geeks4geeks](https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/)</small>
  
 # GRAPHS 
 
@@ -94,7 +94,7 @@ It is good to not have sparse matrix. If there are lot
 of edges then adjacency matrix is a good use
 
 Action        | Adj Matrix   | Adj List 
----------------------------------------
+--------------|--------------|---------
 Add Edge      |  O(1)        | O(1)
 Removing Edge |  O(1)        | O(N)
 Initialize    |  O(N*N)      | O(N)
