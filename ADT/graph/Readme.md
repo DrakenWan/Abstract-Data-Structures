@@ -35,14 +35,7 @@ std::cout<<"\n";
 
 This will give output:-
 
-```{css, echo=FALSE}
-.output {
-    background-color: black;
-    border: 2px solid grey;
-    color: white;
-}
 ```
-```{r class.source="output"}
 UCS Traversal from node 0 to 9.
 0 4 2 6 
 Found goal 9 at cost 13
