@@ -34,13 +34,13 @@ std::cout<<"\n";
 ```
 
 This will give output:- &nbsp;
->   UCS Traversal from node 0 to 9.
->   0 4 2 6 
->   Found goal 9 at cost 13
->   
->   UCS Traversal from node 0 to 4.
->   0
->   Found goal 4 at cost 2
+>UCS Traversal from node 0 to 9.
+>0 4 2 6 
+>Found goal 9 at cost 13
+>
+>UCS Traversal from node 0 to 4.
+>0
+>Found goal 4 at cost 2
 
 
 ## TYPES
