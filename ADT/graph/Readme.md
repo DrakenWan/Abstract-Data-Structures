@@ -111,13 +111,14 @@ There are two ways to store a graph:-
 2. Adjacency List
 
 ### ADJACENCY MATRIX
-- 2D Matrix
+- An NxN matrix where N is number of vertices in the graph
 - rows and columns are vertices
 - each value represents the weight of the edge between the vertices
+- In case of undirected graphs, the adjacency matrix is symmetric. (vice versa not true)
 
 ![140](https://media.geeksforgeeks.org/wp-content/uploads/20200630124726/adjacency_mat1.jpg)
 
-### ADJACENCY LIST 
+### ADJACENCY LIST
 - represented as a collection of `linked lists`.
 - array of pointer which points to the edges connected to that vertex (better understood through illustration below)
 
@@ -125,8 +126,7 @@ There are two ways to store a graph:-
 
 ### Adjacency Matrix vs Adjacency List
 
-It is good to not have sparse matrix. If there are lot
-of edges then adjacency matrix is a good use
+It is good to not have sparse matrix (where many values are 0). Sparse matrices consume large space. If there are lot of edges then adjacency matrix is a good use but if we are going to have less number of edges we should prefer to use adjacency list.
 
 Action        | Adj Matrix   | Adj List 
 --------------|--------------|---------
