@@ -4,6 +4,7 @@
 #include "../queue.h"
 #include "../pqueue.h"
 
+namespace graph{
 #define dtype int
 
 class uGraph {
@@ -217,7 +218,7 @@ void printVector(std::vector<int> arr) {
         std::cout<<*i<<" ";
     std::cout<<"\n";
 }
-
+}
 
 
 

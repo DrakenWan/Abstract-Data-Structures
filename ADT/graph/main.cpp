@@ -14,7 +14,7 @@ int main() {
     };
     cout<<aloo.size();
 
-    uGraph g(10);
+    graph::uGraph g(10);
     //g.adjacencyMatrix(aloo);
     /*
         S - 0
@@ -46,30 +46,30 @@ int main() {
     g.addEdge(6, 4, 3);
     g.addEdge(6, 9, 8);
 
-    g.print();
+    //g.print();
     vector<int> nodes = g.nodes();
 
-    cout<<"Nodes of our graph:-\n";
-    printVector(nodes);
+    //cout<<"Nodes of our graph:-\n";
+    //printVector(nodes);
 
     //int idx = 2;
     //int node = nodes[idx];
     //cout<<endl<<node;
     //vector<int> succs = g.returnAdjacentNodes(node);
 
-    //printVector(succs);
+    //graph::printVector(succs);
 
 
     int node_index = 0;
-    cout<<"recursive DFS Traversal from node "<<node_index<<".\n";
-    g.dfs_recursive_main(node_index);
-    cout<<endl;
-    cout<<"DFS Traversal from node "<<node_index<<".\n";
-    g.dfs(node_index);
-    cout<<endl;
-    cout<<"BFS Traversal from node "<<node_index<<".\n";
-    g.bfs(node_index);
-    cout<<endl;
+    // cout<<"recursive DFS Traversal from node "<<node_index<<".\n";
+    // g.dfs_recursive_main(node_index);
+    // cout<<endl;
+    // cout<<"DFS Traversal from node "<<node_index<<".\n";
+    // g.dfs(node_index);
+    // cout<<endl;
+    // cout<<"BFS Traversal from node "<<node_index<<".\n";
+    // g.bfs(node_index);
+    // cout<<endl;
     cout<<"UCS Traversal from node "<<node_index<<".\n";
 
     dtype goal = 9;
@@ -78,7 +78,7 @@ int main() {
 
     cout<<endl<<endl<<"indexing example g["<<node_index<<"] returns adjacent nodes of "<<node_index<<":-\n";
 
-    printVector(g[node_index]);
+    graph::printVector(g[node_index]);
 
     cout<<endl<<"UCS Traversal from node g["<<node_index<<"] to our goal 4.\n";
     g.ucs(node_index, 4);
