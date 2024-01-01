@@ -8,12 +8,7 @@
 
 using namespace std;
 
-// this undirected graph is represented by adjacency matrix; personal choice
-//point to note is that parallel edges cannot be displayed in adjacency matrix representation
 class uGraph {
-
-    /// NOTE: I have incorrectly named 'returnChildNodes' method. This is technically incorrect as
-    ///        in graphs we don't have parent-child relationships. We have adjacency between nodes
 
     int nV; //number of vertices
     vector<vector <int>> adjMat; //adjacency matrix
@@ -60,7 +55,7 @@ class uGraph {
 
     // methods prototype
     vector<int> nodes();
-    vector<int> returnChildNodes(int index); //prototype name Child is not technically correct.
+    vector<int> returnAdjacentNodes(int index); //prototype name Child is not technically correct.
     void bfs(int start);
     void dfs(int start);
     void ucs(int start, dtype goal);
@@ -101,7 +96,7 @@ vector<int> uGraph::nodes() {
 }
 
 //returns a vector of child nodes of a node
-vector<int> uGraph::returnChildNodes(int index) {
+vector<int> uGraph::returnAdjacentNodes(int index) {
     vector<int> nodo;
 
     for(int i = 0; i < this->nV; ++i)
@@ -127,7 +122,7 @@ void uGraph::bfs(int start) {
         int node = q.dequeue();
         cout<<node<<" ";
 
-        for(auto child : this->returnChildNodes(node))
+        for(auto child : this->returnAdjacentNodes(node))
             if(!visited[child])
              {
                 visited[child]=true;
@@ -151,7 +146,7 @@ void uGraph::dfs(int start) {
         int node = s.pop();
         cout<<node<<" ";
 
-        for(auto child : this->returnChildNodes(node))
+        for(auto child : this->returnAdjacentNodes(node))
             if(!visited[child]) {
                 visited[child]=true;
                 s.push(child);
@@ -175,7 +170,7 @@ void uGraph::ucs(int start, dtype goal) {
         pair<dtype, int> node = pq.dequeue();
         cout<<node.first<<" ";
 
-        for(auto child : this->returnChildNodes(node.first)) {
+        for(auto child : this->returnAdjacentNodes(node.first)) {
             if(child == goal) {
                 cout<<"\nFound goal "<<goal<<" at cost "<<node.second + this->adjMat[node.first][child];
                 return;
@@ -219,7 +214,7 @@ void uGraph::dfs_recursive_main(dtype node) {
 void uGraph::dfs_recursive(int node, vector<bool> &visited) {
     visited[node] = true;
     cout<<node<<" ";
-    vector<dtype> neighbs = this->returnChildNodes(node);
+    vector<dtype> neighbs = this->returnAdjacentNodes(node);
 
     for(auto &i : neighbs)
         if(visited[i] == 0)
@@ -288,7 +283,7 @@ int main() {
     //int idx = 2;
     //int node = nodes[idx];
     //cout<<endl<<node;
-    //vector<int> succs = g.returnChildNodes(node);
+    //vector<int> succs = g.returnAdjacentNodes(node);
 
     //printVector(succs);
 

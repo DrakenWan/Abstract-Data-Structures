@@ -16,7 +16,7 @@ the set of vertices V
 
 4.  Directed graph has edges with direction. 
     Illustration1-
-    !https://media.geeksforgeeks.org/wp-content/uploads/20200630114438/directed.jpg
+    ![123](https://media.geeksforgeeks.org/wp-content/uploads/20200630114438/directed.jpg)
 
 5.  Connected Graph is one in which from one node we can
     visit any other node in the graph
