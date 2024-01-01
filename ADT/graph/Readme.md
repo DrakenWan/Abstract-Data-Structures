@@ -5,6 +5,9 @@
 G(E, V) where E is set of edges connecting 
 the set of vertices V
 
+[graph.h](./graph.h) has all the functionalities of an `undirected graph` as of now. Slowly the whole graph folder will be expanded. Checkout [main.cpp](./main.cpp) driver file to test an example undirected graph. Below is the illustration of our example graph used:-
+
+![exampleGraph](exampleGraph.png)
 
 ## TYPES
 

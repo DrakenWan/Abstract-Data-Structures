@@ -79,5 +79,9 @@ int main() {
     cout<<endl<<endl<<"indexing example g["<<node_index<<"] returns adjacent nodes of "<<node_index<<":-\n";
 
     printVector(g[node_index]);
+
+    cout<<endl<<"UCS Traversal from node g["<<node_index<<"] to our goal 4.\n";
+    g.ucs(node_index, 4);
+    cout<<endl;
     return 0;
 }

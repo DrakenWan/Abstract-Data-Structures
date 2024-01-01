@@ -60,8 +60,6 @@ class uGraph {
     void dfs_recursive_main(dtype start);
     void dfs_recursive(dtype node, std::vector<bool> &visited);
 
-    
-
     std::vector<int> operator[](dtype index);
 };
 
@@ -196,7 +194,6 @@ void uGraph::addEdge(int v, int w, int cost){
     
 }
 
-
 //recursive dfs main function
 void uGraph::dfs_recursive_main(dtype node) {
     std::vector<bool> visited;
@@ -204,7 +201,6 @@ void uGraph::dfs_recursive_main(dtype node) {
     
     this->dfs_recursive(node, visited);
 }
-
 
 void uGraph::dfs_recursive(int node, std::vector<bool> &visited) {
     visited[node] = true;
@@ -216,7 +212,6 @@ void uGraph::dfs_recursive(int node, std::vector<bool> &visited) {
             this->dfs_recursive(i, visited);
 }
 
-//////// 
 void printVector(std::vector<int> arr) {
     for(auto i=arr.begin(); i!=arr.end(); ++i)
         std::cout<<*i<<" ";
