@@ -1,34 +1,30 @@
 #pragma once
 #include<vector>
+#include<stdexcept>
 #include "../stack.h"
 #include "../queue.h"
 #include "../pqueue.h"
 
 namespace graph{
-#define dtype int
 
 class uGraph {
 
-    int nV; //number of vertices
-    std::vector<std::vector <int>> adjMat; //adjacency matrix
-    
-    //void bfs(int); //takes the value of start node
+    int nV;
+    std::vector<std::vector <int>> adjMat; 
 
     public:
     uGraph() {
         std::cout<<"\nNull graph.";
     }
 
-    uGraph(int vertices) {
-        this->nV = vertices;
+    uGraph(int vertices) : nV(vertices){
         this->adjMat.resize(nV, std::vector<int>(nV));
         //std::cout<<"\nGraph created.";
     }
 
     void adjacencyMatrix(std::vector<std::vector <int>> matrix, int nv = -1) {
-        
         if (matrix.size() != this->nV && nv == -1){
-            std::cout<<"\nError. Adjacency matrix not the same size as number of vertices given.";
+            throw std::invalid_argument("Adjacency matrix not the same size as number of vertices given.");
             return;
         }
 
@@ -51,27 +47,27 @@ class uGraph {
 
     // methods prototype
     std::vector<int> nodes();
-    std::vector<int> returnAdjacentNodes(int index); //prototype name Child is not technically correct.
+    std::vector<int> const returnAdjacentNodes(int index);
     void bfs(int start);
     void dfs(int start);
-    void ucs(int start, dtype goal);
+    void ucs(int start, int goal);
 
     void addEdge(int v, int w, int cost=1); //by default cost is 1 if not set
 
-    void dfs_recursive_main(dtype start);
-    void dfs_recursive(dtype node, std::vector<bool> &visited);
+    void dfs_recursive_main(int start);
+    void dfs_recursive(int node, std::vector<bool> &visited);
 
-    std::vector<int> operator[](dtype index);
+    std::vector<int> operator[](int index);
 };
 
 //
-std::vector<int> uGraph::operator[](dtype index) {
+std::vector<int> uGraph::operator[](int index) {
     if(index > this->nV) {
         std::cout<<"Error: vertex not present in graph.";
         exit(0);
     }
 
-    std::vector<dtype> disp;
+    std::vector<int> disp;
     for(auto i = 0; i < this->adjMat[index].size(); i++)
         if(this->adjMat[index][i] != 0)
             disp.push_back(i);
@@ -90,7 +86,7 @@ std::vector<int> uGraph::nodes() {
 }
 
 //returns a std::vector of child nodes of a node
-std::vector<int> uGraph::returnAdjacentNodes(int index) {
+std::vector<int> const uGraph::returnAdjacentNodes(int index) {
     std::vector<int> nodo;
 
     for(int i = 0; i < this->nV; ++i)
@@ -104,7 +100,7 @@ void uGraph::bfs(int start) {
     std::vector<bool> visited;
     visited.resize(this->nV, false);
 
-    queue<dtype> q; //queue for our nodes
+    queue<int> q; //queue for our nodes
 
     //pushing start node of graph into visited nodelist
     visited[start] = true;
@@ -130,7 +126,7 @@ void uGraph::dfs(int start) {
     std::vector<bool> visited;
     visited.resize(this->nV, false);
 
-    stack<dtype> s; //stack for our nodes
+    stack<int> s; //stack for our nodes
 
     //push starting node into stack
     visited[start] = true;
@@ -148,12 +144,12 @@ void uGraph::dfs(int start) {
     }
 }
 
-void uGraph::ucs(int start, dtype goal) {
+void uGraph::ucs(int start, int goal) {
     std::vector<bool> visited;
     visited.resize(this->nV, false);
 
     pqueue pq;
-    std::pair<dtype, int> startNode;
+    std::pair<int, int> startNode;
     startNode.first = start;
     startNode.second = 0; //arbitrary number = 0
 
@@ -161,7 +157,7 @@ void uGraph::ucs(int start, dtype goal) {
     pq.enqueue(startNode);
 
     while(!pq.isEmpty()) {
-        std::pair<dtype, int> node = pq.dequeue();
+        std::pair<int, int> node = pq.dequeue();
         std::cout<<node.first<<" ";
 
         for(auto child : this->returnAdjacentNodes(node.first)) {
@@ -171,7 +167,7 @@ void uGraph::ucs(int start, dtype goal) {
             }
             if(!visited[child]) {
                 visited[child] = true;
-                std::pair <dtype, int> childNode;
+                std::pair <int, int> childNode;
                 childNode.first = child;
                 childNode.second =  node.second + this->adjMat[node.first][child];
 
@@ -196,7 +192,7 @@ void uGraph::addEdge(int v, int w, int cost){
 }
 
 //recursive dfs main function
-void uGraph::dfs_recursive_main(dtype node) {
+void uGraph::dfs_recursive_main(int node) {
     std::vector<bool> visited;
     visited.resize(this->nV, false);
     
@@ -206,7 +202,7 @@ void uGraph::dfs_recursive_main(dtype node) {
 void uGraph::dfs_recursive(int node, std::vector<bool> &visited) {
     visited[node] = true;
     std::cout<<node<<" ";
-    std::vector<dtype> neighbs = this->returnAdjacentNodes(node);
+    std::vector<int> neighbs = this->returnAdjacentNodes(node);
 
     for(auto &i : neighbs)
         if(visited[i] == 0)

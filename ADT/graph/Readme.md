@@ -59,7 +59,7 @@ Found goal 4 at cost 2
 5.  **Connected Graph** is one in which from one node we can
     visit any other node in the graph
 
-6. **Disconnected graph**: You guessed it! Atleast one node has to
+6. **Disconnected graph**: Atleast one node has to
     be not reachable from a node
 
     ![124](https://media.geeksforgeeks.org/wp-content/uploads/20200630121400/connected1.jpg)
@@ -101,6 +101,8 @@ W
 
 
 ![130](https://media.geeksforgeeks.org/wp-content/uploads/20200630123458/tree_vs_graph.jpg)
+
+![131](./graphVStree.png)
 
 ## Representation of Graphs
 There are two ways to store a graph:-
