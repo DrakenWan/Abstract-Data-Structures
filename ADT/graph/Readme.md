@@ -78,9 +78,9 @@ This will give output:- &nbsp;
     ![125](https://media.geeksforgeeks.org/wp-content/uploads/20200630122008/regular.jpg)
 
 9.  **Cycle Graph**: graph is a cycle in itself. Degree of each vertex is 2.
-10. **Cyclice Graph**: A graph containing atleast one cycle
+10. **Cyclic Graph**: A graph containing atleast one cycle
 
-    ![126](https://media.geeksforgeeks.org/wp-content/uploads/20200630122225W/cyclic.jpg)
+    ![126](https://media.geeksforgeeks.org/wp-content/uploads/20230306153646/cyclic-graphdrawio.png)
 
 11. **Directed Acyclic Graph**: A directed graph that does not co-
     ntain any cycle
