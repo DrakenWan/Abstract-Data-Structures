@@ -11,7 +11,14 @@ Below few headings will cover some basic topics about graphs that I have learnt.
 
 ## Graph Example
 
-[graph.h](./graph.h) has all the functionalities of an `undirected graph` as of now. Slowly the whole graph folder will be expanded. Checkout [main.cpp](./main.cpp) driver file to test an example undirected graph. Below is the illustration of our example graph used:-
+[ugraph.h](./ugraph.h) has all the functionalities of an `undirected graph` as of now. Slowly the whole graph folder will be expanded. Checkout [main.cpp](./main.cpp) driver file to test an example undirected graph.
+
+All classes defined in graph folder come under `graph` namespace.
+### Files
+* **[ugraph.h](./ugraph.h)** - undirected graph class
+* **[digraph.h](./digraph.h)** - directed graph class
+
+ Below is the illustration of our example graph used in main.cpp:-
 
 ![exampleGraph](exampleGraph.png)
 
@@ -144,8 +151,7 @@ Initialize    |  O(N*N)      | O(N)
 
 ## Usage of Graphs
 
-- Maps can be respresented using graphs. Use search algo on
-them to find shortest route, etc.
+- Maps can be respresented using graphs. Use search algo on them to find shortest route, etc.
 - When various tasks depend on each other. This scenario can be represented using a directed acyclic graph. Topological sort helps find order in which tasks can be done.
 - State Transition Diagram
 

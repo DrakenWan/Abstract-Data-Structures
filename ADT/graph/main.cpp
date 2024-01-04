@@ -1,6 +1,6 @@
 #include<iostream>
 #include<vector>
-#include "./graph.h"
+#include "./ugraph.h"
 
 using namespace std;
 
@@ -51,7 +51,7 @@ int main() {
     // cout<<endl;
     cout<<"UCS Traversal from node "<<node_index<<".\n";
 
-    dtype goal = 9;
+    int goal = 9;
     g.ucs(node_index, goal);
     cout<<endl<<"UCS Traversal from node g["<<node_index<<"] to our goal 4.\n";
     g.ucs(node_index, 4);
