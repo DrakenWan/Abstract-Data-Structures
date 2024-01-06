@@ -39,6 +39,20 @@ class diGraph {
                 std::cout<<"\n";
             }
         }
+
+        void addEdge(int, int, int cost=1);
 };
 
+
+void diGraph::addEdge(int v, int w, int cost){
+
+    if( v < this->nV && w < this->nV)
+    {
+        this->adjMat[v][w] = cost;
+    }
+    else {
+        std::cout<<"Bad vertex. Recheck. Exiting program.";
+        exit(0);
+    }
+}
 } //graph namespace

@@ -10,7 +10,13 @@ int main () {
                                   {0,1,0,1},
                                   {1,0,1,0}};
     graph::diGraph g(4);
-    g.adjacencyMatrix(matrix);
+    
+    g.addEdge(0,1);
+    g.addEdge(1,2);
+    g.addEdge(2,3);
+    g.addEdge(3,0);
+
+    //g.adjacencyMatrix(matrix);
 
     g.print();
     return 0;
