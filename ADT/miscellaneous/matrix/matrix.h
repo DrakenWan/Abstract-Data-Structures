@@ -275,12 +275,18 @@ class matrix {
         bool loadMatrix(const std::string&);
 };
 
-// function declarations for some outside class functions
+// Some function declarations useful for our matrix library
 template<typename DATA>
 matrix<DATA> eye(int);
 
 template<typename DATA>
 matrix<DATA> diagonal(int, DATA);
+
+template<typename DATA>
+bool is_triangular(matrix<DATA>&);
+
+//  USEFUL util functions for matrix library ///
+
 
 ///// Swap functions /////
 template<typename DATA>
@@ -1135,6 +1141,24 @@ matrix<DATA> eye(int n) {
 
     return m;
 }
+
+/// is triangular?
+template<typename DATA>
+bool is_triangular(matrix<DATA>& M) {
+    // machine precision
+    double eps_mech = 0.000000001;
+
+    for(int i=1; i != M.rows(); i++) {
+        for(int j=0; j!= i; j++)
+         {
+            if(abs(M(i,j)) > eps_mech)
+                return false;
+         }
+    }
+
+    return true;
+}
+
 } //linear namespace
 
 template<typename DATA>

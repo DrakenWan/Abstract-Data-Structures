@@ -151,7 +151,7 @@ void uGraph::ucs(int start, int goal) {
     pqueue pq;
     std::pair<int, int> startNode;
     startNode.first = start;
-    startNode.second = 0; //arbitrary number = 0
+    startNode.second = 0; //arbitrary number = 0 // can put anything here cuz it's the start node and it will be dequeued first.
 
     visited[start] = true;
     pq.enqueue(startNode);

@@ -39,7 +39,6 @@ class diGraph {
                 std::cout<<"\n";
             }
         }
-
         void addEdge(int, int, int cost=1);
 };
 
@@ -51,8 +50,7 @@ void diGraph::addEdge(int v, int w, int cost){
         this->adjMat[v][w] = cost;
     }
     else {
-        std::cout<<"Bad vertex. Recheck. Exiting program.";
-        exit(0);
+        throw std::invalid_argument("Wrong node/vertex value.");
     }
 }
 } //graph namespace
