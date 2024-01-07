@@ -248,4 +248,4 @@ Name is self-explanatory. It has attributes:-
 ## MATRIX
 
 Matrix linear library. Still in works. 
-(./matrix/Readme.md)[Readme for guidance]
+[./matrix/Readme.md](Readme for guidance)
