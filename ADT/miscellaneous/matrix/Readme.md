@@ -1,6 +1,7 @@
 # Matrix linear library
 A matrix data structure. I am still building it up. It makes use of a single pointer array on which matrix values are placed in row major form. It has three members: val (which holds the values of matrix), row (number of rows) and col (number of columns).
 
+I will keep updating this part as well but I have borrowed this matrix data structure for my linear algebra repo - [Matrix](https://github.com/DrakenWan/Matrix)
 
 
 The matrix operations currently implemented so far:-
