@@ -90,9 +90,9 @@ int main() {
     deAlloc(flarray);
 
     if(linear::is_triangular(trian))
-        cout<<"\nIt is diagonal.";
+        cout<<"\nIt is triangular.";
     else
-        cout<<"\nIt aint diagonal.";
+        cout<<"\nIt aint triangular.";
 
     return 0;   
 }
