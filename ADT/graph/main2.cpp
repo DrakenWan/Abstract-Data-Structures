@@ -1,5 +1,6 @@
 #include<iostream>
 #include "./digraph.h"
+#define CHANGE_ID_TO_STRING(x) (#x)
 
 using namespace std;
 
@@ -19,5 +20,10 @@ int main () {
     //g.adjacencyMatrix(matrix);
 
     g.print();
+    cout<<endl;
+
+    std::string var = CHANGE_ID_TO_STRING(matrix);
+
+    cout<<var;
     return 0;
 }
