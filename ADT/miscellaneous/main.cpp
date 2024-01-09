@@ -1,6 +1,6 @@
 #include<iostream>
-#include "String.h"
-//#include "./point.h"
+//#include "String.h"
+#include "./point.h"
 //#include "./matrix.h"
 
 using namespace std;
@@ -10,15 +10,15 @@ int main() {
 
     //// experiments ////
     
-    String sentence = "hello i am new to this field.";
-    cout<<endl;
-    std::cout<<sentence.capitalize()<<endl;
-    std::cout<<sentence.upper()<<endl;
-    std::cout<<sentence.lower()<<endl;
+    // String sentence = "hello i am new to this field.";
+    // cout<<endl;
+    // std::cout<<sentence.capitalize()<<endl;
+    // std::cout<<sentence.upper()<<endl;
+    // std::cout<<sentence.lower()<<endl;
 
-    std::cout<<sentence.startsWith('h'); // outputs - 1
-    std::cout<<sentence.endsWith('.'); //outputs - 1
-    //// experimends ////
+    // std::cout<<sentence.startsWith('h'); // outputs - 1
+    // std::cout<<sentence.endsWith('.'); //outputs - 1
+    // //// experimends ////
 
     // int *array;
     // int N = 4;
