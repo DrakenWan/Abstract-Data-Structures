@@ -50,7 +50,7 @@ int main() {
     invB.display();
 
     linear::eye<float>(5).display();
-    linear::diagonal<float>(3, 5.3).display();
+    linear::diagonal<float>(3, 5.3).display("Diagonal:-");
     // int R=5, C=5;
 
     // linear::matrix<float> A;

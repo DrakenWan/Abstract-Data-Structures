@@ -1,22 +1,34 @@
+#ifndef MATRIX_H
+#define MATRIX_H
+
 #include<iostream>
-#include<omp.h>
+#include<omp.h> // for matrix multiplication speedup.
 #include<stdexcept>
-
-// I/O with File
 #include<fstream>
-
-//extra imports for utility
 #include<random>
+#include<limits>
+#include<type_traits>
 
 namespace linear{
 // macros for deallocation
 #define deAlloc(x) delete[] x; x = NULL;
 
-//path
+//path macros
 #define SAVEPATH "matrixSaves/"
 #define F_EXT ".trix"
 
+//stringify variable name MACRO
+#define CHANGE_ID_TO_STRING(x) (#x)
 
+
+struct range {
+  int start;
+  int end;
+  int length;
+
+  range(int x, int y) : start(x), end(y), length(end-start) {} 
+  const int size() {return end - start;}
+};
 
 template<typename DATA>
 class matrix {
@@ -33,8 +45,7 @@ class matrix {
 
         Note: 
             1.  memory is dynamically allocated for the `val` 
-                member variable.  It's lifetime is until 
-                the object instance of `matrix` defining it is alive.
+                member variable.
             2.  This class object makes use of openMP paralleisation to 
                 take advantage of parallel computing in some operations
                 such as matrix multiplication.
@@ -91,7 +102,12 @@ class matrix {
     void gaussianElimination(matrix<DATA>&, int, int);
 
     /// Gaussian Elimination ends here ///
+    
 
+    /// Full Pivoting private method ///
+    void pickPivotFullPivoting(int, int&, int&);
+
+    /////// FULL PIVOTING ENDS //////
 
     public:
         // Getting matrix dimensions /////
@@ -109,6 +125,8 @@ class matrix {
 
         int rows() const {return this->row;}
         int cols() const {return this->col;}
+
+
         ///// get mat dims end //////
 
         // initialize empty matrix
@@ -156,12 +174,22 @@ class matrix {
         }
 
 
+        // initialize using a 2d std::vector 
+        matrix(std::vector<std::vector<DATA>> data) {
+            this->row = data.size();
+            this->col = data[0].size();
+
+            getMemoryforVal(this->row, this->col);
+            for(int i=0; i<this->row; i++)
+                for(int j=0; j<this->col; j++)
+                    *(val + i*(this->col) + j) = data[i][j];
+        }
+
         //copy constructor
         matrix(const matrix<DATA> &m) {
             this->row = m.row;
             this->col = m.col;
 
-            this->delMemoryforVal();
             this->getMemoryforVal(this->row, this->col);
 
             for(int i=0; i<this->row; i++)
@@ -179,7 +207,7 @@ class matrix {
         void updateWithArray(DATA*, int, int);
 
         // display contents in a 2d grid form
-        void display();
+        void display(const std::string msg="Matrix:-");
         
         ~matrix() {
             delete[] val;
@@ -208,6 +236,11 @@ class matrix {
                 remove old data and reallocate
                 memory for new data.
                 with caution.
+
+                This is different than the reshape function.
+                Reshape function does not delete the values 
+                of original matrix. Infact it creates a new 
+                matrix which it returns.
             */
 
            //resetting rows and cols
@@ -218,6 +251,9 @@ class matrix {
            this->delMemoryforVal();
            this->getMemoryforVal(r, c);
         }
+        
+        //reshape function
+        matrix<DATA> reshape(int newRow, int newCol);
 
         //transpose operation explicit method
         matrix<DATA> transpose();
@@ -225,6 +261,7 @@ class matrix {
 
         // sliceu!
         matrix<DATA> slice(int, int, int, int);
+        matrix<DATA> operator()(range, range);
 
         // raise each element to an integer power
         matrix<DATA> operator^(int);
@@ -265,17 +302,24 @@ class matrix {
         // solve Ax = b
         matrix<DATA> solve(const matrix<DATA>&); //experimental
 
+        // get determinant
+        double det(bool fullPivot=false);
+        double determinant(bool fullPivot=false) {
+            return this->det(fullPivot);
+        }
+
         /// QUERY methods
         bool isSquare() { if(this->col == this->row) return true; else return false;}
         bool isSymmetric();
         DATA item();
+        bool isComparable(const matrix<DATA>&);
 
         /// File operations I/O
         bool saveMatrix(const std::string&);
         bool loadMatrix(const std::string&);
 };
 
-// Some function declarations useful for our matrix library
+//// USEFUL operations for matrix library ///
 template<typename DATA>
 matrix<DATA> eye(int);
 
@@ -285,8 +329,39 @@ matrix<DATA> diagonal(int, DATA);
 template<typename DATA>
 bool is_triangular(matrix<DATA>&);
 
-//  USEFUL util functions for matrix library ///
 
+/// Reshape function
+template<typename DATA>
+matrix<DATA> matrix<DATA>::reshape(int newRow, int newCol) {
+    if(newRow * newCol != (this->cols())*(this->rows())){
+        throw std::invalid_argument("The product of dimensions do not match the product of dimensions of the given matrix.");
+    }
+
+    matrix<DATA> reshapedMatrix(newRow, newCol);
+
+    for(int i=0; i< ((this->cols()) * (this->rows())); i++ ) {
+        reshapedMatrix(i/newCol, i%newCol) = val[i];
+    }
+
+    return reshapedMatrix;
+}
+
+
+//// Full Pivoting private method definition
+template<typename DATA>
+void matrix<DATA>::pickPivotFullPivoting(int startRow, int& pivotRow, int& pivotCol) {
+    pivotRow = startRow;
+    pivotCol = startRow;
+
+    for(int i=startRow; i<this->rows(); i++) {
+        for(int j=startRow; j<this->cols(); j++) {
+            if( abs(val[i*(this->cols()) + j]) > abs(val[pivotRow * (this->cols()) + pivotCol]) ) {
+                pivotRow = i;
+                pivotCol = j;
+            } 
+        }
+    }
+}
 
 ///// Swap functions /////
 template<typename DATA>
@@ -697,6 +772,13 @@ matrix<DATA> matrix<DATA>::argmax(int dim) {
 /////// AGGREGATE FUNCTIONS END ////////////
 
 //// QUERY METHOD DEFINITIONS ////
+template<typename DATA>
+bool matrix<DATA>::isComparable(const matrix<DATA>& m) {
+    if(this->rows() == m.rows() && this->cols() == m.cols()) {
+        return true;
+    }
+    return false;
+}
 
 template<typename DATA>
 bool matrix<DATA>::isSymmetric() {
@@ -798,11 +880,103 @@ matrix<DATA> matrix<DATA>::inv() {
     return inverse;
 }
 
+// get determinant
+template<typename DATA>
+double matrix<DATA>::det(bool fullPivot) {
+    // check that matrix is square
+    if(!isSquare()) {
+        throw std::domain_error("Determinant not defined for non-square matrices.");
+    }
+
+    // get dimensions
+    matrix<int> dims = this->getDims();
+    int n = dims(0,0); //rows
+    int m = dims(0,1); //cols
+    
+    matrix<DATA> this_copy(this->val, n, m); //copy of this
+    double detValue = 1.0;
+    double sign = 1;
+
+    
+    if(fullPivot) {
+        for(int i=0; i<n-1; i++) {
+            // find pivot and perform full pivoting
+            int pivotRow, pivotCol;
+            this_copy.pickPivotFullPivoting(i, pivotRow, pivotCol);
+
+            // swap rows and cols
+            if(pivotRow != i) {
+                this_copy.swapRows(i, pivotRow);
+                sign *= -1; //row swap causes sign change
+            }
+
+            if(pivotCol != i) {
+                this_copy.swapCols(i, pivotCol);
+                sign *= -1; // col swap causes sign change
+            }
+
+            double pivot = this_copy(i,i);
+            if(abs(pivot) == 0.) {
+                return 0.; // singular!
+            }       
+
+            
+            for(int k=i+1; k<n; k++) {
+                double factor = this_copy(k,i) / pivot;
+                
+                for(int j=i; j<n; j++) {
+                    this_copy(k, j) -= factor * this_copy(i, j);
+                }
+            }
+            detValue *= pivot; //multiply detValue by pivot value 
+    }
+
+    detValue *= this_copy(n-1, n-1);
+    detValue *= sign;     //finally implement the sign into it
+    } else { //partial pivoting
+
+        for(int i=0; i< n-1; i++) {
+            int pivotIdx=i;
+            double maxVal = abs(this_copy(i,i));
+            for(int k=i+1; k<n; k++) {
+                double val = abs(this_copy(k,i));
+                if(val > maxVal)
+                {
+                    pivotIdx = k;
+                    maxVal = val;
+                }
+            }
+            if(pivotIdx != i) {
+                this_copy.swapRows(i,pivotIdx);
+                sign *= -1;
+            }
+
+            // row operations that will turn it to UTM
+            double pivot = this_copy(i,i);
+            if(abs(pivot) == 0.)
+                return 0.;
+            
+            for(int k=i+1; k<n; k++) {
+                double factor = this_copy(k,i) / pivot;
+                for(int j=i; j<n; j++)
+                    this_copy(k,j) -= factor * this_copy(i,j);
+            }
+
+            detValue *= pivot;
+        }
+
+        detValue *= this_copy(n-1,n-1);
+        detValue *= sign;
+    } //partial pivoting ends here
+
+    
+    return detValue;
+}
 
 template<typename DATA>
 bool matrix<DATA>::operator==(matrix const& m) {
     
-    if(row == m.row && col == m.col) {
+    if(this->isComparable(m)) {
         bool equal = true;
         for(int i=0; i<row*col; i++)
             {
@@ -834,17 +1008,28 @@ matrix<DATA> matrix<DATA>::operator^(int pow) {
             it would come to dealing with floats using this operation
             it might lead to cases where the data is lost.
     */
-    matrix<int> m(this->row, this->col);
+    matrix<DATA> m(this->row, this->col);
 
-    for(int i=0; i<(m.row*m.col); i++) {
-        int prod=1;
+    for(int i=0; i<m.rows(); i++) {
+        for(int j=0; j<m.cols(); j++) {
+            DATA prod=1.;
 
-        //exponent logic using loop
-        for(int j=0; j<pow; j++)
-            prod *= *(val + i);
-        
-        *(m.val + i) = prod;
+            for(int k=0; k<pow; k++)
+                prod *= *(val + i*(this->col) + j);
+
+            m(i,j) = prod;
+        }
     }
+
+    // for(int i=0; i<(m.rows()*m.cols()); i++) {
+    //     int prod=1;
+
+    //     //exponent logic using loop
+    //     for(int j=0; j<pow; j++)
+    //         prod *= *(val + i);
+        
+    //     *(m.val + i) = prod;
+    // }
 
     return m;
 }
@@ -904,6 +1089,11 @@ DATA& matrix<DATA>::operator()(int r, int c)  {
 
 
 // slicing operations
+template<typename DATA>
+matrix<DATA> matrix<DATA>::operator()(range rowRange, range colRange) {
+    return this->slice(rowRange.start, rowRange.end, colRange.start, colRange.end);
+}
+
 template<typename DATA>
 matrix<DATA> matrix<DATA>::slice(int x_0, int y_0, int x_1, int y_1) {
     /*
@@ -971,7 +1161,7 @@ matrix<DATA> matrix<DATA>::transpose() {
 
 template<typename DATA>
 matrix<DATA> matrix<DATA>::operator+(matrix const& obj) {
-    if(this->row == obj.row && this->col == obj.col) {
+    if(this->isComparable(obj)) {
         matrix<DATA> m(obj.row, obj.col);
         // addition and insertion in row major form.
         for(int i=0; i<m.row; i++)
@@ -988,7 +1178,7 @@ matrix<DATA> matrix<DATA>::operator+(matrix const& obj) {
 template<typename DATA>
 matrix<DATA> matrix<DATA>::operator-(matrix const& obj) {
 
-        if(this->row == obj.row && this->col == obj.col) {
+        if(this->isComparable(obj)) {
             matrix<DATA> m(obj.row, obj.col);
             // subtraction and insertion in row major form.
             for(int i=0; i<m.row; i++)
@@ -1037,9 +1227,10 @@ void matrix<DATA>::updateWithArray(DATA* array, int r, int c) {
 }
 
 template<typename DATA>
-void matrix<DATA>::display()  {
+void matrix<DATA>::display(const std::string msg)  {
     int i,j;
-    std::cout<<"\nMatrix:-\n";
+    std::cout<<'\n'<<msg<<'\n';
+    //std::cout<<"\nMatrix:-\n";
     for(i=0; i<this->row; i++) {
         for(j=0; j<this->col; j++)
             std::cout<<*(val + (this->col)*i + j )<<" ";
@@ -1108,6 +1299,7 @@ bool matrix<DATA>::loadMatrix(const std::string& filename) {
 ///// FILE OPERATIONS ON MATRIX END HERE ////
 
 
+// Diagonal Matrix generator
 template<typename DATA>
 matrix<DATA> diagonal(int n, DATA value) {
     matrix<DATA> m(n);
@@ -1125,7 +1317,7 @@ matrix<DATA> diagonal(int n, DATA value) {
 }
 
 
-//// identity matrix
+// Identity matrix of size n
 template<typename DATA>
 matrix<DATA> eye(int n) {
     matrix<DATA> m(n);
@@ -1142,21 +1334,39 @@ matrix<DATA> eye(int n) {
     return m;
 }
 
-/// is triangular?
+// Is it triangular?
 template<typename DATA>
 bool is_triangular(matrix<DATA>& M) {
-    // machine precision
-    double eps_mech = 0.000000001;
+    matrix<int> dims = M.getDims();
+    int n = dims(0, 0);
+    int m = dims(0, 1);
 
-    for(int i=1; i != M.rows(); i++) {
-        for(int j=0; j!= i; j++)
-         {
-            if(abs(M(i,j)) > eps_mech)
-                return false;
-         }
-    }
+    // machine epsilon
+    DATA epsilon = std::numeric_limits<DATA>::epsilon();
 
-    return true;
+    bool upper=true, lower=true;
+
+    //check upper triangular
+    for(int i=1; i<n; i++) {
+        for(int j=0; j<i && j<m; j++) {
+            if(std::abs(M(i,j)) > epsilon) {
+                upper = false;
+                break;
+            }
+        }
+    } // upper triangular
+
+    //check lower triangular
+    for(int i=0; i<n; i++) {
+        for(int j=i+1; j<m; j++) {
+            if( std::abs(M(i,j)) > epsilon ) {
+                lower = false;
+                break;
+            }
+        }
+    } // lower triangular
+
+    return (upper || lower);
 }
 
 } //linear namespace
@@ -1173,19 +1383,36 @@ void init2dArray(DATA *array, int size_0, int size_1) {
             std::cin>>*(array + i*size_1 + j);
 }
 
-
-void init2dRandArray(int *array, int size_0, int size_1) {
+void init2dRandArray(int *array, int size_0, int size_1, int start=0, int end=9) {
     /*
      UTIL FUNCTION
         Flattened 2d array in row major form will be initialised using a
         uniform integer distribution.
     */
 
-   std::cout<<"\nInitializing our random 2d integer array";
-   std::default_random_engine generator;
-   std::uniform_int_distribution<int> distribution(0, 9);
-
-   for(int i=0; i<size_0; i++)
-    for(int j=0; j<size_1; j++)
-        *(array + i*size_1 + j) = distribution(generator);
+    //std::cout<<"\nInitializing our random 2d integer array";
+    std::default_random_engine generator;
+   
+    std::uniform_int_distribution<int> distribution(start, end);
+    for (int i = 0; i < size_0; i++)
+        for (int j = 0; j < size_1; j++)
+            *(array + i * size_1 + j) = distribution(generator);
 }
+
+void init2dRandArray(float *array, int size_0, int size_1, float start=0., float end=1.) {
+    std::default_random_engine generator;
+    std::uniform_real_distribution<float> distribution(start, end);
+    for (int i = 0; i < size_0; i++)
+        for (int j = 0; j < size_1; j++)
+            *(array + i * size_1 + j) = distribution(generator);
+}
+
+void init2dRandArray(double *array, int size_0, int size_1, double start=0., double end=1.) {
+    std::default_random_engine generator;
+    std::uniform_real_distribution<double> distribution(start, end);
+    for (int i = 0; i < size_0; i++)
+        for (int j = 0; j < size_1; j++)
+            *(array + i * size_1 + j) = distribution(generator);
+}
+
+#endif // MATRIX_H
