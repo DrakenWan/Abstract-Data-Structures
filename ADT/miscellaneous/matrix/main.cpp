@@ -51,17 +51,7 @@ int main() {
 
     linear::eye<float>(5).display();
     linear::diagonal<float>(3, 5.3).display("Diagonal:-");
-    // int R=5, C=5;
-
-    // linear::matrix<float> A;
-    // A.loadMatrix("matrixD");
-
-    // A.display();
     
-    // linear::matrix<float> B;
-    // B.loadMatrix("matrixD");
-
-    // B.inv().display();
 
     std::cout<<"\n\nMatrix solve Ax= b\n\n";
     N=3;
