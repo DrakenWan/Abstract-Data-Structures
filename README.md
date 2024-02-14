@@ -21,6 +21,8 @@ Data structures that serve a specific purpose. For example, I have defined a `ma
 ## Updates
 
 I will post updates here from this commit onwards.
+* timestamp - 1402240328 - I have turned [pqueue](./ADT/pqueue.h) data structure into a templated one for more general sense. Although in the [uGraph](./ADT/graph/ugraph.h), I have not generalized the graph to templated one yet. It uses integer vector of nodes. I am thinking of accomplishing the generalization task of the uGraph and the other diGraph using a vector of pairs to map an object instance of a node to it's unique non-negative integer index to accomodate into the adjacencyMatrix format that I am using.
+
 * timestamp - 11212022 - I have implemented the pqueue dequeue method. I am not sure of its working however. I am checking from left first and then swapping immediately. This looks like a DFS approach. I might implement to look for the smallest element at the entire level and then make the swap.
 
 * timestamp-11162022 - I am currently working on implementing a priority queue DS. The idea is to make it viable to use for our search algorithms such as UCS or A*. I am committing some progress on this DS but one of the functions in the pqueue DS is wrongly implemented and won't give any results

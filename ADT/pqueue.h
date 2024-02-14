@@ -1,15 +1,15 @@
 #pragma once
 #include<iostream>
 #include<vector>
-#define dtype int
-#define dtype_smpl 0 //give a sample dtype value here for reference
+
 
 
 
 // min heap representation used
+template<typename S>
 class pqueue {
-        std::vector< std::pair<dtype, int> > data;
-        void swap(std::pair<dtype, int>&, std::pair<dtype, int>&);
+        std::vector< std::pair<S, int> > data;
+        void swap(std::pair<S, int>&, std::pair<S, int>&);
 
     public:
         bool isEmpty() {
@@ -17,22 +17,24 @@ class pqueue {
             return false;
         }
 
-        void enqueue(std::pair<dtype, int>);
-        std::pair<dtype, int> dequeue(bool verbose=false);
-        std::pair<dtype, int> peek();
+        void enqueue(std::pair<S, int>);
+        std::pair<S, int> dequeue(bool verbose=false);
+        std::pair<S, int> peek();
         void print();
 };
 
-std::pair<dtype, int> pqueue::peek() {
+template<typename S>
+std::pair<S, int> pqueue<S>::peek() {
     if(this->data.size() == 0) {
         std::cout<<"Pqueue is empty.";
-        std::pair<dtype, int> s(dtype_smpl,0); //not a generalized value returned //change it later
+        std::pair<S, int> s(S(),0); //not a generalized value returned //change it later
         return s;
     }
     return this->data[0];
 }
 
-void pqueue::enqueue(std::pair<dtype, int> value) {
+template<typename S>
+void pqueue<S>::enqueue(std::pair<S, int> value) {
     // insert at the end
     this->data.push_back(value);
 
@@ -50,12 +52,13 @@ void pqueue::enqueue(std::pair<dtype, int> value) {
      }
 }
 
-std::pair<dtype, int> pqueue::dequeue(bool verbose) {
+template<typename S>
+std::pair<S, int> pqueue<S>::dequeue(bool verbose) {
 
     // I will swap last element with the root and then pop the root swapped to last
     // and then to maintain the pqueue invariant do what is required
     int last = this->data.size() - 1; 
-    std::pair<dtype, int> root(dtype_smpl, 0); 
+    std::pair<S, int> root(S(), 0); 
 
     // if pqueue is empty
     if(last < 0)  {
@@ -112,14 +115,15 @@ std::pair<dtype, int> pqueue::dequeue(bool verbose) {
     return root;
 }
 
-void pqueue::swap(std::pair<dtype, int> &a, std::pair<dtype, int> &b) {
-    std::pair<dtype, int> temp = a;
+template<typename S>
+void pqueue<S>::swap(std::pair<S, int> &a, std::pair<S, int> &b) {
+    std::pair<S, int> temp = a;
     a = b;
     b = temp;
 }
 
-
-void pqueue::print() {
+template<typename S>
+void pqueue<S>::print() {
     
     std::cout<<std::endl<<"[";
     for(auto i : this->data)
